@@ -1,0 +1,33 @@
+﻿@model List<PaymentDto>
+@using Application.DTOs
+
+<h2>All Payments</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Payment ID</th>
+            <th>Is Paid</th>
+            <th>Payment Method</th>
+            <th>Bill ID</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var payment in Model)
+        {
+            <tr>
+                <td>@payment.Id</td>
+                <td>@(payment.IsPaid ? "Yes" : "No")</td>
+                <td>@payment.PaymentMethodDto</td>
+                <td>@payment.BillId</td>
+                <td>
+                    <a asp-action="GetPaymentById" asp-route-id="@payment.Id">Details</a> |
+                    <a asp-action="EditPayment" asp-route-id="@payment.Id">Edit</a> |
+                    <a asp-action="DeletePayment" asp-route-id="@payment.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="AddPayment">Create New</a>

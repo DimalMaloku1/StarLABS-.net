@@ -1,0 +1,27 @@
+﻿@model PaymentDto
+@using Application.DTOs
+@using Application.DTOs.Enums
+
+<h2>Create Payment</h2>
+
+<form asp-action="AddPayment" method="post">
+    <div class="form-group">
+        <label asp-for="IsPaid"></label>
+        <input asp-for="IsPaid" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="PaymentMethodDto"></label>
+        <select asp-for="PaymentMethodDto" class="form-control">
+            <option value="">Select Payment Method</option>
+            @foreach (var method in Enum.GetValues(typeof(PaymentMethodDto)))
+            {
+                <option value="@method">@method</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="BillId"></label>
+        <input asp-for="BillId" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
