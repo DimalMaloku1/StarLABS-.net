@@ -1,9 +1,6 @@
 ﻿using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Persistence.Repositories
+namespace Domain.Contracts
 {
     public interface IPaymentRepository
     {

@@ -1,0 +1,27 @@
+﻿@model Application.DTOs.RoomDto
+
+<h1>Room Details</h1>
+
+<table class="table">
+    <tr>
+        <th>Room Number</th>
+        <td>@Model.RoomNumber</td>
+    </tr>
+    <tr>
+        <th>Is Free</th>
+        <td>@(Model.IsFree ? "Yes" : "No")</td>
+    </tr>
+</table>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<button onclick="confirmDelete('@Model.Id')" class="btn btn-danger">Delete</button>
+
+@section Scripts {
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Are you sure you want to delete this room?")) {
+                window.location.href = "/Room/Delete/" + id;
+            }
+        }
+    </script>
+}

@@ -1,27 +1,171 @@
-﻿@model PaymentDto
+﻿
 @using Application.DTOs
-@using Application.DTOs.Enums
+@using Domain.Enums
+@model Application.DTOs.PaymentDto
+@using FluentValidation.AspNetCore
 
-<h2>Create Payment</h2>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
-<form asp-action="AddPayment" method="post">
-    <div class="form-group">
-        <label asp-for="IsPaid"></label>
-        <input asp-for="IsPaid" class="form-control" />
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #007bff;
+        border-radius: 10px 10px 0 0;
+        color: white;
+    }
+
+    .btn-create {
+        background-color: #28a745;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Create Payment <i class="fas fa-credit-card"></i></h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group form-check">
+                            <input asp-for="IsPaid" type="checkbox" class="form-check-input" />
+                            <label class="form-check-label" for="IsPaid">Is Paid</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="PaymentMethod">Payment Method:</label>
+                            <select asp-for="PaymentMethod" class="form-control" id="PaymentMethod">
+                                <option value="">Select Payment Method</option>
+                                @foreach (var method in Enum.GetValues(typeof(PaymentMethod)))
+                                {
+                                    <option value="@method">@method</option>
+                                }
+                            </select>
+                          </div>
+                        <select asp-for="BillId" class="form-control" id="BillId">
+                            <option value="">Select Bill</option>
+                            @if (Model.Bills != null)
+                            {
+                                foreach (var bill in Model.Bills)
+                                {
+                                    <option value="@bill.Id" data-user-id="@bill.UserId" data-username="@bill.Username" data-total-amount="@bill.TotalAmount">@bill.Id</option>
+                                }
+                            }
+                        </select>
+
+                        <div class="form-group">
+                            <label for="UserId">User ID:</label>
+                            <input type="text" id="UserId" class="form-control" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Username">Username:</label>
+                            <input type="text" id="Username" class="form-control" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="TotalAmount">Total Amount:</label>
+                            <input type="text" id="TotalAmount" class="form-control" readonly />
+                        </div>
+
+
+                        <div id="paypal-btn" style="display: none;">
+                            <button type="button" class="btn btn-success btn-create"><i class="fas fa-check"></i> Pay Now</button>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-create" id="pay-now-button"><i class="fas fa-check"></i> Pay Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="PaymentMethodDto"></label>
-        <select asp-for="PaymentMethodDto" class="form-control">
-            <option value="">Select Payment Method</option>
-            @foreach (var method in Enum.GetValues(typeof(PaymentMethodDto)))
-            {
-                <option value="@method">@method</option>
+</div>
+<script>
+    // Update user ID, username, and total amount fields when a bill is selected
+    document.getElementById('BillId').addEventListener('change', function () {
+        var selectedBill = this.options[this.selectedIndex];
+        document.getElementById('UserId').value = selectedBill.getAttribute('data-user-id');
+        document.getElementById('Username').value = selectedBill.getAttribute('data-username');
+        document.getElementById('TotalAmount').value = selectedBill.getAttribute('data-total-amount');
+    });
+</script>
+@section Scripts {
+    <script>
+        document.getElementById('PaymentMethod').addEventListener('change', function () {
+            var paymentMethod = this.value;
+            if (paymentMethod === 'PayPal') {
+                initiatePayPalPayment();
+            } else {
+                document.getElementById('paypal-btn').style.display = 'none';
+                document.getElementById('pay-now-button').style.display = 'block';
             }
-        </select>
-    </div>
-    <div class="form-group">
-        <label asp-for="BillId"></label>
-        <input asp-for="BillId" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
+        });
+
+        // Function to initiate PayPal payment
+        function initiatePayPalPayment() {
+            document.getElementById('paypal-btn').style.display = 'block';
+            document.getElementById('pay-now-button').style.display = 'none';
+
+            // Check if PayPal script is already loaded
+            if (!window.paypal) {
+                // Load PayPal script dynamically
+                var paypalScript = document.createElement('script');
+                paypalScript.src = 'https://www.paypalobjects.com/api/checkout.js';
+                document.body.appendChild(paypalScript);
+
+                paypalScript.onload = function () {
+                    renderPayPalButton();
+                };
+            } else {
+                renderPayPalButton();
+            }
+        }
+
+        // Function to render PayPal button
+        function renderPayPalButton() {
+            paypal.Button.render({
+                // Configure PayPal environment
+                env: 'sandbox',
+                client: {
+                    sandbox: 'AcvXqpbh9IWZR4otYpVKNJJ8BLJlTqWW7IGIG9VQQ5sV7n1rt43Jf6b-1i2Th0Wjb2XoaEnPpm6HVrmN'
+                },
+                // Set up a PayPal payment
+                payment: function (data, actions) {
+                    // Fetch total amount from TotalAmount input field
+                    let _total = document.getElementById('TotalAmount').value;
+                    return actions.payment.create({
+                        transactions: [{
+                            amount: {
+                                total: _total,
+                                currency: 'USD'
+                            }
+                        }]
+                    });
+                },
+                // Execute the PayPal payment
+                onAuthorize: function (data, actions) {
+                    return actions.payment.execute().then(function () {
+                        // Redirect to the complete order page or handle success
+                        var url = '@Url.Action("CompleteOrder", "Orders")';
+                        window.location.href = url;
+                    });
+                }
+            }, '#paypal-btn button');
+        }
+    </script>
+}
+

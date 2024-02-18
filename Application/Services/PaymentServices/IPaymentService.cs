@@ -12,5 +12,6 @@ namespace Application.Services.PaymentServices
         Task AddPaymentAsync(PaymentDto paymentDto);
         Task UpdatePaymentAsync(Guid id, PaymentDto paymentDto);
         Task DeletePaymentAsync(Guid id);
+
     }
 }

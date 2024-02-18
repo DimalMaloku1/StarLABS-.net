@@ -1,12 +1,12 @@
 using Domain.Models;
 
-namespace Persistence.Repositories
+namespace Domain.Contracts
 {
     public interface IFeedbackRepository
     {
         Task<IEnumerable<Feedback>> GetFeedbacksAsync();
         Task<Feedback> GetFeedbackByIdAsync(Guid Id);
-        void Add(Feedback feedback);
-        void Delete(Feedback feedback);
+        Task Add(Feedback feedback);
+        Task Delete(Feedback feedback);
     }
 }

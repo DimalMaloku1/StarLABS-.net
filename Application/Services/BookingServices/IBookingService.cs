@@ -9,5 +9,7 @@ namespace Application.Services.BookingServices
         Task<BookingDto> CreateAsync(BookingDto booking);
         Task UpdateAsync(Guid id, BookingDto bookingDto);
         Task DeleteAsync(Guid id);
+        Task<NewBookingDropDownsDTO> GetNewBookingDropDownsValues();
+
     }
 }

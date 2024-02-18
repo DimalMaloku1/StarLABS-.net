@@ -1,7 +1,11 @@
-﻿using Application.Services.BookingServices;
+using Application.Services.BillService;
+using Application.Services.BookingServices;
+using Application.Services.FeedbackServices;
 using Application.Services.PaymentServices;
+using Application.Services.RoomServices;
+using Application.Services.RoomTypeServices;
+using Application.Services.StaffServices;
 using Microsoft.Extensions.DependencyInjection;
-using Persistence.Repositories;
 
 namespace Application
 {
@@ -9,9 +13,21 @@ namespace Application
     {
         public static void Configure(IServiceCollection services)
         {
-            services.AddScoped<IBookingService, BookingService>();
-            services.AddScoped<IPaymentService, PaymentService>();
-        }
 
+            services.AddScoped<IBookingService, BookingService>();
+
+            services.AddScoped<IFeedbackService, FeedbackService>();
+
+            services.AddScoped<IStaffService, StaffService>();
+
+            services.AddScoped<IPaymentService, PaymentService>();
+
+            services.AddScoped<IRoomServices, RoomServices>();
+
+            services.AddScoped<IRoomTypeServices, RoomTypeServices>();
+            services.AddScoped<IBillService, BillService>();
+
+
+        }
     }
 }

@@ -10,12 +10,12 @@ namespace Domain.Contracts
     public interface IBillRepository
     {
         Task<IEnumerable<Bill>> GetAllBills();
-        Task<Bill> GetBill(int id);
+        Task<Bill> GetBillById(Guid id);
         Task<Bill> AddBill(Bill bill);
         Task<Bill> UpdateBill(Bill bill);
-        Task<Bill> DeleteBill(int id);
-        Task<IEnumerable<Bill>> GetBillsByBookingId(int bookingId);
-        Task<IEnumerable<Bill>> GetBillsByUser(string userId);
+        Task<Bill> DeleteBill(Bill bill);
+        Task<IEnumerable<Bill>> GetBillsByBookingId(Guid bookingId);
+        Task<IEnumerable<Bill>> GetBillsByUser(Guid userId);
 
     }
 }

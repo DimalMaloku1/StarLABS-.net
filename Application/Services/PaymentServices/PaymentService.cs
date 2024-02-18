@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Domain.Models;
-using Persistence.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Application.DTOs;
 using Domain.Enums;
+using Domain.Contracts;
+using Persistence.Repositories;
 
 namespace Application.Services.PaymentServices
 {
@@ -14,11 +12,14 @@ namespace Application.Services.PaymentServices
         private readonly IPaymentRepository _paymentRepository;
         private readonly IMapper _mapper;
 
+
+
         public PaymentService(IPaymentRepository paymentRepository, IMapper mapper)
         {
             _paymentRepository = paymentRepository;
             _mapper = mapper;
         }
+
 
         public async Task<PaymentDto> GetPaymentByIdAsync(Guid id)
         {
@@ -26,17 +27,20 @@ namespace Application.Services.PaymentServices
             return _mapper.Map<PaymentDto>(payment);
         }
 
+
         public async Task<IEnumerable<PaymentDto>> GetAllPaymentsAsync()
         {
             var payments = await _paymentRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<PaymentDto>>(payments);
         }
 
+
         public async Task AddPaymentAsync(PaymentDto paymentDto)
         {
             var payment = _mapper.Map<Payment>(paymentDto);
             await _paymentRepository.AddAsync(payment);
         }
+
 
         public async Task UpdatePaymentAsync(Guid id, PaymentDto paymentDto)
         {
@@ -45,11 +49,8 @@ namespace Application.Services.PaymentServices
             {
                 return;
             }
-
-            existingPayment.PaymentMethod = _mapper.Map<PaymentMethod>(paymentDto.PaymentMethodDto); 
-
+            existingPayment.PaymentMethod = paymentDto.PaymentMethod;
             _mapper.Map(paymentDto, existingPayment);
-
             await _paymentRepository.UpdateAsync(id, existingPayment);
         }
 

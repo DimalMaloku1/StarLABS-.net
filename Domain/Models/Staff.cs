@@ -1,4 +1,5 @@
 ﻿using Domain.Base;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,9 @@ namespace Domain.Models
         public string Department { get; set; }
         public decimal Salary { get; set; }
         public string Address { get; set; }
-
-       // public string UserId { get; set; }
-        public int PositionId { get; set; }
-       // public IdentityUser User { get; set; }
+        public Guid UserId { get; set; }
+        public Guid PositionId { get; set; }
+        public AppUser User { get; set; }
         public Position Position { get; set; }
     }
 }

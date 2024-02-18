@@ -1,12 +1,11 @@
 using Application;
 using Application.Core;
-using Application.Services.BookingServices;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
-using API.Data;
-using API.Areas.Identity.Data;
+using Domain.Models;
+using Application.Validations;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,19 +16,17 @@ RepositoryDIConfiguration.Configure(builder.Services);
 ServicesDIConfiguration.Configure(builder.Services);
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+builder.Services.AddFluentValidationAutoValidation(config =>
+{
+    config.DisableDataAnnotationsValidation = true;
+});
 
 builder.Services.AddDbContext<DataContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddDbContext<APIContext>(opt =>
-{
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-builder.Services.AddDefaultIdentity<APIUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<APIContext>();
-
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DataContext>();
 
 builder.Services.AddSwaggerGen();
 
@@ -48,11 +45,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
    
 }
-
-
-
-
-
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -62,6 +54,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages();
+
+app.MapRazorPages();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

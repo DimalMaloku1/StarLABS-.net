@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Contracts;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -14,14 +15,22 @@ namespace Persistence.Repositories
         }
         public async Task<IEnumerable<Booking>> GetBookingsAsync()
         {
-            var bookings = await _context.Bookings.ToListAsync();
+            var bookings = await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .ThenInclude(r => r.RoomType)
+                .ToListAsync();
             return bookings;
         }
 
 
         public async Task<Booking> GetBookingByIdAsync(Guid Id)
         {
-            var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == Id);
+            var booking = await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .ThenInclude(r => r.RoomType)
+                .FirstOrDefaultAsync(x => x.Id == Id);
             return booking;
         }
 

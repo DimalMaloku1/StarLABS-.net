@@ -5,44 +5,62 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Contracts;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositories
 {
-    public class BillRepository : IBillRepository
-    {
-        public Task<Bill> AddBill(Bill bill)
+    internal sealed class BillRepository : IBillRepository { 
+        private readonly DataContext _context;
+       public BillRepository(DataContext context)
+           {
+            _context = context;
+        }
+    
+        public async Task<Bill> AddBill(Bill bill)
         {
-            throw new NotImplementedException();
+             _context.Bills.Add(bill);
+             await _context.SaveChangesAsync();
+            return bill;
         }
 
-        public Task<Bill> DeleteBill(int id)
+        public async Task<Bill> DeleteBill(Bill bill)
         {
-            throw new NotImplementedException();
+            _context.Bills.Remove(bill);
+            await _context.SaveChangesAsync();
+            return bill;
         }
 
-        public Task<IEnumerable<Bill>> GetAllBills()
+        public async Task<IEnumerable<Bill>> GetAllBills()
         {
-            throw new NotImplementedException();
+            var bills = await _context.Bills.ToListAsync();
+            return bills;
+
+
         }
 
-        public Task<Bill> GetBill(int id)
+        public async Task<Bill> GetBillById(Guid id)
         {
-            throw new NotImplementedException();
+            var bill = await _context.Bills.FindAsync(id);
+            return bill;
         }
 
-        public Task<IEnumerable<Bill>> GetBillsByBookingId(int bookingId)
+        public async Task<IEnumerable<Bill>> GetBillsByBookingId(Guid bookingId)
         {
-            throw new NotImplementedException();
+            var bills = await _context.Bills.Where(b => b.BookingId == bookingId).ToListAsync();  
+            return bills;
         }
 
-        public Task<IEnumerable<Bill>> GetBillsByUser(string userId)
+        public async Task<IEnumerable<Bill>> GetBillsByUser(Guid userId)
         {
-            throw new NotImplementedException();
+            var bills = await _context.Bills.Where(b => b.Booking.UserId == userId).ToListAsync();
+            return bills;
         }
 
-        public Task<Bill> UpdateBill(Bill bill)
+        public async Task<Bill> UpdateBill(Bill bill)
         {
-            throw new NotImplementedException();
+           _context.Bills.Update(bill);
+            await _context.SaveChangesAsync();
+            return bill;
         }
     }
 }

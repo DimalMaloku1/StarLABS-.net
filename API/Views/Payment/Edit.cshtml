@@ -3,15 +3,15 @@
 
 <h2>Edit Payment</h2>
 
-<form asp-action="UpdatePayment" method="post">
+<form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />
     <div class="form-group">
         <label asp-for="IsPaid"></label>
         <input asp-for="IsPaid" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="PaymentMethodDto"></label>
-        <input asp-for="PaymentMethodDto" class="form-control" />
+        <label asp-for="PaymentMethod"></label>
+        <input asp-for="PaymentMethod" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="BillId"></label>

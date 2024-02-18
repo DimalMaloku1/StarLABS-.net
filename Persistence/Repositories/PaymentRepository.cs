@@ -1,10 +1,6 @@
-﻿using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Domain.Contracts;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace Persistence.Repositories
 {
@@ -43,7 +39,7 @@ namespace Persistence.Repositories
             if (existingPayment != null)
             {
                 existingPayment.IsPaid = payment.IsPaid;
-                existingPayment.PaymentMethod = payment.PaymentMethod;
+                //existingPayment.PaymentMethod = payment.PaymentMethod;
                 existingPayment.BillId = payment.BillId;
 
                 await _db.SaveChangesAsync();

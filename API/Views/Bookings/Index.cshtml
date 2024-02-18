@@ -1,0 +1,97 @@
+﻿@using Application.DTOs;
+@model IEnumerable<BookingDto>
+@{
+    ViewData["Title"] = "List of Bookings";
+}
+<style>
+    /* Custom styles for the table */
+    .table {
+        width: 100%;
+        text-align: center;
+    }
+
+        .table img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+    /* Custom styles for the buttons */
+    .btn {
+        cursor: pointer;
+    }
+
+    .btn-details {
+        color: #17a2b8;
+    }
+
+    .btn-delete {
+        color: #dc3545;
+    }
+</style>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div style="position: fixed; right: 25px; bottom: 75px;" class="text-white">
+            <a asp-controller="Bookings" asp-action="Create" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Add New Booking
+            </a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.CheckInDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.CheckOutDate)</th>
+                    @* <th>@Html.DisplayNameFor(model => model.TotalPrice)</th> *@
+                    @* <th>@Html.DisplayNameFor(model => model.RoomId)</th> *@
+                    <th>@Html.DisplayNameFor(model => model.Room.RoomNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.Room.RoomTypeId)</th>
+                    <th>@Html.DisplayNameFor(model => model.User.Email)</th>
+
+                        <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.CheckInDate)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.CheckOutDate)
+                        </td>
+                       @*  <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.TotalPrice)
+                        </td> *@
+                      @*   <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.RoomId)
+                        </td> *@
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Room.RoomNumber)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Room.RoomTypeId)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.User.Email)
+                        </td>
+                            <td class="align-middle">
+                                <a class="btn btn-outline-primary" asp-controller="Bookings" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i>Edit</a> |
+                                <a class="btn btn-outline-info" asp-controller="Bookings" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye"></i>Details</a> |
+                                <a class="btn btn-danger" asp-controller="Bookings" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i>Delete</a>
+                            </td>
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+

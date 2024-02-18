@@ -1,30 +1,49 @@
+using Domain.Contracts;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Persistence.Repositories
 {
     internal sealed class FeedbackRepository : IFeedbackRepository
     {
-        public Task<IEnumerable<Feedback>> GetFeedbacksAsync()
+        private readonly DataContext _context;
+
+        public FeedbackRepository(DataContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<Feedback> GetFeedbackByIdAsync(Guid Id)
+        public async Task<IEnumerable<Feedback>> GetFeedbacksAsync()
         {
-            throw new NotImplementedException();
+            var feedbacks = await _context.Feedbacks.ToListAsync();
+            return feedbacks;
         }
 
-        public void Add(Feedback feedback)
+        public async Task<Feedback> GetFeedbackByIdAsync(Guid Id)
         {
-            throw new NotImplementedException();
+            var feedback = await _context.Feedbacks.FirstOrDefaultAsync(x => x.Id == Id);
+            return feedback;
         }
 
-        public void Delete(Feedback feedback)
+        public async Task Add(Feedback feedback)
         {
-            throw new NotImplementedException();
+            await _context.Feedbacks.AddAsync(feedback);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Update(Feedback feedback)
+        {
+            EntityEntry entityEntry = _context.Feedbacks.Entry(feedback);
+            entityEntry.State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Delete(Feedback feedback)
+        {
+            _context.Feedbacks.Remove(feedback);
+            await _context.SaveChangesAsync();
         }
     }
 }

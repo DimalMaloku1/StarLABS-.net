@@ -1,0 +1,33 @@
+﻿@model List<StaffDTO>
+@using Application.DTOs
+@{
+    ViewData["Title"] = "Staff List";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Address</th>
+            <th>User</th>
+            <th>Position</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var staff in Model)
+        {
+            <tr>
+                <td>@staff.Id</td>
+                <td>@staff.Department</td>
+                <td>@staff.Salary</td>
+                <td>@staff.Address</td>
+                <td>@staff.User.UserName</td>
+                <td>@staff.Position.PositionName</td>
+            </tr>
+        }
+    </tbody>
+</table>

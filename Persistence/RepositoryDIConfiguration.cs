@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Domain.Contracts;
+using Microsoft.Extensions.DependencyInjection;
 using Persistence.Repositories;
 
 namespace Persistence
@@ -10,6 +11,11 @@ namespace Persistence
         {
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IRoomTypeRepository, RoomTypeRepository>();
+            services.AddScoped<IStaffRepository, StaffRepository>();
+            services.AddScoped<IBillRepository, BillRepository>();
         }
 
     }

@@ -1,10 +1,7 @@
 ﻿using Domain.Base;
-using Domain.Enums; 
+using Domain.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
@@ -12,7 +9,7 @@ namespace Domain.Models
     {
         public bool IsPaid { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
-        public Bill Bill { get; set; }
         public Guid BillId { get; set; }
+        public Bill Bill { get; set; }
     }
 }

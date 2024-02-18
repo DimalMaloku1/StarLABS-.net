@@ -9,6 +9,7 @@ namespace Domain.Enums
     public enum PaymentMethod
     {
         Cash,
-        Credit
+        Credit,
+        PayPal,
     }
 }
