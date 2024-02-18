@@ -46,12 +46,18 @@ namespace Persistence.Repositories
 
         public async Task<IEnumerable<Staff>> GetAllStaffAsync()
         {
-            return await _dbContext.Staff.ToListAsync();
+            return await _dbContext.Staff
+                .Include(s => s.User) 
+                .Include(s => s.Position) 
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Staff>> GetStaffByDepartmentAsync(string department)
         {
-            return await _dbContext.Staff.Where(s => s.Department == department).ToListAsync();
+            return await _dbContext.Staff.Where(s => s.Department == department)
+                .Include(s => s.User)
+                .Include(s => s.Position)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Staff>> GetStaffByPositionAsync(Guid positionId)

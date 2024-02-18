@@ -11,7 +11,7 @@ namespace Domain.Models
     {
         public double TotalAmount { get; set; }
         // Changed the type of BookingId to Guid
-        public Guid BookingId { get; set; }
+         public Guid BookingId { get; set; }
         public Booking Booking { get; set; }
     }
 }

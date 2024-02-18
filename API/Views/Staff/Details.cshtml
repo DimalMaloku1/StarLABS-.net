@@ -1,5 +1,44 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Application.DTOs
+@model StaffDTO
 @{
+    ViewData["Title"] = "Staff Details";
 }
+
+<div class="row text">
+    <div class="col-md-8 offset-2">
+        <p>
+            <h1>Staff Details</h1>
+        </p>
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <dl class="row">
+                    <dt class="col-sm-4">Id</dt>
+                    <dd class="col-sm-8">@Model.Id</dd>
+                    
+                    <dt class="col-sm-4">Department</dt>
+                    <dd class="col-sm-8">@Model.Department</dd>
+                    
+                    <dt class="col-sm-4">Salary</dt>
+                    <dd class="col-sm-8">@Model.Salary</dd>
+                    
+                    <dt class="col-sm-4">Address</dt>
+                    <dd class="col-sm-8">@Model.Address</dd>
+                    
+                    <dt class="col-sm-4">User</dt>
+                    <dd class="col-sm-8">@Model.UserId</dd>
+                    
+                    <dt class="col-sm-4">Position</dt>
+                    <dd class="col-sm-8">@Model.PositionId</dd>
+                </dl>
+                <div class="form-group d-flex justify-content-between mt-2">
+                    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                        </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

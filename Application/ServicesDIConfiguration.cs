@@ -5,6 +5,7 @@ using Application.Services.PaymentServices;
 using Application.Services.RoomServices;
 using Application.Services.RoomTypeServices;
 using Application.Services.StaffServices;
+using Application.Validations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application

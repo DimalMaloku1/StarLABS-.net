@@ -21,13 +21,12 @@ namespace Persistence
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
+        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Room> Rooms { get; set; }
-
-        public DbSet<RoomType> RoomTypes { get; set; }
         public DbSet<Staff> Staff { get; set; }
-        public DbSet<Position> Positions { get; set; }
-
+        public DbSet<Position> Position { get; set; }
+        public DbSet<RoomType> RoomTypes { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Payment> Payments { get; set; }

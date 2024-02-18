@@ -16,7 +16,7 @@ namespace API.Controllers
         public PaymentController(IPaymentService pservice, IBillService billService)
         {
             _pservice = pservice;
-            _billService = billService; 
+            _billService = billService;
         }
 
         [HttpGet]
@@ -31,7 +31,7 @@ namespace API.Controllers
             return View(paymentdto);
         }
 
-       
+
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -43,11 +43,11 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var paymentDto = new PaymentDto(); 
-            var bills = await _billService.GetAllBills(); 
+            var paymentDto = new PaymentDto();
+            var bills = await _billService.GetAllBills();
             paymentDto.Bills = bills;
 
-            return View(paymentDto); 
+            return View(paymentDto);
         }
 
 

@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.DTOs;
+using Domain.Models;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Validations
 {
-    public class StaffValidator : AbstractValidator<Staff>
+    public class StaffValidator : AbstractValidator<StaffDTO>
     {
         public StaffValidator()
         {

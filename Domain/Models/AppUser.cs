@@ -9,5 +9,8 @@ namespace Domain.Models
 {
     public class AppUser : IdentityUser<Guid>
     {
-    }
+		public string? Name { get; set; }
+		public string? Surname { get; set; }
+		public string? Role { get; set; }
+	}
 }

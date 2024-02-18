@@ -30,6 +30,9 @@ builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireCo
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

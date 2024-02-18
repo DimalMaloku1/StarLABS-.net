@@ -6,6 +6,8 @@ using Application.DTOs;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.StaffServices
 {
@@ -13,17 +15,24 @@ namespace Application.Services.StaffServices
     {
         private readonly IStaffRepository _staffRepository;
         private readonly IMapper _mapper;
+        private readonly UserManager<AppUser> _userManager;
 
-        public StaffService(IStaffRepository staffRepository, IMapper mapper)
+
+        public StaffService(IStaffRepository staffRepository, IMapper mapper, UserManager<AppUser> userManager)
         {
             _staffRepository = staffRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<StaffDTO>> GetAllStaffAsync()
         {
             var staffEntities = await _staffRepository.GetAllStaffAsync();
             return _mapper.Map<IEnumerable<StaffDTO>>(staffEntities);
+        }
+        public async Task<IEnumerable<Guid>> GetAllUserNamesAsync()
+        {
+            return await _userManager.Users.Select(u => u.Id).ToListAsync();
         }
 
         public async Task<StaffDTO> GetStaffByIdAsync(Guid id)

@@ -1,0 +1,16 @@
+﻿@using Application.DTOs
+@model FeedbackDto
+
+<h2>Feedback Details</h2>
+
+<div>
+    <h4>Comment</h4>
+    <p>@Model.Comment</p>
+    <h4>Rating</h4>
+    <p>@Model.Rating</p>
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>
+

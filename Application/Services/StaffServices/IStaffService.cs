@@ -16,5 +16,7 @@ namespace Application.Services.StaffServices
         Task DeleteStaffAsync(Guid id);
         Task<IEnumerable<StaffDTO>> GetStaffByDepartmentAsync(string department);
         Task<IEnumerable<StaffDTO>> GetStaffByPositionAsync(Guid positionId);
+        Task<IEnumerable<Guid>> GetAllUserNamesAsync();
+
     }
 }

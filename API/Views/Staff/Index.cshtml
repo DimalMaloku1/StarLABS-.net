@@ -5,7 +5,15 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+<a class="btn btn-outline-success" asp-action="Create" >Create</a>
 
+<form asp-action="Department" method="post">
+    <div class="form-group">
+        <label for="department">Department:</label>
+        <input type="text" id="department" name="department" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Show Staff</button>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -15,6 +23,7 @@
             <th>Address</th>
             <th>User</th>
             <th>Position</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -25,9 +34,18 @@
                 <td>@staff.Department</td>
                 <td>@staff.Salary</td>
                 <td>@staff.Address</td>
-                <td>@staff.User.UserName</td>
+                <td>@staff.User.Email</td>
                 <td>@staff.Position.PositionName</td>
+                <td>
+                    <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@staff.Id">Details</a>
+                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@staff.Id">Edit</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@staff.Id">Delete</a>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
+<div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+</div>

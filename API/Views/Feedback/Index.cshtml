@@ -1,0 +1,28 @@
+﻿@using Application.DTOs
+@model IEnumerable<FeedbackDto>
+
+<h2>Feedback List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Comment</th>
+            <th>Rating</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var feedback in Model)
+        {
+            <tr>
+                <td>@feedback.Comment</td>
+                <td>@feedback.Rating</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@feedback.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@feedback.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@feedback.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
