@@ -16,6 +16,8 @@ namespace Persistence
             services.AddScoped<IRoomTypeRepository, RoomTypeRepository>();
             services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IBillRepository, BillRepository>();
+            services.AddScoped<IPositionRepository, PositionRepository>();
+
         }
 
     }

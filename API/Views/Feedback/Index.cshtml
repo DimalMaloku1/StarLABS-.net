@@ -1,11 +1,19 @@
 ﻿@using Application.DTOs
 @model IEnumerable<FeedbackDto>
 
+@{
+    ViewData["Title"] = "Feedback List";
+    var averageRating = ViewBag.AverageRating; // Retrieve the average rating from ViewBag
+}
+
 <h2>Feedback List</h2>
+
+<p>Average Rating: @averageRating</p>
 
 <table class="table">
     <thead>
         <tr>
+            <th>User</th>
             <th>Comment</th>
             <th>Rating</th>
             <th>Actions</th>
@@ -15,6 +23,7 @@
         @foreach (var feedback in Model)
         {
             <tr>
+                <td>@feedback.User.firstName</td>
                 <td>@feedback.Comment</td>
                 <td>@feedback.Rating</td>
                 <td>

@@ -38,9 +38,9 @@ namespace Persistence.Repositories
             var existingPayment = await _db.Payments.FindAsync(id);
             if (existingPayment != null)
             {
-                existingPayment.IsPaid = payment.IsPaid;
-                //existingPayment.PaymentMethod = payment.PaymentMethod;
+                existingPayment.PaymentMethod = payment.PaymentMethod;
                 existingPayment.BillId = payment.BillId;
+                existingPayment.TotalAmount = payment.TotalAmount;
 
                 await _db.SaveChangesAsync();
             }

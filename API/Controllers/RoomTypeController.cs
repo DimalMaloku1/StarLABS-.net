@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Application.DTOs;
+using Application.Services.RoomServices;
 using Application.Services.RoomTypeServices;
+using Application.Validations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -9,10 +11,14 @@ namespace API.Controllers
     public class RoomTypeController : Controller
     {
         private readonly IRoomTypeServices _roomTypeService;
+        private readonly IRoomServices _roomService;
 
-        public RoomTypeController(IRoomTypeServices roomTypeService)
+        private readonly RoomTypeValidator _roomTypeValidator;
+        public RoomTypeController(IRoomTypeServices roomTypeService, RoomTypeValidator roomTypeValidator, IRoomServices roomService)
         {
             _roomTypeService = roomTypeService;
+            _roomTypeValidator = roomTypeValidator;
+            _roomService = roomService;
         }
 
         [HttpGet]
@@ -42,8 +48,14 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(RoomTypeDto roomTypeDto)
         {
-            var createdRoomType = await _roomTypeService.CreateAsync(roomTypeDto);
-            return RedirectToAction(nameof(Index));
+            var validationResult = _roomTypeValidator.Validate(roomTypeDto);
+
+            if (validationResult.IsValid)
+            {
+                var createdRoomType = await _roomTypeService.CreateAsync(roomTypeDto);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(roomTypeDto);
         }
 
         [HttpGet]
@@ -61,8 +73,15 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Guid Id, RoomTypeDto roomTypeDto)
         {
-            await _roomTypeService.UpdateAsync(Id, roomTypeDto);
-            return RedirectToAction(nameof(Details), new { Id });
+            var validationResult = _roomTypeValidator.Validate(roomTypeDto);
+
+            if (validationResult.IsValid)
+            {
+                await _roomTypeService.UpdateAsync(Id, roomTypeDto);
+                return RedirectToAction(nameof(Details), new { Id });
+            }
+
+            return View(roomTypeDto);
         }
 
         [HttpPost]

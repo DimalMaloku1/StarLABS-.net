@@ -7,6 +7,7 @@ namespace Domain.Contracts
         Task<IEnumerable<Feedback>> GetFeedbacksAsync();
         Task<Feedback> GetFeedbackByIdAsync(Guid Id);
         Task Add(Feedback feedback);
+        Task Update(Feedback feedback);
         Task Delete(Feedback feedback);
     }
 }

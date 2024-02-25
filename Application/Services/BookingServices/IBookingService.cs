@@ -6,7 +6,7 @@ namespace Application.Services.BookingServices
     {
         Task<IEnumerable<BookingDto>> GetAllBookingsAsync();
         Task<BookingDto> GetBookingByIdAsync(Guid id);
-        Task<BookingDto> CreateAsync(BookingDto booking);
+        Task<BookingDto> CreateAsync(BookingDto booking, Guid userId);
         Task UpdateAsync(Guid id, BookingDto bookingDto);
         Task DeleteAsync(Guid id);
         Task<NewBookingDropDownsDTO> GetNewBookingDropDownsValues();

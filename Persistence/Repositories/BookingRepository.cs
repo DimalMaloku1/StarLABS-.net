@@ -5,14 +5,8 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Persistence.Repositories
 {
-    internal sealed class BookingRepository : IBookingRepository
+    internal sealed class BookingRepository(DataContext _context) : IBookingRepository
     {
-        private readonly DataContext _context;
-
-        public BookingRepository(DataContext context)
-        {
-            _context = context;
-        }
         public async Task<IEnumerable<Booking>> GetBookingsAsync()
         {
             var bookings = await _context.Bookings

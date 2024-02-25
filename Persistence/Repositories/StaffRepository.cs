@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositories
 {
-    public class StaffRepository : IStaffRepository
+    internal sealed class StaffRepository : IStaffRepository
     {
         private readonly DataContext _dbContext;
 
@@ -62,7 +62,10 @@ namespace Persistence.Repositories
 
         public async Task<IEnumerable<Staff>> GetStaffByPositionAsync(Guid positionId)
         {
-            return await _dbContext.Staff.Where(s => s.PositionId == positionId).ToListAsync();
+            return await _dbContext.Staff.Where(s => s.PositionId == positionId)
+                .Include(s => s.User)
+                .Include(s => s.Position)
+                .ToListAsync();
         }
     }
 }

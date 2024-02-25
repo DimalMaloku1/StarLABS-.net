@@ -27,16 +27,19 @@
                     <span asp-validation-for="CheckOutDate" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="RoomId" class="control-label"></label>
-                    <input asp-for="RoomId" class="form-control" readonly />
+                    <label asp-for="Room.RoomNumber"></label>
+                    <select asp-for="RoomId" asp-items="ViewBag.Rooms" class="form-control" readonly>
+                        <option value="">Select Room</option>
+                    </select>
                     <span asp-validation-for="RoomId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="UserId" class="control-label"></label>
-                    <input asp-for="UserId" class="form-control" readonly />
-                    <span asp-validation-for="UserId" class="text-danger"></span>
+                    <label asp-for="RoomType.Type"></label>
+                    <select asp-for="RoomTypeId" asp-items="ViewBag.RoomTypes" class="form-control" readonly>
+                        <option value="">Select Room Type</option>
+                    </select>
+                    <span asp-validation-for="RoomTypeId" class="text-danger"></span>
                 </div>
-
                 <div class="form-group d-flex justify-content-between mt-2">
                     <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
                     <form asp-action="Delete">

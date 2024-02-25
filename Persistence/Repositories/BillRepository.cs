@@ -18,21 +18,25 @@ namespace Persistence.Repositories
     
         public async Task<Bill> AddBill(Bill bill)
         {
-             _context.Bills.Add(bill);
+             await _context.Bills.AddAsync(bill);
              await _context.SaveChangesAsync();
             return bill;
         }
 
-        public async Task<Bill> DeleteBill(Bill bill)
+        public async Task DeleteBill(Bill bill)
         {
-            _context.Bills.Remove(bill);
+             _context.Bills.Remove(bill);
             await _context.SaveChangesAsync();
-            return bill;
+            
         }
 
         public async Task<IEnumerable<Bill>> GetAllBills()
         {
-            var bills = await _context.Bills.ToListAsync();
+            var bills = await _context.Bills
+                .Include(b => b.Booking)
+                .ThenInclude(bo => bo.User)
+                .OrderBy(b=>b.CreatedAt)
+                .ToListAsync();
             return bills;
 
 
@@ -40,7 +44,15 @@ namespace Persistence.Repositories
 
         public async Task<Bill> GetBillById(Guid id)
         {
-            var bill = await _context.Bills.FindAsync(id);
+            var bill = await _context.Bills
+                .Include(b => b.Booking)
+                .ThenInclude(b=>b.Room)
+                .ThenInclude(b=>b.RoomType)
+                .Include(b=>b.Booking)
+                .ThenInclude(b=>b.User)
+                .FirstOrDefaultAsync(b => b.Id == id);
+            
+            
             return bill;
         }
 

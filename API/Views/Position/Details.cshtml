@@ -1,0 +1,18 @@
+﻿﻿
+@model PositionDTO
+@using Application.DTOs
+
+<h2>Position Details</h2>
+
+<div>
+    <h4>Position ID: @Model.Id</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Position Name</dt>
+        <dd class="col-sm-10">@Model.PositionName</dd>
+        <dt class="col-sm-2">Position Description</dt>
+        <dd class="col-sm-10">@Model.PositionDescription</dd>
+        <dt class="col-sm-2">Shift</dt>
+        <dd class="col-sm-10">@Model.Shift</dd>
+    </dl>
+</div>

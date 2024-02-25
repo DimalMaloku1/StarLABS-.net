@@ -14,6 +14,19 @@
     </div>
     <button type="submit" class="btn btn-primary">Show Staff</button>
 </form>
+<form asp-controller="Staff" asp-action="Position" method="post">
+    <div class="form-group">
+        <label for="positionId">Position:</label>
+        <select id="positionId" name="positionId" class="form-control">
+            <option value="">Select Position</option>
+            @foreach (var staff in Model)
+            {
+                <option value="@staff.Position.Id">@staff.Position.PositionName</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Show Staff</button>
+</form>
 <table class="table">
     <thead>
         <tr>

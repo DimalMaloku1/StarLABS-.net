@@ -1,0 +1,40 @@
+﻿@model List<PositionDTO>
+@using Application.DTOs
+
+<h2>Positions</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Position ID</th>
+            <th>Position Name</th>
+            <th>Position Description</th>
+            <th>Shift</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+       
+        <tbody>
+                @foreach (var position in Model)
+                {
+                <tr>
+                    <td>@position.Id</td>
+                    <td>@position.PositionName</td>
+                    <td>@position.PositionDescription</td>
+                    <td>@position.Shift</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@position.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@position.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@position.Id">Delete</a>
+                    </td>
+                </tr>
+                }
+        </tbody>
+        
+        
+</table>

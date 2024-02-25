@@ -3,93 +3,133 @@ using Application.Responses;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Models;
-
+using Persistence.Repositories;
 
 
 namespace Application.Services.BillService
 {
-    internal class BillService : IBillService { 
+    internal class BillService : IBillService
+    {
         private readonly IBillRepository _billRepository;
         private readonly IMapper _mapper;
-        public BillService(IBillRepository billRepository, IMapper mapper)
+        private readonly IBookingRepository _bookingRepository;
+
+        public BillService(IBillRepository billRepository, IMapper mapper, IBookingRepository bookingRepository)
         {
             _billRepository = billRepository;
             _mapper = mapper;
+            _bookingRepository = bookingRepository;
         }
 
-    
-        public async Task<ApiResponse> AddBill(BillDto billDto)
+        public async Task<BillDto> AddBill(BillDto billDto)
         {
-            if(billDto != null)
+            decimal totalPrice = 0;
+            var booking = await _bookingRepository.GetBookingByIdAsync(billDto.BookingId);
+
+
+            try
             {
+                if (booking == null && (billDto == null || booking?.Room?.RoomType == null))
+                {
+                    throw new InvalidOperationException("Booking or Room information is missing.");
+                }
+
+                billDto.DaysSpent = (booking.CheckOutDate - booking.CheckInDate).Days;
+                totalPrice = (decimal)(billDto.DaysSpent * booking.Room.RoomType.Price);
+
+                billDto.TotalAmount = totalPrice;
+
                 var bill = _mapper.Map<Bill>(billDto);
-                await _billRepository.AddBill(bill); ;
-                return new ApiResponse(200, "Bill added successfully");
-            }
-            return new ApiResponse(400, "Bill not added");
-           
-            
 
+                await _billRepository.AddBill(bill);
+                return billDto;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+            finally
+            {
+                Console.WriteLine($"Total amount of bill: {totalPrice}");
+            }
         }
 
-        public async Task<ApiResponse> DeleteBill(Guid id)
+        public async Task DeleteBill(Guid id)
         {
-            if(id != Guid.Empty)
+            var bill = await _billRepository.GetBillById(id);
+            if (bill == null) throw new InvalidOperationException("Could not find bill");
+            try
             {
-                var bill = await _billRepository.GetBillById(id);
                 await _billRepository.DeleteBill(bill);
-                return new ApiResponse(200,"Bill deleted succesfully");
             }
-            return new ApiResponse(400, "Bill not deleted");
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<IEnumerable<BillDto>> GetAllBills()
         {
             var bills = await _billRepository.GetAllBills();
-            return  _mapper.Map<IEnumerable<BillDto>>(bills);
-           
+            var billDtos = _mapper.Map<IEnumerable<BillDto>>(bills);
+            foreach (var bill in billDtos)
+            {
+                bill.Username = bill.Booking.User.UserName;
+                bill.UserId = bill.Booking.UserId;
+            }
+
+            return billDtos;
         }
+
 
         public async Task<BillDto> GetBillById(Guid id)
         {
-            if(id != Guid.Empty)
-            {
-                var bill = await _billRepository.GetBillById(id);
-                return _mapper.Map<BillDto>(bill);
-            }
-            return null;
+            if (id == Guid.Empty) return null;
+            var bill = await _billRepository.GetBillById(id);
+
+            var billDto = _mapper.Map<BillDto>(bill);
+            billDto.Username = bill.Booking.User.UserName;
+            billDto.DaysSpent = (bill.Booking.CheckOutDate - bill.Booking.CheckInDate).Days;
+            billDto.RoomPrice = bill.Booking.Room.RoomType.Price;
+                billDto.RoomType = bill.Booking.Room.RoomType.Type;
+
+
+            return billDto;
         }
 
         public async Task<IEnumerable<BillDto>> GetBillsByBookingId(Guid bookingId)
         {
-            if(bookingId != Guid.Empty)
+            if (bookingId != Guid.Empty)
             {
                 var bills = await _billRepository.GetBillsByBookingId(bookingId);
                 return _mapper.Map<IEnumerable<BillDto>>(bills);
-                
             }
+
             return null;
         }
 
         public async Task<IEnumerable<BillDto>> GetBillsByUser(Guid userId)
         {
-            if(userId != null)
+            if (userId != Guid.Empty)
             {
                 var bills = await _billRepository.GetBillsByUser(userId);
                 return _mapper.Map<IEnumerable<BillDto>>(bills);
             }
+
             return null;
         }
 
-
         public async Task<ApiResponse> UpdateBill(BillDto bill)
         {
-            if(bill != null)
+            if (bill != null)
             {
                 var billToUpdate = _mapper.Map<Bill>(bill);
                 await _billRepository.UpdateBill(billToUpdate);
-               return new ApiResponse(200, "Bill succesfully updated");
+                return new ApiResponse(200, "Bill succesfully updated");
             }
+
             return new ApiResponse(400, "Bill not updated");
         }
     }

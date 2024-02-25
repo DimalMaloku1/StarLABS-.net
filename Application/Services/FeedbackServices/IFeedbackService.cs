@@ -1,4 +1,5 @@
 using Application.DTOs;
+using Domain.Contracts;
 
 namespace Application.Services.FeedbackServices
 {
@@ -9,5 +10,9 @@ namespace Application.Services.FeedbackServices
         Task<FeedbackDto> CreateAsync(FeedbackDto feedback);
         Task UpdateAsync(Guid id, FeedbackDto feedback);
         Task DeleteAsync(Guid id);
+        Task<double> CalculateAverageRatingAsync();
+        Task<IEnumerable<FeedbackDto>> GetTopRatedFeedbacksAsync(int count);
+        
+
     }
 }

@@ -12,7 +12,7 @@ namespace Application.DTOs
     public class StaffDTO : BaseEntityDto
     {
         public string Department { get; set; }
-        public decimal Salary { get; set; }
+        public int Salary { get; set; }
         public string Address { get; set; }
 
         public Guid UserId { get; set; }

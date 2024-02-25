@@ -1,0 +1,42 @@
+﻿@model List<Domain.Models.AppUser>
+
+@{
+    ViewData["Title"] = "AspNetUsers";
+}
+
+<h2>Application Users</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Role</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.UserName</td>
+                <td>@user.firstName</td>
+                <td>@user.lastName</td>
+                <td>@user.Role</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Users", new { userId = user.Id })" class="btn btn-primary">Edit</a>
+                </td>
+                <td>
+                    <form method="post" action="@Url.Action("Delete", "Users")">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

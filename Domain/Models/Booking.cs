@@ -10,14 +10,16 @@ namespace Domain.Models
         private DateTime _checkOutDate;
         private Guid _roomId;
         private Guid _userId;
+        private Guid _roomTypeId;
 
-        public Booking(int totalPrice, DateTime checkInDate, DateTime checkOutDate, Guid roomId, Guid userId)
+        public Booking(int totalPrice, DateTime checkInDate, DateTime checkOutDate, Guid roomId, Guid userId, Guid roomTypeId)
         {
             TotalPrice = totalPrice;
             CheckInDate = checkInDate;
             CheckOutDate = checkOutDate;
             RoomId = roomId;
             UserId = userId;
+            RoomTypeId = roomTypeId;
         }
 
         public int TotalPrice
@@ -46,13 +48,20 @@ namespace Domain.Models
         public Guid UserId
         {
             get => _userId;
-            private set => _userId = value;
+            set => _userId = value;
         }
+        public Guid RoomTypeId
+        {
+            get => _roomTypeId;
+            set => _roomTypeId = value;
+        }
+
         [ForeignKey("RoomId")]
         public Room Room { get; set; }
         [ForeignKey("UserId")]
         public AppUser User { get; set; }
 
+        //public List<Booking_Room> Bookings_Rooms { get; set; }
 
 
     }

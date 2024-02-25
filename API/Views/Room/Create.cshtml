@@ -1,5 +1,4 @@
-﻿@using Domain.Enums
-@model Application.DTOs.RoomDto
+﻿@model Application.DTOs.RoomDto
 
 <h1>Create Room</h1>
 
@@ -17,16 +16,7 @@
         </select>
         <span asp-validation-for="IsFree" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="TypeOfService"></label>
-        <select asp-for="TypeOfService" class="form-control">
-            <option value="">Select Type Of Service</option>
-            @foreach (var method in Enum.GetValues(typeof(TypeOfService)))
-            {
-                <option value="@method">@method</option>
-            }
-        </select>
-    </div>
+
     <div class="form-group">
         <label asp-for="RoomTypeId"></label>
         <select asp-for="RoomTypeId" asp-items="@(new SelectList(Model.RoomTypes, "Id", "Type"))" class="form-control">

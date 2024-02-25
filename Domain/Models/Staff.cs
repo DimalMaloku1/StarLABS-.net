@@ -13,7 +13,7 @@ namespace Domain.Models
     public class Staff : BaseEntity
     {
         public string Department { get; set; }
-        public decimal Salary { get; set; }
+        public int Salary { get; set; }
         public string Address { get; set; }
         public Guid UserId { get; set; }
         public Guid PositionId { get; set; }

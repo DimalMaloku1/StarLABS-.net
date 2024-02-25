@@ -1,0 +1,31 @@
+﻿  @model Application.DTOs.BillDto
+
+    <h2>Create a Bill</h2>
+
+
+  <form asp-action="Create" method="post" id="billform">
+      <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+      <div class="form-group">
+        <select asp-for="BookingId" class="form-control">
+            <option value="">Select Booking Id</option>
+            @if (ViewBag.Bookings != null && ViewBag.Bookings.Count > 0)
+            {
+                foreach (var booking in ViewBag.Bookings)
+                {
+                    <option value="@booking.Id">@booking.Id</option>
+                }
+            }
+            else
+            {
+                <option value="">No Bookings</option>
+            }
+        </select>
+      
+          <span class="text-danger" asp-validation-for="BookingId"></span>
+      
+      </div>
+      <button type="submit" class="btn btn-primary">Create</button>
+
+  </form>
+  
+  

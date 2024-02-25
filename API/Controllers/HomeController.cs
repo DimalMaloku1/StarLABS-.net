@@ -1,12 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Services.FeedbackServices;
+using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+public class HomeController : Controller
 {
-	public class HomeController : Controller
-	{
-		public IActionResult Index()
-		{
-			return View();
-		}
-	}
+    private readonly IFeedbackService _feedbackService;
+
+    public HomeController(IFeedbackService feedbackService)
+    {
+        _feedbackService = feedbackService;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var topRatedFeedbacks = await _feedbackService.GetTopRatedFeedbacksAsync(3);
+        return View(topRatedFeedbacks);
+    }
+
+    
 }

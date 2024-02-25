@@ -14,9 +14,11 @@ namespace Application.Core
             CreateMap<RoomType, RoomTypeDto>().ReverseMap();
             CreateMap<Staff, StaffDTO>().ReverseMap();
             CreateMap<Payment, PaymentDto>().ReverseMap();
-            CreateMap<Bill, BillDto>()
-     .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Booking.UserId))
-     .ReverseMap();
+            CreateMap<Position, PositionDTO>().ReverseMap();
+            CreateMap<Bill, BillDto>().ReverseMap();
+
+
+
 
 
         }

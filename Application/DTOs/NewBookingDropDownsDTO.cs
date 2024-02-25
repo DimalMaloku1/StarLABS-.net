@@ -6,9 +6,11 @@ namespace Application.DTOs
     {
         public NewBookingDropDownsDTO()
         {
-            RoomTypes = Enumerable.Empty<RoomType>();
+            Rooms = Enumerable.Empty<RoomDto>();
+            RoomTypes = Enumerable.Empty<RoomTypeDto>();
         }
 
-        public IEnumerable<RoomType> RoomTypes { get; init; }
+        public IEnumerable<RoomTypeDto> RoomTypes { get; set; }
+        public IEnumerable<RoomDto> Rooms { get; set; }
     }
 }

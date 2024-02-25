@@ -11,6 +11,23 @@
         <th>Is Free</th>
         <td>@(Model.IsFree ? "Yes" : "No")</td>
     </tr>
+    <tr>
+        <th>Room Type</th>
+        <td>@Model.Type</td>
+    </tr>
+    <tr>
+        <th>Room Description</th>
+        <td>@Model.Description</td>
+    </tr>
+    <tr>
+        <th>Room Capacity</th>
+        <td>@Model.Capacity</td>
+    </tr>
+    <tr>
+        <th>Price per night</th>
+        <td>@Model.Price</td>
+    </tr>
+
 </table>
 
 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>

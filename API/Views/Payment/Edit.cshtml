@@ -1,21 +1,91 @@
-﻿@model PaymentDto
-@using Application.DTOs
+﻿@model Application.DTOs.PaymentDto
+@using Domain.Enums
 
-<h2>Edit Payment</h2>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <label asp-for="IsPaid"></label>
-        <input asp-for="IsPaid" class="form-control" />
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #007bff;
+        border-radius: 10px 10px 0 0;
+        color: white;
+    }
+
+    .btn-update {
+        background-color: #007bff;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .text-danger {
+        color: #dc3545;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Edit Payment <i class="fas fa-credit-card"></i></h2>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="form-group">
+                        <label for="PaymentMethod">Payment Method:</label>
+                        <select asp-for="PaymentMethod" class="form-control" id="PaymentMethod" data-val="true" data-val-required="">
+                            <option value="">Select Payment Method</option>
+                            @foreach (var method in Enum.GetValues(typeof(PaymentMethod)))
+                            {
+                                <option value="@method">@method</option>
+                            }
+                        </select>
+                        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="BillId">Bill ID:</label>
+                        <select asp-for="BillId" class="form-control" id="BillId">
+                            <option value="">Select Bill</option>
+                            @foreach (var bill in Model.Bills)
+                            {
+                                <option value="@bill.Id" data-total-amount="@bill.TotalAmount" selected="@(@bill.Id == Model.BillId)">@(bill.Id.ToString())</option>
+                            }
+                        </select>
+                        <span asp-validation-for="BillId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TotalAmount">Total Amount:</label>
+                        <input type="text" asp-for="TotalAmount" class="form-control" readonly />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-update"><i class="fas fa-save"></i> Update</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="PaymentMethod"></label>
-        <input asp-for="PaymentMethod" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="BillId"></label>
-        <input asp-for="BillId" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#BillId').change(function () {
+            var totalAmount = $('option:selected', this).data('total-amount');
+            $('#TotalAmount').val(totalAmount);
+        });
+    });
+</script>
+

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Application.DTOs.BillDto>
+
+
+<h2>All Bills</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Bill ID</th>
+            <th>Username</th>
+            <th>Booking ID</th>
+            <th>Total Amount</th>
+            <th>Created At</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var bill in Model)
+        {
+            <tr>
+                <td>@bill.Id</td>
+                <td>@bill.Username</td>
+                <td>@bill.BookingId</td>
+                <td>@bill.TotalAmount</td>
+                <td>@bill.CreatedAt</td>
+                <td>
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@bill.Id">Details</a>
+                    <a class="btn btn-primary" asp-action="Update" asp-route-id="@bill.Id">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@bill.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<a class="btn btn-success" asp-action="Create">Create New</a>

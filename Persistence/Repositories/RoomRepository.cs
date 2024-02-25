@@ -19,7 +19,7 @@ namespace Persistence.Repositories
         {
             _context = context;
         }
- 
+
 
         public async Task<Room> GetRoomByIdAsync(Guid Id)
         {
@@ -51,6 +51,17 @@ namespace Persistence.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Room>> GetRoomsByFreeStatusAsync(bool isFree)
+        {
+            var rooms = await _context.Rooms.Where(x => x.IsFree == isFree).ToListAsync();
+            return rooms;
+        }
+
+        public async Task<IEnumerable<Room>> GetRoomsByRoomTypeIdAsync(Guid roomTypeId)
+        {
+            var rooms = await _context.Rooms.Where(room => room.RoomTypeId == roomTypeId).ToListAsync();
+            return rooms;
+        }
 
     }
 }

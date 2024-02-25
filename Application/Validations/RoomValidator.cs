@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Application.DTOs;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Validations
 {
-    public class RoomValidator : AbstractValidator<Room>
+    public class RoomValidator : AbstractValidator<RoomDto>
     {
         public RoomValidator()
         {
@@ -19,8 +20,6 @@ namespace Application.Validations
             RuleFor(x => x.IsFree)
                 .NotNull().WithMessage("IsFree property is required.");
 
-           RuleFor(x => x.RoomTypeId)
-                .NotEmpty().WithMessage("Room type ID is required.");
         }
     }
 }

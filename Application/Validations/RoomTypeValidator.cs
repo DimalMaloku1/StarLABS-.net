@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Application.DTOs;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Validations
 {
-    public class RoomTypeValidator : AbstractValidator<RoomType>
+    public class RoomTypeValidator : AbstractValidator<RoomTypeDto>
     {
         public RoomTypeValidator()
         {

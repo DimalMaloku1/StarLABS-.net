@@ -1,6 +1,6 @@
 ﻿using Domain.Models;
 
-namespace Persistence.Repositories
+namespace Domain.Contracts
 {
     public interface IBookingRepository
     {

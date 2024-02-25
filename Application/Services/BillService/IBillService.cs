@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Responses;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace Application.Services.BillService
     {
         Task<IEnumerable<BillDto>> GetAllBills();
         Task<BillDto> GetBillById(Guid id);
-        Task<ApiResponse> AddBill(BillDto bill);
+        Task<BillDto> AddBill(BillDto bill);
         Task<ApiResponse> UpdateBill(BillDto bill);
-        Task<ApiResponse> DeleteBill(Guid Id);
+        Task DeleteBill(Guid id);
         Task<IEnumerable<BillDto>> GetBillsByBookingId(Guid bookingId);
         Task<IEnumerable<BillDto>> GetBillsByUser(Guid userId);
     }

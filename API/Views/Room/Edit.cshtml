@@ -1,5 +1,4 @@
 ﻿@model Application.DTOs.RoomDto
-@using Domain.Enums
 <h1>Edit Room</h1>
 
 <form asp-action="Update" asp-route-id="@Model.Id" method="post">
@@ -23,15 +22,6 @@
         </select>
         <span asp-validation-for="RoomTypeId" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="TypeOfService"></label>
-        <select asp-for="TypeOfService" class="form-control">
-            <option value="">Select Type Of Service</option>
-            @foreach (var method in Enum.GetValues(typeof(TypeOfService)))
-            {
-                <option value="@method">@method</option>
-            }
-        </select>
-    </div>
+
     <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>

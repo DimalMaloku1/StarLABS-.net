@@ -1,15 +1,15 @@
-﻿using Domain.Models;
+﻿using Application.DTOs;
 using FluentValidation;
 
 namespace Application.Validations
 {
-    public class BookingValidator : AbstractValidator<Booking>
+    public class BookingValidator : AbstractValidator<BookingDto>
     {
         public BookingValidator()
         {
-            RuleFor(x => x.TotalPrice)
-                .NotEmpty().WithMessage("Total price is required.")
-                .GreaterThan(0).WithMessage("Total price must be greater than 0.");
+        //    RuleFor(x => x.TotalPrice)
+        //        .NotEmpty().WithMessage("Total price is required.")
+        //        .GreaterThan(0).WithMessage("Total price must be greater than 0.");
 
             RuleFor(x => x.CheckInDate)
                 .NotEmpty().WithMessage("Check-in date is required.")
@@ -20,10 +20,12 @@ namespace Application.Validations
                 .GreaterThanOrEqualTo(x => x.CheckInDate).WithMessage("Check-out date must be after check-in date.");
 
             RuleFor(x => x.RoomId)
-                .NotEmpty().WithMessage("Room ID is required.");
+                .NotEmpty().WithMessage("RoomNumber is required.");
 
             RuleFor(x => x.UserId)
-                .NotEmpty().WithMessage("User ID is required.");
+                .NotEmpty().WithMessage("User is required.");
+            RuleFor(x => x.RoomTypeId)
+                .NotEmpty().WithMessage("RoomType is required.");
         }
     }
 }

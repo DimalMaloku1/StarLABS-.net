@@ -1,0 +1,26 @@
+﻿﻿
+@model PositionDTO
+@using Application.DTOs
+
+<h2>Create Position</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="PositionName"></label>
+        <input asp-for="PositionName" class="form-control" />
+        <span asp-validation-for="PositionName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PositionDescription"></label>
+        <input asp-for="PositionDescription" class="form-control" />
+        <span asp-validation-for="PositionDescription" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Shift"></label>
+        <select asp-for="Shift" class="form-control" asp-items="ViewBag.ShiftOptions">
+            <option value="">Select Shift</option>
+        </select>
+        <span asp-validation-for="Shift" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

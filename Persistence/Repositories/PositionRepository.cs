@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,27 +9,44 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repositories
 {
-    internal class PositionRepository : IPositionRepository
+    internal sealed class PositionRepository : IPositionRepository
     {
-        public Task<List<Position>> GetAllPositionsAsync()
+        private readonly DataContext _dbContext;
+
+        public PositionRepository(DataContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
-        public Task<Position> GetPositionByIdAsync(Guid id)
+        public async Task<List<Position>> GetAllPositionsAsync()
         {
-            throw new NotImplementedException();
+            return await _dbContext.Position.ToListAsync();
         }
-        public Task AddPositionAsync(Position position)
+
+        public async Task<Position> GetPositionByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Position.FindAsync(id);
         }
-        public Task UpdatePositionAsync(Position position)
+
+        public async Task AddPositionAsync(Position position)
         {
-            throw new NotImplementedException();
+            _dbContext.Position.Add(position);
+            await _dbContext.SaveChangesAsync();
         }
-        public Task DeletePositionAsync(Guid id)
+
+        public async Task UpdatePositionAsync(Position position)
         {
-            throw new NotImplementedException();
+            _dbContext.Entry(position).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeletePositionAsync(Guid id)
+        {
+            var position = await _dbContext.Position.FindAsync(id);
+            if (position != null)
+            {
+                _dbContext.Position.Remove(position);
+                await _dbContext.SaveChangesAsync();
+            }
         }
     }
 }

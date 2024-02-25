@@ -14,14 +14,14 @@ namespace Application.Services.RoomServices
     internal sealed class RoomServices : IRoomServices
     {
 
-    private readonly IRoomRepository _roomRepository;
-    private readonly IMapper _mapp;
+        private readonly IRoomRepository _roomRepository;
+        private readonly IMapper _mapp;
 
-            public RoomServices(IRoomRepository roomRepository, IMapper mapper)
-            {
-                _roomRepository = roomRepository;
-                _mapp = mapper;
-            }
+        public RoomServices(IRoomRepository roomRepository, IMapper mapper)
+        {
+            _roomRepository = roomRepository;
+            _mapp = mapper;
+        }
 
 
         public async Task<IEnumerable<RoomDto>> GetAllRoomsAsync()
@@ -63,8 +63,22 @@ namespace Application.Services.RoomServices
 
         }
 
+        public async Task<IEnumerable<RoomDto>> GetRoomsByFreeStatusAsync(bool isFree)
+        {
+            var rooms = await _roomRepository.GetRoomsByFreeStatusAsync(isFree);
+            var roomsDto = _mapp.Map<IEnumerable<RoomDto>>(rooms);
+            return roomsDto;
+        }
 
- 
+        public async Task<IEnumerable<RoomDto>> GetRoomsByRoomTypeIdAsync(Guid roomTypeId, bool isFree)
+        {
+            var rooms = await _roomRepository.GetRoomsByRoomTypeIdAsync(roomTypeId);
+
+            rooms = rooms.Where(room => room.IsFree);
+
+            var roomDtos = _mapp.Map<IEnumerable<RoomDto>>(rooms);
+            return roomDtos;
+        }
 
     }
 }

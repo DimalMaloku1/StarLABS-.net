@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model IEnumerable<Application.DTOs.PaymentDto>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +17,7 @@
         }
 
         .table th, .table td {
-            vertical-align: middle; 
+            vertical-align: middle;
         }
 
         .btn-action {
@@ -39,57 +41,56 @@
 </head>
 <body>
 
-    
-        <h2 class="text-center mb-4">All Payments</h2>
+    <h2 class="text-center mb-4">All Payments</h2>
 
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead class="thead-dark">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Payment Method</th>
+                    <th>Bill ID</th>
+                    <th>Total Amount</th>
+                    <th>Username</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var payment in Model)
+                {
                     <tr>
-                        <th>Payment ID</th>
-                        <th>Is Paid</th>
-                        <th>Payment Method</th>
-                        <th>Bill ID</th>
-                        <th>Action</th>
+                        <td>@payment.Id</td>
+                        <td>@payment.PaymentMethod</td>
+                        <td>@payment.BillId</td>
+                        <td>@payment.TotalAmount</td>
+                        <td>@payment.Username</td>
+                        <td>
+                            <a class="btn btn-info btn-sm btn-action" asp-action="Details" asp-route-id="@payment.Id">
+                                <i class="fas fa-info-circle"></i> Details
+                            </a>
+                            <a class="btn btn-primary btn-sm btn-action" asp-action="Edit" asp-route-id="@payment.Id">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <form asp-action="Delete" asp-route-id="@payment.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm btn-action" onclick="return confirm('Are you sure you want to delete this payment?')">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </button>
+                            </form>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var payment in Model)
-                    {
-                        <tr>
-                            <td>@payment.Id</td>
-                            <td>@(payment.IsPaid ? "Yes" : "No")</td>
-                            <td>@payment.PaymentMethod</td>
-                            <td>@payment.BillId</td>
-                            <td>
-                                <a class="btn btn-info btn-sm btn-action" asp-action="Details" asp-route-id="@payment.Id">
-                                    <i class="fas fa-info-circle"></i> Details
-                                </a>
-                                <a class="btn btn-primary btn-sm btn-action" asp-action="Edit" asp-route-id="@payment.Id">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <form asp-action="Delete" asp-route-id="@payment.Id" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-danger btn-sm btn-action" onclick="return confirm('Are you sure you want to delete this payment?')">
-                                        <i class="fas fa-trash-alt"></i> Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
+    </div>
 
-        <div class="text-center">
-            <a class="btn btn-success btn-create-new" asp-action="Create">
-                <i class="fas fa-plus"></i> Create New Payment
-            </a>
-        </div>
-
+    <div class="text-center">
+        <a class="btn btn-success btn-create-new" asp-action="Create">
+            <i class="fas fa-plus"></i> Create New Payment
+        </a>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>

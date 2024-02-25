@@ -13,7 +13,7 @@ namespace Domain.Contracts
         Task<Bill> GetBillById(Guid id);
         Task<Bill> AddBill(Bill bill);
         Task<Bill> UpdateBill(Bill bill);
-        Task<Bill> DeleteBill(Bill bill);
+        Task DeleteBill(Bill bill);
         Task<IEnumerable<Bill>> GetBillsByBookingId(Guid bookingId);
         Task<IEnumerable<Bill>> GetBillsByUser(Guid userId);
 

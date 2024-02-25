@@ -10,8 +10,8 @@ namespace Application.Services.PositionServices
 {
     public interface IPositionServices
     {
-        Task<IEnumerable<Position>> GetAllPositionsAsync();
-        Task<Position> GetPositionByIdAsync(Guid id);
+        Task<IEnumerable<PositionDTO>> GetAllPositionsAsync();
+        Task<PositionDTO> GetPositionByIdAsync(Guid id);
         Task AddPositionAsync(PositionDTO positionDto);
         Task UpdatePositionAsync(Guid id, PositionDTO positionDto);
         Task DeletePositionAsync(Guid id);

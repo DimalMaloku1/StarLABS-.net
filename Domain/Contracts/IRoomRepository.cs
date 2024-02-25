@@ -15,5 +15,11 @@ namespace Domain.Contracts
         Task Delete(Room room);
 
         Task UpdateAsync(Guid Id, Room room);
+
+        Task<IEnumerable<Room>> GetRoomsByFreeStatusAsync(bool isFree);
+
+        Task<IEnumerable<Room>> GetRoomsByRoomTypeIdAsync(Guid roomTypeId);
+
     }
+
 }

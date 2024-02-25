@@ -2,18 +2,21 @@ using Application.DTOs;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Services.FeedbackServices
 {
     internal sealed class FeedbackService : IFeedbackService
     {
         private readonly IFeedbackRepository _feedbackRepository;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
 
-        public FeedbackService(IFeedbackRepository feedbackRepository, IMapper mapper)
+        public FeedbackService(IFeedbackRepository feedbackRepository, IMapper mapper, UserManager<AppUser> userManager)
         {
             _feedbackRepository = feedbackRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<FeedbackDto>> GetAllFeedbacksAsync()
@@ -31,7 +34,12 @@ namespace Application.Services.FeedbackServices
         }
         public async Task<FeedbackDto> CreateAsync(FeedbackDto feedbackDto)
         {
-            var feedback = _mapper.Map<Feedback>(feedbackDto);
+            var feedback = new Feedback()
+            {
+                Comment = feedbackDto.Comment,
+                Rating = feedbackDto.Rating,
+                UserId = feedbackDto.UserId
+            };
             await _feedbackRepository.Add(feedback);
             return feedbackDto;
         }
@@ -39,17 +47,67 @@ namespace Application.Services.FeedbackServices
         {
             var feedback = await _feedbackRepository.GetFeedbackByIdAsync(id);
 
-            _mapper.Map(feedbackDto, feedback);
+            if (feedback == null)
+            {
 
-            //await _feedbackRepository.Update(feedback);
+                return;
+            }
 
+            feedback.Comment = feedbackDto.Comment;
+            feedback.Rating = feedbackDto.Rating;
+
+
+            await _feedbackRepository.Update(feedback);
         }
+
+
         public async Task DeleteAsync(Guid id)
         {
             var feedback = await _feedbackRepository.GetFeedbackByIdAsync(id);
             await _feedbackRepository.Delete(feedback);
-
         }
+
+        public async Task<double> CalculateAverageRatingAsync()
+        {
+            
+            var feedbacks = await _feedbackRepository.GetFeedbacksAsync();
+
+            
+            if (feedbacks == null || !feedbacks.Any())
+            {
+                
+                return 0;
+            }
+
+            
+            int totalRatingSum = feedbacks.Sum(f => f.Rating);
+
+           
+            double averageRating = (double)totalRatingSum / feedbacks.Count();
+
+            return averageRating;
+        }
+
+        public async Task<IEnumerable<FeedbackDto>> GetTopRatedFeedbacksAsync(int count)
+        {
+            var topRatedFeedbacks = await _feedbackRepository.GetFeedbacksAsync();
+            var topRatedFeedbacksDto = topRatedFeedbacks
+                .OrderByDescending(f => f.Rating)
+                .Take(count)
+                .Select(f => new FeedbackDto
+                {
+                    Id = f.Id, // Assuming Id is a property in FeedbackDto
+                    Comment = f.Comment,
+                    Rating = f.Rating,
+                    // Map other properties as needed
+                });
+
+            return topRatedFeedbacksDto;
+        }
+
+
+
+
 
     }
 }

@@ -2,22 +2,30 @@
 using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Services.FeedbackServices;
+using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class FeedbackController : Controller
     {
         private readonly IFeedbackService _feedbackService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public FeedbackController(IFeedbackService feedbackService)
+        public FeedbackController(UserManager<AppUser> userManager, IFeedbackService feedbackService)
         {
+            _userManager = userManager;
             _feedbackService = feedbackService;
         }
-
-        public async Task<IActionResult> Index()
+    
+       public async Task<IActionResult> Index()
         {
             var feedbacks = await _feedbackService.GetAllFeedbacksAsync();
+            var averageRating = await _feedbackService.CalculateAverageRatingAsync();
+            ViewBag.AverageRating = averageRating; 
             return View("Index", feedbacks);
         }
 
@@ -35,8 +43,26 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(FeedbackDto feedbackDto)
         {
-            await _feedbackService.CreateAsync(feedbackDto);
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    feedbackDto.UserId = user.Id;
+
+                    // Pass the feedback object to the service for creation
+                    await _feedbackService.CreateAsync(feedbackDto);
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "User not found");
+                }
+            }
+
+            // If ModelState is not valid or user is not found, return the view with errors
+            return View(feedbackDto);
         }
 
         public async Task<IActionResult> Edit(Guid id)
@@ -53,13 +79,6 @@ namespace API.Controllers
         }
 
         public async Task<IActionResult> Delete(Guid id)
-        {
-            var feedback = await _feedbackService.GetFeedbackByIdAsync(id);
-            return View("Delete", feedback);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             await _feedbackService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));

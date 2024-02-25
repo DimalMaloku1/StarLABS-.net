@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Services.PositionServices;
 using Application.Services.StaffServices;
 using Application.Validations;
 using FluentValidation;
@@ -12,12 +13,14 @@ namespace MVC.Controllers
     public class StaffController : Controller
     {
         private readonly IStaffService _staffService;
+        private readonly IPositionServices _positionService;
         private readonly StaffValidator _staffValidator; 
 
-        public StaffController(IStaffService staffService, StaffValidator staffValidator)
+        public StaffController(IStaffService staffService, StaffValidator staffValidator ,IPositionServices positionServices)
         {
             _staffService = staffService;
             _staffValidator = staffValidator;
+            _positionService = positionServices;
         }
 
         public async Task<IActionResult> Index()
@@ -40,7 +43,8 @@ namespace MVC.Controllers
         {
             var users = await _staffService.GetAllUserNamesAsync();
             ViewBag.Users = new SelectList(users);
-
+            var positions = await _positionService.GetAllPositionsAsync();
+            ViewBag.Positions = new SelectList(positions ,"Id", "PositionName");
             return View();
         }
 
@@ -64,6 +68,9 @@ namespace MVC.Controllers
 
             var users = await _staffService.GetAllUserNamesAsync();
             ViewBag.Users = new SelectList(users);
+
+            var positions = await _positionService.GetAllPositionsAsync();
+            ViewBag.Positions = new SelectList(positions, "Id", "PositionName");
             return View(staffDTO);
         }
 
@@ -110,6 +117,17 @@ namespace MVC.Controllers
 
             var staff = await _staffService.GetStaffByDepartmentAsync(department);
             return View("StaffListByDepartment", staff);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Position(Guid positionId)
+        {
+            if (positionId == Guid.Empty)
+            {
+                return BadRequest("Position ID is required.");
+            }
+
+            var staff = await _staffService.GetStaffByPositionAsync(positionId);
+            return View("StaffListByPosition", staff);
         }
 
 

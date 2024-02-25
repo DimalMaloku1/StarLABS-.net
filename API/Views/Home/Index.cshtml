@@ -6,4 +6,23 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<div class="container mt-5">
+    <h2>Top Rated Feedbacks</h2>
+
+    <table class="table">
+        
+        <tbody>
+            @foreach (var feedback in Model)
+            {
+                <tr>
+                    
+                    <td>@feedback.Comment</td>
+                    <td>@feedback.Rating</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
 <script src="/_framework/aspnetcore-browser-refresh.js"></script>

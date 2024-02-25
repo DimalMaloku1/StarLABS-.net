@@ -1,20 +1,17 @@
-﻿using Domain.Enums;
-using Domain.Models;
+﻿using Application.DTOs;
 using FluentValidation;
-
 
 namespace Application.Validations
 {
-    public class PaymentValidation : AbstractValidator<Payment>
+    public class PaymentValidator : AbstractValidator<PaymentDto>
     {
-        public PaymentValidation()
+        public PaymentValidator()
         {
-            RuleFor(payment => payment.PaymentMethod)
-                .NotEmpty().WithMessage("Payment method is required.");
+            RuleFor(x => x.PaymentMethod)
+                .NotEmpty().WithMessage("Please select a valid payment method.");
 
-
-            RuleFor(payment => payment.BillId)
-                .NotEmpty().WithMessage("Bill ID is required.");
+            RuleFor(x => x.BillId)
+                .NotEmpty().WithMessage("Please select a valid bill.");
         }
     }
 }

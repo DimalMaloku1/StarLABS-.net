@@ -1,12 +1,10 @@
-﻿using Application.DTOs;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Application.DTOs;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.PositionServices
 {
@@ -18,26 +16,25 @@ namespace Application.Services.PositionServices
         public PositionServices(IPositionRepository positionRepository, IMapper mapper)
         {
             _positionRepository = positionRepository;
-            _mapper = mapper;
+            _mapper = mapper ;
         }
 
-        public async Task<IEnumerable<Position>> GetAllPositionsAsync()
+        public async Task<IEnumerable<PositionDTO>> GetAllPositionsAsync()
         {
             var positions = await _positionRepository.GetAllPositionsAsync();
-            return positions;
+            return _mapper.Map<IEnumerable<PositionDTO>>(positions);
         }
 
-        public async Task<Position> GetPositionByIdAsync(Guid id)
+        public async Task<PositionDTO> GetPositionByIdAsync(Guid id)
         {
             var position = await _positionRepository.GetPositionByIdAsync(id);
-            return position;
+            return _mapper.Map<PositionDTO>(position);
         }
 
         public async Task AddPositionAsync(PositionDTO positionDto)
         {
             var position = _mapper.Map<Position>(positionDto);
             await _positionRepository.AddPositionAsync(position);
-           
         }
 
         public async Task UpdatePositionAsync(Guid id, PositionDTO positionDto)
@@ -51,7 +48,6 @@ namespace Application.Services.PositionServices
             }
             else
             {
-                // Handle the case where the position with the given ID is not found
                 throw new ArgumentException($"Position with ID {id} not found.");
             }
         }

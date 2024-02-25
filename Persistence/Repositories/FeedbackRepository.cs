@@ -16,13 +16,13 @@ namespace Persistence.Repositories
 
         public async Task<IEnumerable<Feedback>> GetFeedbacksAsync()
         {
-            var feedbacks = await _context.Feedbacks.ToListAsync();
+            var feedbacks = await _context.Feedbacks.Include(x => x.User).ToListAsync();
             return feedbacks;
         }
 
         public async Task<Feedback> GetFeedbackByIdAsync(Guid Id)
         {
-            var feedback = await _context.Feedbacks.FirstOrDefaultAsync(x => x.Id == Id);
+            var feedback = await _context.Feedbacks.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == Id);
             return feedback;
         }
 

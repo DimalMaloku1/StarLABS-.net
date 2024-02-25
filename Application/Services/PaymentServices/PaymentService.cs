@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using Domain.Models;
-using Application.DTOs;
-using Domain.Enums;
+﻿using Application.DTOs;
+using AutoMapper;
 using Domain.Contracts;
-using Persistence.Repositories;
+using Domain.Models;
 
 namespace Application.Services.PaymentServices
 {
@@ -12,14 +10,11 @@ namespace Application.Services.PaymentServices
         private readonly IPaymentRepository _paymentRepository;
         private readonly IMapper _mapper;
 
-
-
         public PaymentService(IPaymentRepository paymentRepository, IMapper mapper)
         {
             _paymentRepository = paymentRepository;
             _mapper = mapper;
         }
-
 
         public async Task<PaymentDto> GetPaymentByIdAsync(Guid id)
         {
@@ -27,20 +22,17 @@ namespace Application.Services.PaymentServices
             return _mapper.Map<PaymentDto>(payment);
         }
 
-
         public async Task<IEnumerable<PaymentDto>> GetAllPaymentsAsync()
         {
             var payments = await _paymentRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<PaymentDto>>(payments);
         }
 
-
         public async Task AddPaymentAsync(PaymentDto paymentDto)
         {
             var payment = _mapper.Map<Payment>(paymentDto);
             await _paymentRepository.AddAsync(payment);
         }
-
 
         public async Task UpdatePaymentAsync(Guid id, PaymentDto paymentDto)
         {
@@ -53,9 +45,6 @@ namespace Application.Services.PaymentServices
             _mapper.Map(paymentDto, existingPayment);
             await _paymentRepository.UpdateAsync(id, existingPayment);
         }
-
-
-
 
         public async Task DeletePaymentAsync(Guid id)
         {

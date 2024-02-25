@@ -1,4 +1,6 @@
 ﻿using Application.DTOs;
+using Application.Services.RoomServices;
+using Application.Services.RoomTypeServices;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Models;
@@ -6,19 +8,9 @@ using Persistence.Repositories;
 
 namespace Application.Services.BookingServices
 {
-    internal sealed class BookingService : IBookingService
+    internal sealed class BookingService(IRoomServices _roomService,IRoomTypeServices _roomTypeService,
+        IBookingRepository _bookingRepository, IMapper _mapper): IBookingService
     {
-        private readonly IBookingRepository _bookingRepository;
-        private readonly IRoomTypeRepository _roomTypeRepository;
-        private readonly IMapper _mapper;
-
-        public BookingService(IBookingRepository bookingRepository,IRoomTypeRepository roomTypeRepository, IMapper mapper)
-        {
-            _bookingRepository = bookingRepository;
-            _roomTypeRepository = roomTypeRepository;
-            _mapper = mapper;
-        }
-
         public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
         {
             var bookings = await _bookingRepository.GetBookingsAsync();
@@ -32,11 +24,25 @@ namespace Application.Services.BookingServices
             var bookingDto = _mapper.Map<BookingDto>(booking);
             return bookingDto;
         }
-        public async Task<BookingDto> CreateAsync(BookingDto bookingDto)
+        public async Task<BookingDto> CreateAsync(BookingDto bookingDto, Guid userId)
         {
             var booking = _mapper.Map<Booking>(bookingDto);
+            booking.UserId = userId; 
             await _bookingRepository.Add(booking);
-            return bookingDto;
+
+            foreach (var roomId in bookingDto.RoomIds)
+            {
+                var newBookingRoom = new Booking_RoomDto()
+                {
+                    BookingId = bookingDto.Id,
+                    RoomId = roomId,
+                };
+                //await _bookingRepository
+            }
+
+
+
+            return _mapper.Map<BookingDto>(booking);
         }
         public async Task UpdateAsync(Guid id, BookingDto bookingDto)
         {
@@ -58,7 +64,8 @@ namespace Application.Services.BookingServices
         {
             var response = new NewBookingDropDownsDTO()
             {
-                RoomTypes = await _roomTypeRepository.GetRoomTypesAsync(),
+                Rooms = await _roomService.GetAllRoomsAsync(),
+                RoomTypes = await _roomTypeService.GetAllRoomTypesAsync()
             };
 
             return response;

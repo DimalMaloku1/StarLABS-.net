@@ -1,6 +1,5 @@
 ﻿using Application.Base;
 using Domain.Base;
-using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +12,16 @@ namespace Application.DTOs
     {
         public int RoomNumber { get; set; }
         public bool IsFree { get; set; }
-        public TypeOfService TypeOfService { get; set; }
 
         public Guid RoomTypeId { get; set; }
-        public IEnumerable<RoomTypeDto> RoomTypes { get; set; }
 
         public string Type { get; set; }
+
+        public string Description { get; set; }
+        public double Price { get; set; }
+        public int Capacity { get; set; }
+        public IEnumerable<RoomTypeDto> RoomTypes { get; set; }
+
 
 
     }

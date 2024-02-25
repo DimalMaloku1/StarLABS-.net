@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.DTOs;
 using Domain.Models;
 using FluentValidation;
 
 namespace Application.Validations
 {
-    public class BillValidator : AbstractValidator<Bill>
+    public class BillValidator : AbstractValidator<BillDto>
     {
         public BillValidator()
         {
-            RuleFor(x => x.TotalAmount)
-                .NotEmpty().WithMessage("Total amount is required.")
-                .GreaterThan(0).WithMessage("Total amount must be greater than 0.");
-
-            RuleFor(x => x.BookingId)
-                .NotEmpty().WithMessage("Booking ID is required.");
+            RuleFor(x => x.BookingId).NotEmpty()
+                .WithMessage("Booking Id cannot be null");
         }
     }
 }

@@ -15,5 +15,9 @@ namespace Application.Services.RoomServices
         Task UpdateAsync(Guid id, RoomDto roomDto);
         Task DeleteAsync(Guid id);
 
+        Task<IEnumerable<RoomDto>> GetRoomsByFreeStatusAsync(bool isFree);
+
+        Task<IEnumerable<RoomDto>> GetRoomsByRoomTypeIdAsync(Guid roomTypeId, bool isFree);
+
     }
 }

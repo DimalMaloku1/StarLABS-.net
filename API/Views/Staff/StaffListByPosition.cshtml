@@ -1,0 +1,43 @@
+﻿@model IEnumerable<StaffDTO>
+@using Application.DTOs
+
+@{
+    ViewData["Title"] = "Staff List by Position";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Department</th>
+                <th>Salary</th>
+                <th>Address</th>
+                <th>User</th>
+                <th>Position</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var staffMember in Model)
+            {
+                <tr>
+                    <td>@staffMember.Id</td>
+                    <td>@staffMember.Department</td>
+                    <td>@staffMember.Salary</td>
+                    <td>@staffMember.Address</td>
+                    <td>@staffMember.User.Email</td>
+                    <td>@staffMember.Position.PositionName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No staff members found for the specified department.</p>
+}
+
+<a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
