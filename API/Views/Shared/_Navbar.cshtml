@@ -1,0 +1,36 @@
+﻿<style>
+    .activeDashboard{
+    font-weight: 800;
+    }
+</style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto mx-2 px-4 fw-normal">
+             <li class="nav-item @(ViewContext.RouteData.Values["action"].ToString() == "Users" ? "activeDashboard" : "")">
+                            <a class="nav-link" href="@Url.Action("Users", "Dashboard")">Users</a>
+                        </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["action"].ToString() == "Bookings" ? "activeDashboard" : "")">
+                           <a class="nav-link" href="@Url.Action("Bookings", "Dashboard")">Bookings</a>
+                       </li> <li class="nav-item @(ViewContext.RouteData.Values["action"].ToString() == "Bills" ? "activeDashboard" : "")">
+                                            <a class="nav-link" href="@Url.Action("Bills", "Dashboard")">Bills</a>
+                                        </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["action"].ToString() == "Payments" ? "activeDashboard" : "")">
+                           <a class="nav-link" href="@Url.Action("Payments", "Dashboard")">Payments</a>
+                       </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["action"].ToString() == "Rooms" ? "activeDashboard" : "")">
+                           <a class="nav-link" href="@Url.Action("Rooms", "Dashboard")">Rooms</a>
+                       </li>
+             <li class="nav-item @(ViewContext.RouteData.Values["action"].ToString() == "RoomTypes" ? "activeDashboard" : "")">
+                            <a class="nav-link" href="@Url.Action("RoomTypes", "Dashboard")">Room Types</a>
+                        </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["action"].ToString() == "Staff" ? "activeDashboard" : "")">
+                           <a class="nav-link" href="@Url.Action("Staff", "Dashboard")">Staff</a>
+                       </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["action"].ToString() == "Positions" ? "activeDashboard" : "")">
+                           <a class="nav-link" href="@Url.Action("Positions", "Dashboard")">Positions</a>
+                       </li>
+        </ul>
+    </div>
+  
+</nav>
+

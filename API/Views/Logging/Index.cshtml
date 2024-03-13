@@ -1,0 +1,116 @@
+﻿@using Domain.Models
+@model IEnumerable<Log>
+@{
+    ViewData["Title"] = "Logging";
+}
+
+@*
+<h1>Logging</h1>
+
+<div>
+    <label for="deleteMonth">Select Month and Year:</label>
+    <input type="month" id="deleteMonth" name="deleteMonth">
+    <button onclick="deleteLogs()">Delete Logs</button>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Action</th>
+            <th>Entity</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>@log.UserName</td>
+                <td>@log.Action</td>
+                <td>@log.Entity</td>
+                <td>@log.Timestamp.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+*@
+
+
+
+<div class="crudIndex">
+    <div class="buttons-title">
+        <h3>Loggs</h3>
+       
+    </div>
+
+    <div class="filters">
+        
+            <div class="input">
+                <input type="month" id="deleteMonth" name="deleteMonth" class="input-logs">
+                <button onclick="deleteLogs()" class="btnDelete-logs">Delete</button>
+            </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Action</th>
+                <th>Entity</th>
+                <th class="d-flex container-fluid justify-content-center">Timestamp</th>
+            </tr>
+        </thead>
+        <tbody class="fw-bold">
+            @foreach (var log in Model)
+            {
+                if (@log.Action == "Deleted")
+                {
+                    <tr class="deleted">
+                        <td>@log.UserName</td>
+                        <td>@log.Action</td>
+                        <td>@log.Entity</td>
+                        <td>@log.Timestamp.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    </tr>
+                }
+                else if (@log.Action == "Created")
+                {
+                    <tr class="created">
+                        <td>@log.UserName</td>
+                        <td>@log.Action</td>
+                        <td>@log.Entity</td>
+                        <td>@log.Timestamp.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    </tr>
+                }
+
+                else if (@log.Action == "Updated")
+                {
+                    <tr class="updated">
+                        <td>@log.UserName</td>
+                        <td>@log.Action</td>
+                        <td>@log.Entity</td>
+                        <td>@log.Timestamp.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="signup">
+                        <td>@log.UserName</td>
+                        <td>@log.Action</td>
+                        <td>@log.Entity</td>
+                        <td>@log.Timestamp.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+</div>
+
+
+<script>
+    function deleteLogs() {
+        var deleteMonth = document.getElementById("deleteMonth").value;
+        window.location.href = "/Logging/DeleteLogs?monthYear=" + deleteMonth;
+    }
+</script>

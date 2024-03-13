@@ -7,15 +7,15 @@
 <div class="row text">
     <div class="col-md-8 offset-2">
         <p>
-            <h1>Details for @Model.Id</h1>
+            <h1>View Booking Details</h1>
         </p>
         <div class="row">
             <div class="col-md-8 offset-2">
                 <div class="form-group">
-                <label asp-for="User.Email" class="control-label"></label>
-                <input asp-for="User.Email" class="form-control" readonly />
-                <span asp-validation-for="User.Email" class="text-danger"></span>
-                </div> 
+                    <label asp-for="User.Email" class="control-label"></label>
+                    <input asp-for="User.Email" class="form-control" readonly />
+                    <span asp-validation-for="User.Email" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     <label asp-for="CheckInDate" class="control-label"></label>
                     <input asp-for="CheckInDate" class="form-control" readonly />
@@ -40,18 +40,13 @@
                     </select>
                     <span asp-validation-for="RoomTypeId" class="text-danger"></span>
                 </div>
-               
+
                 <div class="form-group d-flex justify-content-between mt-2">
                     <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
-                        <a class="btn btn-outline-success float-right" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                   <form method="post" asp-action="Create" asp-controller="Bill">
-<input type="hidden" asp-for="Id" />
-                        <button type="submit" class="btn btn-outline-primary">Create Bill</button>
-                    </form>
-                   
-
+                    <a class="btn btn-outline-success float-right" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                    <a href="@Url.Action("ViewBill", "Bookings", new { id = Model.Id })" class="btn btn-primary">View Bill</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-

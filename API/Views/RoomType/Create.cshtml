@@ -3,7 +3,7 @@
 
 <h2>Create Room Type</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="Type"></label>
         <input asp-for="Type" class="form-control" />
@@ -24,5 +24,27 @@
         <input asp-for="Capacity" class="form-control" />
         <span asp-validation-for="Capacity" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="Photos" class="control-label"></label>
+        <input type="file" name="photos" multiple class="form-control" />
+    </div>
+    <div class="form-group">
+        <img id="preview" src="#" alt="Image Preview" style="max-width: 200px; max-height: 200px; display: none;" />
+    </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
+
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#preview').attr('src', e.target.result);
+                $('#preview').css('display', 'block');
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

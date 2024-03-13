@@ -1,58 +1,28 @@
-using Application;
-using Application.Core;
-using Application.Stripe;
-using Domain.Models;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Persistence;
+using Infrastructure;
+using API.Extensions;
+using Microsoft.AspNetCore.Identity;
+using API.Middleware;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
+//builder.Services.AddIdentityServiceJWT(builder.Configuration);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-var key = builder.Configuration.GetValue<string>("StripeSettings:SecretKey");
-
-
-RepositoryDIConfiguration.Configure(builder.Services);
-ServicesDIConfiguration.Configure(builder.Services, builder.Configuration);
-
-
-builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-builder.Services.AddFluentValidationAutoValidation(config =>
-{
-    config.DisableDataAnnotationsValidation = true;
-});
-
-builder.Services.AddDbContext<DataContext>(opt =>
-{
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    opt.LogTo(Console.WriteLine, LogLevel.Information);
-});
-
-builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<DataContext>()
-    .AddDefaultTokenProviders();
-
-builder.Services.AddSwaggerGen();
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Password.RequireNonAlphanumeric = false;
-});
-
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
-builder.Services.AddRazorPages();
 
 var app = builder.Build();
+//app.UseMiddleware<ExceptionMiddleware>();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -60,12 +30,12 @@ if (app.Environment.IsDevelopment())
 
 }
 app.UseStaticFiles();
-app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseCors();
+
+app.UseAuthentication();
 app.UseAuthorization();
-
-
 
 app.MapRazorPages();
 
@@ -75,7 +45,9 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<DataContext>();
-    context.Database.Migrate();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedData(roleManager,context);
 }
 catch (Exception ex)
 {

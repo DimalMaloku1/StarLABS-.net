@@ -7,19 +7,26 @@ using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Policy;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Application.Services.LoggingServices;
+using System.Security.Claims; // Import the namespace for LoggingService
 
 namespace API.Controllers
 {
+    [Authorize]
     public class BillController : Controller
     {
         private readonly IBillService _billService;
         private readonly IValidator<BillDto> _billValidator;
         private readonly IBookingService _bookingService;
-        public BillController(IBillService billService, IValidator<BillDto> billValidator, IBookingService bookingService)
+        private readonly ILoggingService _loggingService;
+
+        public BillController(IBillService billService, IValidator<BillDto> billValidator, IBookingService bookingService, ILoggingService loggingService)
         {
             _billService = billService;
             _billValidator = billValidator;
             _bookingService = bookingService;
+            _loggingService = loggingService;
         }
 
         [HttpGet]
@@ -50,6 +57,7 @@ namespace API.Controllers
                 var billValidaton = _billValidator.Validate(billDto);
                 if (billValidaton.IsValid){
                     await _billService.AddBill(billDto);
+                    await _loggingService.LogActionAsync("Created", "Bill", User.FindFirst(ClaimTypes.Email)?.Value);
                     return RedirectToAction(nameof(Index));
                 }
               
@@ -60,20 +68,7 @@ namespace API.Controllers
                 return View(billDto);
             }
         
-        // [HttpPost]
-        // public async Task<IActionResult> Create(PaymentDto paymentDto)
-        // {
-        //     var validationResult = _paymentValidator.Validate(paymentDto);
-        //     if (validationResult.IsValid)
-        //     {
-        //         await _pservice.AddPaymentAsync(paymentDto);
-        //         return RedirectToAction("Index");
-        //     }
-        //
-        //     paymentDto.Bills = await _billService.GetAllBills();
-        //     return View(paymentDto);
-        // }
-
+ 
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
@@ -86,6 +81,7 @@ namespace API.Controllers
         public async Task<IActionResult> Update(BillDto billDto)
         {
             await _billService.UpdateBill(billDto);
+            await _loggingService.LogActionAsync("Updated", "Bill", User.FindFirst(ClaimTypes.Email)?.Value);
             return RedirectToAction(nameof(Details), new { billDto.Id });
         }
 
@@ -94,6 +90,7 @@ namespace API.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             await _billService.DeleteBill(id);
+            await _loggingService.LogActionAsync("Deleted", "Bill", User.FindFirst(ClaimTypes.Email)?.Value);
             return RedirectToAction(nameof(Index));
         }
 

@@ -1,40 +1,46 @@
 ﻿@model List<PositionDTO>
 @using Application.DTOs
 
-<h2>Positions</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Position ID</th>
-            <th>Position Name</th>
-            <th>Position Description</th>
-            <th>Shift</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-       
+<div class="crudIndex">
+    <div class="buttons-title">
+        <h3>Positions</h3>
+        <a asp-controller="Position" asp-action="Create" class="btn btn-success"><span class="material-icons">add_circle</span>  Add New Position</a>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Position ID</th>
+                <th>Position Name</th>
+                <th>Position Description</th>
+                <th>Shift</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
         <tbody>
-                @foreach (var position in Model)
-                {
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <td>@position.Id</td>
-                    <td>@position.PositionName</td>
-                    <td>@position.PositionDescription</td>
-                    <td>@position.Shift</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@position.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@position.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@position.Id">Delete</a>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Id)
                     </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.PositionName)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.PositionDescription)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Shift)
+                    </td>
+                    <td class="align-middle">
+                        <a class="btn btn-outline-primary" asp-controller="Position" asp-action="Edit" asp-route-id="@item.Id"><span class="material-icons">edit</span></a>
+                        <a class="btn btn-outline-info" asp-controller="Position" asp-action="Details" asp-route-id="@item.Id"><span class="material-icons">info</span></a>
+                        <a class="btn btn-danger" asp-controller="Position" asp-action="Delete" asp-route-id="@item.Id"><span class="material-icons">delete</span></a>
+                    </td>
+
                 </tr>
-                }
+            }
         </tbody>
-        
-        
-</table>
+
+    </table>
+</div>

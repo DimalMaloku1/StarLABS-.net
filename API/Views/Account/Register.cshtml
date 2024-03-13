@@ -1,0 +1,47 @@
+﻿@using Application.DTOs.AccountDTOs;
+@model RegisterDto
+
+@{
+    Layout = "~/Views/_AuthLayout.cshtml";
+}
+
+
+<h2>Register</h2>
+
+<form asp-action="Register" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="d-flex justify-content-between gap-2">
+    <div class="form-group mt-4">
+        <label asp-for="UserName">First Name</label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-4">
+        <label asp-for="UserLastName">Last Name</label>
+        <input asp-for="UserLastName" class="form-control" />
+        <span asp-validation-for="UserLastName" class="text-danger"></span>
+    </div>
+    </div>
+
+    <div class="form-group mt-4">
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-4">
+        <label asp-for="Password">Password</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <button type="submit" class="btn btn-primary container-fluid">Register</button>
+    </div>
+</form>
+
+
+
+

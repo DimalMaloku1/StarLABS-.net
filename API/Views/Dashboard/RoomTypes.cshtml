@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Application.DTOs.RoomTypeDto>
+@Html.Partial("_Navbar")
+<div class="relative mx-auto overflow-x-auto">
+    <div class="card w-2/3 mx-auto mt-12">
+        
+        
+    
+        <div class="card-body">
+            <table  class="datatable table table-bordered table-striped table-hover py-4">
+                <thead class="table-dark ">
+                <th> RoomType Id </th>
+                <th> Type</th>
+                <th> Description </th>
+                <th> Created At</th>
+                <th> Actions</th>
+                </thead>
+                <tbody>
+                @foreach (var roomType in Model)
+                {
+                    <tr>
+                        <td> @roomType.Id </td>
+                        <td> @roomType.Type</td>
+                        <td> @roomType.Description</td>
+                        <td> @roomType.CreatedAt</td>
+                        <td class="text-center ">
+                            <a asp-controller="RoomType" asp-action="Details" asp-route-id="@roomType.Id" class=" btn btn-info" >Details</a>
+                            <a asp-controller="RoomType" asp-action="Edit" asp-route-id="@roomType.Id" class=" btn btn-primary" >Edit</a>
+                            <form asp-controller="RoomType" asp-action="Delete" asp-route-Id="@roomType.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <script src="../wwwroot/js/site.js">
+            
+          </script>
+
+</div>

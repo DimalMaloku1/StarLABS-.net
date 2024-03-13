@@ -1,0 +1,23 @@
+﻿@model Application.DTOs.AccountDTOs.UserDto
+@Html.Partial("_Navbar")
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">User Details</h2>
+            <form asp-action="UpdateUser" method="post">
+                <div class="mb-3">
+                    <label for="userName" class="form-label">First Name</label>
+                    <input asp-for="UserName" type="text" class="form-control" id="userName" name="UserName"   />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="UserLastName" for="userLastName" class="form-label">Last Name</label>
+                    <input asp-for="UserLastName" type="text" class="form-control" id="userLastName" name="UserLastname"   />
+                </div>
+                <!-- Add more form controls for other user properties as needed -->
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a href="@Url.Action("Users")" class="btn btn-secondary">Back</a>
+            </form>
+        </div>
+    </div>
+</div>

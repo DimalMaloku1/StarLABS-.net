@@ -1,0 +1,33 @@
+﻿@using Application.DTOs.AccountDTOs
+@model LoginDto
+
+@{
+    Layout = "~/Views/_AuthLayout.cshtml";
+}
+
+<h2>Login</h2>
+
+<form asp-controller="Account" asp-action="Login">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @if (ViewData["ErrorMessage"] == "Please verify your account before logging in")
+    {
+        <p>
+            You can verify your account
+            <a href="@Url.Action("VerifyEmail", "Account", new { email = Model.Email })">here</a>.
+        </p>
+    }
+    <div class="form-group mt-4">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control"/>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-4">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" class="form-control"/>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <button type="submit" class="btn btn-primary container-fluid">Login</button>
+    </div>
+
+</form>

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Application.DTOs.AccountDTOs.UserDto>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<h1>Manage Users</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <div>
+        <h3>Promote a user to admin</h3>
+        <form asp-action="PromoteToAdmin" method="post">
+            <div class="form-group">
+                <label for="promoteEmail">User Email:</label>
+                <input type="email" class="form-control" id="promoteEmail" name="email" required>
+            </div>
+            <button type="submit" class="btn btn-success">Promote to Admin</button>
+        </form>
+        <br>
+    </div>
+
+    <div>
+        <h3>Demote an admin to user</h3>
+        <form asp-action="Demote" method="post">
+            <div class="form-group">
+                <label for="demoteEmail">Admin Email:</label>
+                <input type="email" class="form-control" id="demoteEmail" name="email" required>
+            </div>
+            <button type="submit" class="btn btn-warning">Demote to User</button>
+        </form>
+    </div>
+}
+else
+{
+    <p>You do not have permission to access this page.</p>
+}
+    

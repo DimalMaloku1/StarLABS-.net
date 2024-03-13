@@ -5,16 +5,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Application.DTOs;
 using Application.Services.PositionServices;
 using Application.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Application.Services.LoggingServices;
+using System.Security.Claims;
 
 namespace YourNamespace.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class PositionController : Controller
     {
         private readonly IPositionServices _positionServices;
+        private readonly ILoggingService _loggingService;
 
-        public PositionController(IPositionServices positionServices)
+        public PositionController(IPositionServices positionServices, ILoggingService loggingService)
         {
             _positionServices = positionServices;
+            _loggingService = loggingService;
         }
 
         public async Task<ActionResult> Index()
@@ -46,6 +52,7 @@ namespace YourNamespace.Controllers
             if (ModelState.IsValid)
             {
                 await _positionServices.AddPositionAsync(positionDto);
+                await _loggingService.LogActionAsync("Created", "Staff Position", User.FindFirst(ClaimTypes.Email)?.Value);
                 return RedirectToAction("Index");
             }
 
@@ -69,7 +76,8 @@ namespace YourNamespace.Controllers
             if (ModelState.IsValid)
             {
                   await _positionServices.UpdatePositionAsync(id, positionDto);
-                    return RedirectToAction("Index");
+                await _loggingService.LogActionAsync("Updated", "Staff Position", User.FindFirst(ClaimTypes.Email)?.Value);
+                return RedirectToAction("Index");
             }
             return View(positionDto);
         }
@@ -77,6 +85,7 @@ namespace YourNamespace.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
             await _positionServices.DeletePositionAsync(id);
+            await _loggingService.LogActionAsync("Deleted", "Staff Position", User.FindFirst(ClaimTypes.Email)?.Value);
             return RedirectToAction("Index");
         }
     }

@@ -2,9 +2,7 @@
 {
     public enum PaymentMethod
     {
-        Cash =1,
-        Credit,
+        Stripe =1,
         PayPal,
-        Stripe,
     }
 }

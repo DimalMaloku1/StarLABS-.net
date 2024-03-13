@@ -1,0 +1,21 @@
+﻿@model Application.DTOs.AccountDTOs.UserDto
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">User Details</h2>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>User Id:</strong> @Model.Id</li>
+                <li class="list-group-item"><strong>First Name:</strong> @Model.UserName</li>
+                <li class="list-group-item"><strong>Last Name:</strong> @Model.UserLastName</li>
+                <li class="list-group-item"><strong>Registration Date:</strong> @Model.CreatedAt</li>
+                <li class="list-group-item"><strong>Last Updated At:</strong> @Model.UpdatedAt</li>
+            </ul>
+            
+           
+        </div>
+        
+    </div>
+    
+     <a class="btn btn-success my-4" asp-action="Users"> Back</a>
+</div>

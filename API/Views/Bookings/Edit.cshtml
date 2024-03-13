@@ -40,9 +40,10 @@
                         <span asp-validation-for="RoomTypeId" class="text-danger"></span>
                     </div>
                     <input type="hidden" asp-for="UserId" name="userId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+
                     <div class="form-group d-flex justify-content-between mt-2">
                         <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
-                        <input type="submit" value="Update" class="btn btn-outline-success"/>
+                        <input type="submit" value="Update" class="btn btn-outline-success" />
                     </div>
 
                 </form>

@@ -27,21 +27,22 @@
                         <span asp-validation-for="CheckOutDate" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="RoomId"></label>
-                        <select asp-for="RoomId" asp-items="ViewBag.Rooms" class="form-control">
-                            <option value="">Select Room</option>
-                        </select>
-                        <span asp-validation-for="RoomId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
                         <label asp-for="RoomTypeId"></label>
                         <select asp-for="RoomTypeId" asp-items="ViewBag.Roomtypes" class="form-control">
                             <option value="">Select Room Type</option>
                         </select>
                         <span asp-validation-for="RoomTypeId" class="text-danger"></span>
                     </div>
-                    <input type="hidden" asp-for="UserId" name="userId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
-
+                    <div class="form-group">
+                        <label asp-for="RoomId"></label>
+                        <select asp-for="RoomId" asp-items="ViewBag.Rooms" class="form-control">
+                            <option value="">Select Room</option>
+                        </select>
+                        <span asp-validation-for="RoomId" class="text-danger"></span>
+                    </div>
+                    
+                    <input type="hidden" asp-for="UserId" name="userId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" /> 
+                  
                     <div class="form-group d-flex justify-content-between mt-2">
                         <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
                         <input type="submit" value="Create" class="btn btn-outline-success" />
@@ -52,3 +53,45 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        // Hide the room dropdown list initially
+        $('#RoomId').hide();
+
+        // When the room type dropdown changes
+        $('#RoomTypeId').change(function () {
+            var selectedRoomTypeId = $(this).val();
+
+            // If a room type is selected
+            if (selectedRoomTypeId) {
+                // Make an AJAX call to retrieve the available rooms for the selected room type
+                $.ajax({
+                    url: '@Url.Action("GetRoomsByRoomTypeIdAsync", "RoomController")',
+                    type: 'GET',
+                    data: { roomTypeId: selectedRoomTypeId },
+                    success: function (data) {
+                        // Clear the existing options in the room dropdown
+                        $('#RoomId').empty();
+
+                        // Add the retrieved rooms as options in the room dropdown
+                        $.each(data, function (index, item) {
+                            $('#RoomId').append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+
+                        // Show the room dropdown
+                        $('#RoomId').show();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            } else {
+                // If no room type is selected, hide the room dropdown
+                $('#RoomId').hide();
+            }
+        });
+    });
+</script>

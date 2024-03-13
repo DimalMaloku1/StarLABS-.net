@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Application.DTOs;
+﻿using Application.DTOs;
 using Application.Services.FeedbackServices;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Application.Services.LoggingServices;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -14,14 +14,16 @@ namespace API.Controllers
     {
         private readonly IFeedbackService _feedbackService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly ILoggingService _loggingService;
 
-        public FeedbackController(UserManager<AppUser> userManager, IFeedbackService feedbackService)
+        public FeedbackController(UserManager<AppUser> userManager, IFeedbackService feedbackService, ILoggingService loggingService)
         {
             _userManager = userManager;
             _feedbackService = feedbackService;
+            _loggingService = loggingService;
         }
-    
-       public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index()
         {
             var feedbacks = await _feedbackService.GetAllFeedbacksAsync();
             var averageRating = await _feedbackService.CalculateAverageRatingAsync();
@@ -49,9 +51,8 @@ namespace API.Controllers
                 if (user != null)
                 {
                     feedbackDto.UserId = user.Id;
-
-                    // Pass the feedback object to the service for creation
                     await _feedbackService.CreateAsync(feedbackDto);
+                    await _loggingService.LogActionAsync("Created", "Feedback", User.FindFirst(ClaimTypes.Email)?.Value);
 
                     return RedirectToAction("Index");
                 }
@@ -60,8 +61,6 @@ namespace API.Controllers
                     ModelState.AddModelError("", "User not found");
                 }
             }
-
-            // If ModelState is not valid or user is not found, return the view with errors
             return View(feedbackDto);
         }
 
@@ -75,12 +74,14 @@ namespace API.Controllers
         public async Task<IActionResult> Edit(Guid id, FeedbackDto feedbackDto)
         {
             await _feedbackService.UpdateAsync(id, feedbackDto);
+            await _loggingService.LogActionAsync("Updated", "Feedback", User.FindFirst(ClaimTypes.Email)?.Value);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(Guid id)
         {
             await _feedbackService.DeleteAsync(id);
+            await _loggingService.LogActionAsync("Deleted", "Feedback", User.FindFirst(ClaimTypes.Email)?.Value);
             return RedirectToAction(nameof(Index));
         }
     }

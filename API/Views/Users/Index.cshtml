@@ -4,39 +4,51 @@
     ViewData["Title"] = "AspNetUsers";
 }
 
-<h2>Application Users</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Email</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Role</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
+<div class="crudIndex">
+    <div class="buttons-title">
+        <h3>Users</h3>
+        <a href="/Identity/Account/Register" class="btn btn-success"><span class="material-icons">add_circle</span>  Register User</a>
+    </div>
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@user.Id</td>
-                <td>@user.UserName</td>
-                <td>@user.firstName</td>
-                <td>@user.lastName</td>
-                <td>@user.Role</td>
-                <td>
-                    <a href="@Url.Action("Edit", "Users", new { userId = user.Id })" class="btn btn-primary">Edit</a>
-                </td>
-                <td>
-                    <form method="post" action="@Url.Action("Delete", "Users")">
-                        <input type="hidden" name="userId" value="@user.Id" />
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Name & Surname</th>
+                <th>Role</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    @*
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.firstName) @Html.DisplayFor(modelItem => item.lastName)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>
+                    *@
+                    <td class="align-middle d-flex gap-2 align-items-center">
+                        <a class="btn btn-outline-primary" href="@Url.Action("Edit", "Users", new { userId = item.Id })"><span class="material-icons">edit</span></a>
+                        <form method="post" action="@Url.Action("Delete", "Users")">
+                            <input type="hidden" name="userId" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger"><span class="material-icons">delete</span></button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

@@ -55,29 +55,14 @@
                         <span asp-validation-for="PaymentMethod" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="BillId">Bill ID:</label>
-                        <select asp-for="BillId" class="form-control" id="BillId" data-val="true" data-val-required="">
-                            <option value="">Select Bill</option>
-                            @foreach (var bill in Model.Bills)
-                            {
-                                <option value="@bill.Id" data-total-amount="@bill.TotalAmount" data-username="@bill.Username">@bill.Id</option>
-                            }
-                        </select>
-                        <span asp-validation-for="BillId" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="Username">Username:</label>
-                        <input type="text" asp-for="Username" class="form-control" readonly />
-                    </div>
+                        <input hidden type="text" asp-for="BillId" class="form-control" readonly />
 
                     <div class="form-group">
                         <label for="TotalAmount">Total Amount:</label>
                         <input type="text" asp-for="TotalAmount" class="form-control" readonly />
                     </div>
 
-                    <button type="submit" class="btn btn-success btn-create" id="pay-now-button"><i class="fas fa-check"></i> Pay Now</button>
+                    <button type="submit" class="btn btn-success btn-create" id="pay-now-button"><i class="fas fa-check"></i>Proceed to Payment</button>
                 </form>
             </div>
         </div>
@@ -89,14 +74,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.validate/1.19.3/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
 
-
 <script>
     $(document).ready(function () {
         $('#BillId').change(function () {
             var totalAmount = $('option:selected', this).data('total-amount');
             var username = $('option:selected', this).data('username');
             $('#TotalAmount').val(totalAmount);
-            $('#Username').val(username).prop('readonly', true);
+            $('#Username').val(username);
         });
     });
 </script>

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Staff List";
 }
 
-<h1>@ViewData["Title"]</h1>
+@*<h1>@ViewData["Title"]</h1>
 <a class="btn btn-outline-success" asp-action="Create" >Create</a>
 
 <form asp-action="Department" method="post">
@@ -58,7 +58,90 @@
         }
     </tbody>
 </table>
+*@
 
-<div>
-    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+
+
+
+
+
+<div class="crudIndex">
+    <div class="buttons-title">
+        <h3>Employees</h3>
+        <a asp-controller="Staff" asp-action="Create" class="btn btn-success"><span class="material-icons">add_circle</span>  Hire User</a>
+    </div>
+    <div class="filters">
+        <form asp-action="Department" method="post">
+                <label for="department">Department:</label>
+            <div class="input">
+                <input type="text" id="department" name="department" class="form-control" />
+                <button type="submit" class="btn btn-primary"><span class="material-icons">search</span></button>
+            </div>
+        </form>
+
+        <div class="right-side">
+            <form asp-controller="Staff" asp-action="Position" method="post">
+                    <label for="positionId">Position:</label>
+                <div class="input">
+                    <select id="positionId" name="positionId" class="form-control">
+                        <option value="">Select Position</option>
+                        @foreach (var staff in Model)
+                        {
+                            <option value="@staff.Position.Id">@staff.Position.PositionName</option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-primary"><span class="material-icons">search</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>SurName</th>
+                <th>Department</th>
+                <th>Salary</th>
+                <th>Address</th>
+                <th>User</th>
+                <th>Position</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.User.UserName)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.User.UserLastname)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Department)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Salary)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.User.Email)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Position.PositionName)
+                    </td>
+                    <td class="align-middle">
+                        <a class="btn btn-outline-primary" asp-controller="Staff" asp-action="Edit" asp-route-id="@item.Id"><span class="material-icons">edit</span></a>
+                        <a class="btn btn-outline-info" asp-controller="Staff" asp-action="Details" asp-route-id="@item.Id"><span class="material-icons">info</span></a>
+                        <a class="btn btn-danger" asp-controller="Staff" asp-action="Delete" asp-route-id="@item.Id"><span class="material-icons">delete</span></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
 </div>

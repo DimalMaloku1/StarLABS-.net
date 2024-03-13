@@ -1,9 +1,7 @@
 ﻿using Application.DTOs;
-using Application.Responses;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Models;
-using Persistence.Repositories;
 
 
 namespace Application.Services.BillService
@@ -87,14 +85,18 @@ namespace Application.Services.BillService
         public async Task<BillDto> GetBillById(Guid id)
         {
             if (id == Guid.Empty) return null;
-            var bill = await _billRepository.GetBillById(id);
 
+            var bill = await _billRepository.GetBillById(id);
+            decimal totalAmount = (decimal)((bill.Booking.CheckOutDate - bill.Booking.CheckInDate).Days *
+                                            bill.Booking.Room.RoomType.Price);
+            bill.TotalAmount = (double)totalAmount;
+            await _billRepository.UpdateBill(bill);
             var billDto = _mapper.Map<BillDto>(bill);
             billDto.Username = bill.Booking.User.UserName;
             billDto.DaysSpent = (bill.Booking.CheckOutDate - bill.Booking.CheckInDate).Days;
+            billDto.TotalAmount = totalAmount;
             billDto.RoomPrice = bill.Booking.Room.RoomType.Price;
-                billDto.RoomType = bill.Booking.Room.RoomType.Type;
-
+            billDto.RoomType = bill.Booking.Room.RoomType.Type;
 
             return billDto;
         }
@@ -121,16 +123,15 @@ namespace Application.Services.BillService
             return null;
         }
 
-        public async Task<ApiResponse> UpdateBill(BillDto bill)
+        public async Task<BillDto> UpdateBill(BillDto bill)
         {
             if (bill != null)
             {
                 var billToUpdate = _mapper.Map<Bill>(bill);
                 await _billRepository.UpdateBill(billToUpdate);
-                return new ApiResponse(200, "Bill succesfully updated");
             }
 
-            return new ApiResponse(400, "Bill not updated");
+            return bill;
         }
     }
 }

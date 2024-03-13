@@ -4,32 +4,33 @@ using Application.Services.RoomTypeServices;
 using Application.Validations;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Application.Services.LoggingServices; // Import the namespace for LoggingService
+using System.Security.Claims;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class RoomController : Controller
     {
         private readonly IRoomServices _roomServices;
         private readonly IRoomTypeServices _roomTypeService;
-        private readonly RoomValidator _roomValidator;
+        private readonly IValidator<RoomDto> _roomValidator;
+        private readonly ILoggingService _loggingService; 
 
-        public RoomController(IRoomServices roomServices, IRoomTypeServices roomTypeService, RoomValidator roomValidator)
+        public RoomController(IRoomServices roomServices, IRoomTypeServices roomTypeService, IValidator<RoomDto> roomValidator, ILoggingService loggingService)
         {
             _roomServices = roomServices;
             _roomTypeService = roomTypeService;
             _roomValidator = roomValidator;
+            _loggingService = loggingService; // Injected logging service
         }
 
         public async Task<IActionResult> Index()
         {
             var rooms = await _roomServices.GetAllRoomsAsync();
-
-
-
-          //  ViewBag.RoomTypes = await _roomTypeService.GetAllRoomTypesAsync();
 
             foreach (var room in rooms)
             {
@@ -59,6 +60,7 @@ namespace API.Controllers
             if (validationResult.IsValid)
             {
                 await _roomServices.CreateAsync(roomDto);
+                await _loggingService.LogActionAsync("Created", "Room", User.FindFirst(ClaimTypes.Email)?.Value); // Log action
                 return RedirectToAction(nameof(Index));
             }
 
@@ -93,12 +95,14 @@ namespace API.Controllers
             if (validationResult.IsValid)
             {
                 await _roomServices.UpdateAsync(id, roomDto);
+                await _loggingService.LogActionAsync("Updated", "Room", User.FindFirst(ClaimTypes.Email)?.Value); // Log action
                 return RedirectToAction(nameof(Index));
             }
 
             roomDto.RoomTypes = await _roomTypeService.GetAllRoomTypesAsync();
             return View(roomDto);
         }
+
         public async Task<IActionResult> Details(Guid id)
         {
             var roomDto = await _roomServices.GetRoomByIdAsync(id);
@@ -121,9 +125,9 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             await _roomServices.DeleteAsync(id);
+            await _loggingService.LogActionAsync("Deleted", "Room", User.FindFirst(ClaimTypes.Email)?.Value); // Log action
             return RedirectToAction(nameof(Index));
         }
-
 
         public async Task<IActionResult> GetRoomsByFreeStatus(bool isFree)
         {

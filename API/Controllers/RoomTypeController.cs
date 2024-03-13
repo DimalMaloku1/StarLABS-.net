@@ -1,24 +1,31 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Services.RoomServices;
 using Application.Services.RoomTypeServices;
 using Application.Validations;
+using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Application.Services.LoggingServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class RoomTypeController : Controller
     {
         private readonly IRoomTypeServices _roomTypeService;
         private readonly IRoomServices _roomService;
+        private readonly  IValidator<RoomTypeDto> _roomTypeValidator;
+        private readonly ILoggingService _loggingService;
 
-        private readonly RoomTypeValidator _roomTypeValidator;
-        public RoomTypeController(IRoomTypeServices roomTypeService, RoomTypeValidator roomTypeValidator, IRoomServices roomService)
+        public RoomTypeController(IRoomTypeServices roomTypeService, IValidator<RoomTypeDto> roomTypeValidator, IRoomServices roomService, ILoggingService loggingService)
         {
             _roomTypeService = roomTypeService;
             _roomTypeValidator = roomTypeValidator;
             _roomService = roomService;
+            _loggingService = loggingService;
         }
 
         [HttpGet]
@@ -46,15 +53,22 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RoomTypeDto roomTypeDto)
+        public async Task<IActionResult> Create(RoomTypeDto roomTypeDto, List<IFormFile> photos)
         {
-            var validationResult = _roomTypeValidator.Validate(roomTypeDto);
-
-            if (validationResult.IsValid)
+            if (ModelState.IsValid)
             {
-                var createdRoomType = await _roomTypeService.CreateAsync(roomTypeDto);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var createdRoomType = await _roomTypeService.CreateAsync(roomTypeDto, photos);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Failed to create room type.");
+                    return View(roomTypeDto);
+                }
             }
+
             return View(roomTypeDto);
         }
 
@@ -77,7 +91,8 @@ namespace API.Controllers
 
             if (validationResult.IsValid)
             {
-                await _roomTypeService.UpdateAsync(Id, roomTypeDto);
+               // await _roomTypeService.UpdateAsync(Id, roomTypeDto);
+                await _loggingService.LogActionAsync("Updated", "Room Type", User.FindFirst(ClaimTypes.Email)?.Value);
                 return RedirectToAction(nameof(Details), new { Id });
             }
 
@@ -88,6 +103,7 @@ namespace API.Controllers
         public async Task<IActionResult> Delete(Guid Id)
         {
             await _roomTypeService.DeleteAsync(Id);
+            await _loggingService.LogActionAsync("Deleted", "Room Type", User.FindFirst(ClaimTypes.Email)?.Value);
             return RedirectToAction(nameof(Index));
         }
     }

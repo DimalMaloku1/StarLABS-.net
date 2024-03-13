@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.DTOs.AccountDTOs;
 using AutoMapper;
 using Domain.Models;
 
@@ -16,6 +17,9 @@ namespace Application.Core
             CreateMap<Payment, PaymentDto>().ReverseMap();
             CreateMap<Position, PositionDTO>().ReverseMap();
             CreateMap<Bill, BillDto>().ReverseMap();
+            CreateMap<AppUser, UserDto>().ReverseMap();
+            CreateMap<RoomTypePhoto,RoomTypePhotoDTO>().ReverseMap();
+            CreateMap<AppUser, VerifyAccountDto>().ReverseMap();
 
 
 

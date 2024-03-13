@@ -1,4 +1,6 @@
 ﻿using Application.DTOs;
+using Domain.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace Application.Services.RoomTypeServices
     {
         Task<IEnumerable<RoomTypeDto>> GetAllRoomTypesAsync();
         Task<RoomTypeDto> GetRoomTypeByIdAsync(Guid Id);
-        Task<RoomTypeDto> CreateAsync(RoomTypeDto roomType);
+        Task<RoomTypeDto> CreateAsync(RoomTypeDto roomTypeDto, List<IFormFile> photos);
         Task UpdateAsync(Guid Id, RoomTypeDto roomTypeDto);
         Task DeleteAsync(Guid Id);
     }

@@ -2,7 +2,7 @@
 
 namespace Application.PayPal
 {
-    public static class PaypalConfiguration
+public static class PaypalConfiguration
     {
         //Variables for storing the clientID and clientSecret key  
 

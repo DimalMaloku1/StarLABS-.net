@@ -1,31 +1,23 @@
 ﻿using Application.DTOs;
+using Application.Services.BillService;
 using Application.Services.BookingServices;
-using Application.Services.RoomServices;
-using Application.Validations;
 using Domain.Models;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace API.Controllers
 {
-    public class BookingsController(UserManager<AppUser> _userManager, IBookingService _bookingService, IValidator<BookingDto> _bookingValidator) : Controller
+    [Authorize]
+    public class BookingsController(UserManager<AppUser> _userManager, IBookingService _bookingService, IValidator<BookingDto> _bookingValidator, IBillService _billService) : Controller
     {
-
-        private async Task SetViewBagData()
-        {
-            var bookingDropDownData = await _bookingService.GetNewBookingDropDownsValues();
-            ViewBag.Rooms = new SelectList(bookingDropDownData.Rooms, "Id", "RoomNumber");
-            ViewBag.RoomTypes = new SelectList(bookingDropDownData.RoomTypes, "Id", "Type");
-        }
-
         public async Task<IActionResult> Index()
         {
             var bookings = await _bookingService.GetAllBookingsAsync();
             return View("Index", bookings);
         }
-
         public async Task<IActionResult> Details(Guid id)
         {
             try
@@ -61,14 +53,31 @@ namespace API.Controllers
             try
             {
                 var userId = _userManager.GetUserId(User);
-                if (userId != null)
+                if (userId is not null)
                 {
                     await SetViewBagData();
+                    string baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}";
+
                     var validationResult = _bookingValidator.Validate(bookingDto);
                     if (validationResult.IsValid)
                     {
-                        await _bookingService.CreateAsync(bookingDto, Guid.Parse(userId));
-                        return RedirectToAction(nameof(Index));
+                        var createdBookingDto = await _bookingService.CreateAsync(bookingDto, Guid.Parse(userId), baseUrl);
+                        var bills = await _billService.GetBillsByBookingId(createdBookingDto.Id);
+
+                        if (bills == null || !bills.Any())
+                        {
+                            return NotFound();
+                        }
+
+                        var firstBill = bills.FirstOrDefault();
+                        if (firstBill != null)
+                        {
+                            return RedirectToAction("Details", "Bill", new { id = firstBill.Id });
+                        }
+                        else
+                        {
+                            return NotFound();
+                        }
                     }
                     else
                     {
@@ -90,7 +99,6 @@ namespace API.Controllers
                 return View(bookingDto);
             }
         }
-
         public async Task<IActionResult> Edit(Guid id)
         {
             try
@@ -159,8 +167,6 @@ namespace API.Controllers
                 return View(bookingDto);
             }
         }
-
-
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -189,5 +195,40 @@ namespace API.Controllers
                 return RedirectToAction(nameof(Delete), new { id });
             }
         }
+        public async Task<IActionResult> ViewBill(Guid id)
+        {
+            try
+            {
+                var bills = await _billService.GetBillsByBookingId(id);
+
+                if (bills == null || !bills.Any())
+                {
+                    return NotFound();
+                }
+
+                var firstBill = bills.FirstOrDefault();
+                if (firstBill != null)
+                {
+                    return RedirectToAction("Details", "Bill", new { id = firstBill.Id });
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error", ex.Message);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        private async Task SetViewBagData()
+        {
+            var bookingDropDownData = await _bookingService.GetNewBookingDropDownsValues();
+            ViewBag.Rooms = new SelectList(bookingDropDownData.Rooms, "Id", "RoomNumber");
+            ViewBag.RoomTypes = new SelectList(bookingDropDownData.RoomTypes, "Id", "Type");
+        }
+
     }
 }

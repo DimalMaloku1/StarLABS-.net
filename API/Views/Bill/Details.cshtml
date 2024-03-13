@@ -127,24 +127,25 @@
               <div class="col-md-6">
                 <div class="text-muted mb-2">Client</div>
                 <strong>
-                  @Model.Username
+                  @Model.Username @Model.Booking.User.UserLastname
                 </strong>
                 <p class="fs-sm">
-                  989 5th Avenue, New York, 55832
+                  client address
                   <br>
-                  <a href="#!" class="text-purple">@Model.Username
+                  <a href="#!" class="text-purple">
+                      @Model.Booking.User.Email
                   </a>
                 </p>
               </div>
               <div class="col-md-6 text-md-end">
                 <div class="text-muted mb-2">Payment To</div>
                 <strong>
-                  Our Hotel Name here
+                  XENI IMPERIAL
                 </strong>
                 <p class="fs-sm">
-                  Our Hotel Address here
+                  Genting Highlands, 69000 Genting
                   <br>
-                  <a href="#!" class="text-purple">hotmail@email.com
+                  <a href="#!" class="text-purple">xeniimperial@gmail.com
                   </a>
                 </p>
               </div>
@@ -180,13 +181,13 @@
             </div>
           </div>
         </div>
-        <a asp-route-id="@Model.Id" asp-action="Details" asp-controller="Payment" class="mx-4 btn btn-dark btn-lg card-footer-btn justify-content-center text-uppercase-bold-sm hover-lift-light">
-          <span class="svg-icon text-white me-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><title>ionicons-v5-g</title><path d="M336,208V113a80,80,0,0,0-160,0v95" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path><rect x="96" y="208" width="320" height="272" rx="48" ry="48" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></rect></svg>
-          </span>
-          Pay Now
-        </a>
-      <button onclick="CreatePDFfromHTML()" class="mt-4 mb-4 mx-4 btn btn-primary" id="downloadPdfButton">Download PDF</button>
+                <a href="@Url.Action("Create", "Payment", new { BillId = Model.Id })" class="mx-4 btn btn-dark btn-lg card-footer-btn justify-content-center text-uppercase-bold-sm hover-lift-light">
+                    <span class="svg-icon text-white me-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><title>ionicons-v5-g</title><path d="M336,208V113a80,80,0,0,0-160,0v95" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></path><rect x="96" y="208" width="320" height="272" rx="48" ry="48" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></rect></svg>
+                    </span>
+                    Pay Now
+                </a>
+                <button onclick="CreatePDFfromHTML()" class="mt-4 mb-4 mx-4 btn btn-primary" id="downloadPdfButton">Download PDF</button>
 
       </div>
     </div>

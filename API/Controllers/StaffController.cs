@@ -2,25 +2,36 @@
 using Application.Services.PositionServices;
 using Application.Services.StaffServices;
 using Application.Validations;
+using Domain.Models;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using Application.Services.LoggingServices;
+using System.Security.Claims;
 
 namespace MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class StaffController : Controller
     {
         private readonly IStaffService _staffService;
         private readonly IPositionServices _positionService;
-        private readonly StaffValidator _staffValidator; 
+        private readonly IValidator<StaffDTO> _staffValidator;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly ILoggingService _loggingService;
 
-        public StaffController(IStaffService staffService, StaffValidator staffValidator ,IPositionServices positionServices)
+        public StaffController(IStaffService staffService, IValidator<StaffDTO> staffValidator, IPositionServices positionServices, UserManager<AppUser> userManager, ILoggingService loggingService)
         {
             _staffService = staffService;
             _staffValidator = staffValidator;
             _positionService = positionServices;
+            _userManager = userManager;
+            _loggingService = loggingService;
         }
 
         public async Task<IActionResult> Index()
@@ -41,8 +52,8 @@ namespace MVC.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var users = await _staffService.GetAllUserNamesAsync();
-            ViewBag.Users = new SelectList(users);
+            var users = await _userManager.Users.Select(u => new { u.Id, u.Email }).ToListAsync();
+            ViewBag.Users = new SelectList(users, "Id", "Email");
             var positions = await _positionService.GetAllPositionsAsync();
             ViewBag.Positions = new SelectList(positions ,"Id", "PositionName");
             return View();
@@ -58,6 +69,7 @@ namespace MVC.Controllers
             if (validationResult.IsValid)
             {
                 await _staffService.AddStaffAsync(staffDTO);
+                await _loggingService.LogActionAsync("Created", "Staff", User.FindFirst(ClaimTypes.Email)?.Value);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -66,14 +78,13 @@ namespace MVC.Controllers
                 ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
 
-            var users = await _staffService.GetAllUserNamesAsync();
-            ViewBag.Users = new SelectList(users);
+            var users = await _userManager.Users.Select(u => new { u.Id, u.Email }).ToListAsync();
+            ViewBag.Users = new SelectList(users, "Id", "Email");
 
             var positions = await _positionService.GetAllPositionsAsync();
             ViewBag.Positions = new SelectList(positions, "Id", "PositionName");
             return View(staffDTO);
         }
-
         public async Task<IActionResult> Edit(Guid id)
         {
             var staff = await _staffService.GetStaffByIdAsync(id);
@@ -81,6 +92,13 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
+
+            var users = await _userManager.Users.Select(u => new { u.Id, u.Email }).ToListAsync();
+            ViewBag.Users = new SelectList(users, "Id", "Email");
+
+            var positions = await _positionService.GetAllPositionsAsync();
+            ViewBag.Positions = new SelectList(positions, "Id", "PositionName");
+
             return View(staff);
         }
 
@@ -98,15 +116,24 @@ namespace MVC.Controllers
             if (validationResult.IsValid)
             {
                 await _staffService.UpdateStaffAsync(id, staffDTO);
+                await _loggingService.LogActionAsync("Edit", "Staff", User.FindFirst(ClaimTypes.Email)?.Value);
                 return RedirectToAction(nameof(Index));
             }
+
             foreach (var error in validationResult.Errors)
             {
                 ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
 
+            var users = await _userManager.Users.Select(u => new { u.Id, u.Email }).ToListAsync();
+            ViewBag.Users = new SelectList(users, "Id", "Email");
+
+            var positions = await _positionService.GetAllPositionsAsync();
+            ViewBag.Positions = new SelectList(positions, "Id", "PositionName");
+
             return View(staffDTO);
         }
+
         [HttpPost]
         public async Task<IActionResult> Department(string department)
         {
@@ -146,6 +173,7 @@ namespace MVC.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             await _staffService.DeleteStaffAsync(id);
+            await _loggingService.LogActionAsync("Deleted", "Staff", User.FindFirst(ClaimTypes.Email)?.Value);
             return RedirectToAction(nameof(Index));
         }
     }
