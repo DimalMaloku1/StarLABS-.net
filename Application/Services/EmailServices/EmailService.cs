@@ -48,11 +48,34 @@ namespace Application.Services.EmailServices
                 Subject = "Booking Confirmation",
                 IsBodyHtml = true,
                 Body = message
-               
+
             };
             mailMessage.To.Add(email);
 
             await client.SendMailAsync(mailMessage);
         }
+
+
+        public async Task SendDailyTaskEmailAsync(string email, string message)
+        {
+         
+                var client = new SmtpClient("sandbox.smtp.mailtrap.io", 587)
+                {
+                    Credentials = new NetworkCredential("ae5a5c523f9421", "fc8ed9a155880e"),
+                    EnableSsl = true
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("systemhotelmanagment@gmail.com"),
+                    Subject = "New Daily Task Assigned",
+                    IsBodyHtml = true,
+                    Body = message
+                };
+                mailMessage.To.Add(email);
+
+                await client.SendMailAsync(mailMessage);
+            }
+
     }
 }

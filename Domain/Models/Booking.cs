@@ -1,5 +1,6 @@
 ﻿using Domain.Base;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Domain.Models
 {
@@ -42,7 +43,7 @@ namespace Domain.Models
         public Guid RoomId
         {
             get => _roomId;
-            private set => _roomId = value;
+            set => _roomId = value;
         }
 
         public Guid UserId
@@ -55,6 +56,8 @@ namespace Domain.Models
             get => _roomTypeId;
             set => _roomTypeId = value;
         }
+        [JsonIgnore]
+        public RoomType RoomType { get; set; }
 
         [ForeignKey("RoomId")]
         public Room Room { get; set; }

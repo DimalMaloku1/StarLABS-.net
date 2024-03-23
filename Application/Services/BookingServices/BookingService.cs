@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using Application.Core;
+using Application.DTOs;
 using Application.Services.BillService;
 using Application.Services.EmailServices;
 using Application.Services.RazorServices;
@@ -31,59 +32,70 @@ namespace Application.Services.BookingServices
             BookingDto bookingDto = _mapper.Map<BookingDto>(booking);
             return bookingDto;
         }
-        public async Task<BookingDto> CreateAsync(BookingDto bookingDto, Guid userId, string baseUrl)
+       
+
+        public async Task<Result<BookingDto>> CreateAsync(BookingDto bookingDto, Guid userId, string baseUrl)
         {
             try
             {
-                var booking = _mapper.Map<Booking>(bookingDto);
-                booking.UserId = userId;
-                await _bookingRepository.Add(booking);
-                var billDto = new BillDto
-                {
-                    BookingId = booking.Id,
-                    UserId = booking.UserId
-                };
-                var createdBill = await _billService.AddBill(billDto);
-                var bills = await _billService.GetBillsByBookingId(booking.Id);
+                var availableRoom = await AvailableRoom(bookingDto);
 
-                if (bills == null || !bills.Any())
+                if (availableRoom != null)
                 {
-                    throw new Exception("No bills found for the created booking.");
-                }
+                    bookingDto.UserId = userId;
+                    bookingDto.TotalPrice = await CalculateTotalPrice(bookingDto.RoomTypeId, bookingDto);
+                    var booking = _mapper.Map<Booking>(bookingDto);
 
-                var firstBill = bills.FirstOrDefault();
-                if (firstBill != null)
-                {
-                    var billDetailsUrl = GenerateBillDetailsUrl(firstBill.Id, baseUrl);
-                    var user = await _userManager.FindByIdAsync(userId.ToString());
-                    int daysSpent = (booking.CheckOutDate - booking.CheckInDate).Days;
-                    var roomPrice = booking.Room.RoomType.Price;
-                    var totalPrice = (decimal)(daysSpent * roomPrice);
-                    var bookingConfirmationDto = new BookingConfirmationDto
+                    booking.RoomId = availableRoom.Id;
+
+                    await _bookingRepository.Add(booking);
+
+                    var billDto = new BillDto
                     {
                         BookingId = booking.Id,
-                        UserId = booking.UserId,
-                        BillId = firstBill.Id,
-                        Username = booking.User.UserName,
-                        CheckInDate = booking.CheckInDate,
-                        CheckOutDate = booking.CheckOutDate,
-                        RoomType = booking.Room.RoomType.Type,
-                        RoomNumber = booking.Room.RoomNumber,
-                        DaysSpent = daysSpent,
-                        TotalAmount = (double)totalPrice,
-                        BillDetailsUrl = billDetailsUrl
+                        UserId = userId
                     };
+                    var createdBill = await _billService.AddBill(billDto);
+                    var bills = await _billService.GetBillsByBookingId(booking.Id);
 
-                    // Send confirmation email
-                    var html = await _renderer.RenderPartialToStringAsync("_BookingConfirmation", bookingConfirmationDto);
-                    await _emailService.SendBookingConfirmationEmailAsync(user.Email, html);
+                    if (bills == null || !bills.Any())
+                    {
+                        return Result<BookingDto>.Failure("No bills found for the created booking.");
+                    }
 
-                    return _mapper.Map<BookingDto>(booking);
+                    var firstBill = bills.FirstOrDefault();
+                    if (firstBill != null)
+                    {
+                        var billDetailsUrl = GenerateBillDetailsUrl(firstBill.Id, baseUrl);
+                        var user = await _userManager.FindByIdAsync(userId.ToString());
+                        int daysSpent = (booking.CheckOutDate - booking.CheckInDate).Days;
+                        var roomPrice = booking.Room.RoomType.Price;
+                        var totalPrice = (decimal)(daysSpent * roomPrice);
+                        var bookingConfirmationDto = new BookingConfirmationDto
+                        {
+                            BookingId = booking.Id,
+                            UserId = booking.UserId,
+                            BillId = firstBill.Id,
+                            Username = booking.User.UserName,
+                            CheckInDate = booking.CheckInDate,
+                            CheckOutDate = booking.CheckOutDate,
+                            RoomType = booking.Room.RoomType.Type,
+                            RoomNumber = booking.Room.RoomNumber,
+                            DaysSpent = daysSpent,
+                            TotalAmount = (double)totalPrice,
+                            BillDetailsUrl = billDetailsUrl
+                        };
+
+                        var html = await _renderer.RenderPartialToStringAsync("_BookingConfirmation", bookingConfirmationDto);
+                        await _emailService.SendBookingConfirmationEmailAsync(user.Email, html);
+
+                        var createdBooking = _mapper.Map<BookingDto>(booking);
+                        return Result<BookingDto>.Success(createdBooking);
+                    }
+
+                    return Result<BookingDto>.Failure("No bills found for the created booking.");
                 }
-                else
-                {
-                    throw new Exception("No bills found for the created booking.");
-                }
+                return Result<BookingDto>.Failure("No available rooms for the selected dates!");
             }
             catch (Exception ex)
             {
@@ -91,38 +103,25 @@ namespace Application.Services.BookingServices
                 throw;
             }
         }
-
-        private string GenerateBillDetailsUrl(Guid billId, string baseUrl)
-        {
-            string url = $"{baseUrl}/Bill/Details/{billId}";
-            return url;
-        }
-
-
-        public async Task UpdateAsync(Guid bookingId, BookingDto updatedBookingDto)
+        public async Task<Result<BookingDto>> UpdateAsync(Guid bookingId, BookingDto updatedBookingDto)
         {
             Booking booking = await _bookingRepository.GetBookingByIdAsync(bookingId);
 
             try
             {
-                _ = _mapper.Map(updatedBookingDto, booking);
-                await _bookingRepository.Update(booking);
+                var availableRoom = await AvailableRoom(updatedBookingDto);
+                if (availableRoom != null)
+                {
+                    updatedBookingDto.RoomId = availableRoom.Id;
+                    updatedBookingDto.TotalPrice = await CalculateTotalPrice(updatedBookingDto.RoomTypeId, updatedBookingDto);
+                    _mapper.Map(updatedBookingDto, booking);
 
-                int daysSpent = (updatedBookingDto.CheckOutDate - updatedBookingDto.CheckInDate).Days;
-                if (booking.Room != null && booking.Room.RoomType != null)
-                {
-                    IEnumerable<BillDto> bills = await _billService.GetBillsByBookingId(bookingId);
-                    foreach (BillDto bill in bills)
-                    {
-                        BillDto billDto = _mapper.Map<BillDto>(bill);
-                        billDto.DaysSpent = daysSpent;
-                        billDto.TotalAmount = (decimal)(daysSpent * booking.Room.RoomType.Price);
-                        _ = await _billService.UpdateBill(billDto);
-                    }
+                    // Update the booking in the repository
+                    await _bookingRepository.Update(booking);
+
+                    return Result<BookingDto>.Success(updatedBookingDto);
                 }
-                else
-                {
-                }
+                return Result<BookingDto>.Failure("No available rooms for the given dates.");
             }
             catch (Exception ex)
             {
@@ -130,6 +129,7 @@ namespace Application.Services.BookingServices
                 throw;
             }
         }
+
         public async Task DeleteAsync(Guid id)
         {
             Booking booking = await GetBookingById(id);
@@ -154,6 +154,31 @@ namespace Application.Services.BookingServices
             return await _bookingRepository.GetBookingByIdAsync(id);
         }
 
+
+        private async Task<double> CalculateTotalPrice(Guid roomtypeId, BookingDto bookingDto)
+        {
+            var roomtype = await _roomTypeService.GetRoomTypeByIdAsync(roomtypeId);
+            if (roomtype == null) return 0;
+            int days = (bookingDto.CheckOutDate - bookingDto.CheckInDate).Days;
+
+            return (double)(roomtype.Price * days);
+        }
+
+        private async Task<RoomDto> AvailableRoom(BookingDto bookingDto)
+        {
+            var roomTypeId = bookingDto.RoomTypeId;
+            var checkInDate = bookingDto.CheckInDate;
+            var checkOutDate = bookingDto.CheckOutDate;
+
+            var availableRoom = await _roomService.GetAvailableRoomAsync(roomTypeId, checkInDate, checkOutDate);
+            return availableRoom;
+        }
+
+        private string GenerateBillDetailsUrl(Guid billId, string baseUrl)
+        {
+            string url = $"{baseUrl}/Bill/Details/{billId}";
+            return url;
+        }
 
     }
 }

@@ -6,95 +6,69 @@
 
 @{
     var currentUser = await UserManager.GetUserAsync(User);
+    string gridContainerClass = "grid-container";
+    if (currentUser != null)
+    {
+        bool isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
+        if (isAdmin)
+        {
+            gridContainerClass = "admin-grid-container";
+        }
+    }
 }
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Internstellar Hotel</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/API.styles.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/API.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
 
 </head>
 <body>
-<div class="grid-container">
-    <aside class="left-side-menu" id="aside">
-        <h1>Internstellar Hotel</h1>
-        <hr>
-        <partial name="_LoginPartial.cshtml"/>
-        <hr>
-
-        <nav>
-            <ul id="sidebar-list">
-
-                <li>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
-                        <div class="content">
-                            <div class="left-side-content">
-                                <span class="material-icons md-60">home</span>
-                                <p>Home</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Bookings" asp-action="Index">
-                        <div class="content">
-                            <div class="left-side-content">
-                                <span class="material-icons md-60">bookmark</span>
-                                <p>Bookings</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Feedback" asp-action="Index">
-                        <div class="content">
-                            <div class="left-side-content">
-                                <span class="material-icons md-60">reviews</span>
-                                <p>Feedbacks</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Payment" asp-action="Index">
-                        <div class="content">
-                            <div class="left-side-content">
-                                <span class="material-icons md-60">paid</span>
-                                <p>Payments</p>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Bill" asp-action="Index">
-                        <div class="content">
-                            <div class="left-side-content">
-                                <span class="material-icons md-60">card_membership</span>
-                                <p>Bills</p>
-                            </div>
-                        </div>
-                    </a>
-                
-                @if (currentUser != null)
-                {
-                    // Check if the user is in the "Admin" role
-                    bool isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
-
-                    if (isAdmin)
+    <div class="@gridContainerClass">
+        @if (currentUser != null)
+        {
+            // Check if the user is in the "Admin" role
+            bool isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
+            if (isAdmin)
+            {
+                <aside class="left-side-menu" id="aside">
+                    <h1>Internstellar Hotel</h1>
+                    <hr>
+                    @if (SignInManager.IsSignedIn(User))
                     {
+                        <div class="content-user">
+                            <a id="manage" class="nav-link text-dark" asp-page="/Home/Index" title="Manage">
+                                <div class="left-side-content">
+                                    <span class="material-icons md-60">person</span>
+                                    <p>@UserManager.GetUserName(User)</p>
+                                </div>
+                            </a>
+                            <form id="logoutForm" class="form-inline" asp-controller="Account" asp-action="Logout">
+                                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="nav-link text-dark" href="/Account/Register">
+                            <div class="login-btn">
+                                <span class="material-icons md-60">person</span>
+                                <p>Sign up</p>
+                            </div>
+                        </a>
+                    }
+                    <hr>
+
+                    <nav>
+                        <ul id="sidebar-list">
                             <li>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Logging" asp-action="Index">
                                     <div class="content">
@@ -106,117 +80,181 @@
                                 </a>
                             </li>
 
-                        <li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Users">
-                                <div class="content">
-                                    <div class="left-side-content">
-                                        <span class="material-icons md-60">admin_panel_settings</span>
-                                        <p>Dashboard</p>
+                            <li>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Users">
+                                    <div class="content">
+                                        <div class="left-side-content">
+                                            <span class="material-icons md-60">admin_panel_settings</span>
+                                            <p>Dashboard</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
-                        
-                        <li>
-                            <a class="nav-link text-dark" asp-controller="Room" asp-action="Index">
-                                <div class="content">
-                                    <div class="left-side-content">
-                                        <span class="material-icons md-60">door_front</span>
-                                        <p>Rooms</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
 
-                        <li>
-                            <a class="nav-link text-dark" asp-controller="RoomType" asp-action="Index">
-                                <div class="content">
-                                    <div class="left-side-content">
-                                        <span class="material-icons md-60">king_bed</span>
-                                        <p>Room Types</p>
+                            <li>
+                                <a class="nav-link text-dark" asp-controller="Room" asp-action="Index">
+                                    <div class="content">
+                                        <div class="left-side-content">
+                                            <span class="material-icons md-60">door_front</span>
+                                            <p>Rooms</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>   
+                                </a>
+                            </li>
 
-                        <li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Position" asp-action="Index">
-                                <div class="content">
-                                    <div class="left-side-content">
-                                        <span class="material-icons md-60">engineering</span>
-                                        <p>Staff Positions</p>
+                            <li>
+                                <a class="nav-link text-dark" asp-controller="RoomType" asp-action="Index">
+                                    <div class="content">
+                                        <div class="left-side-content">
+                                            <span class="material-icons md-60">king_bed</span>
+                                            <p>Room Types</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Staff" asp-action="Index">
-                                <div class="content">
-                                    <div class="left-side-content">
-                                        <span class="material-icons md-60">badge</span>
-                                        <p>Employees</p>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Position" asp-action="Index">
+                                    <div class="content">
+                                        <div class="left-side-content">
+                                            <span class="material-icons md-60">engineering</span>
+                                            <p>Staff Positions</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
-                        
-                    <li>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">
-                            <div class="content">
-                                <div class="left-side-content">
-                                    <span class="material-icons md-60">badge</span>
-                                    <p>Roles</p>
-                                </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Staff" asp-action="Index">
+                                    <div class="content">
+                                        <div class="left-side-content">
+                                            <span class="material-icons md-60">badge</span>
+                                            <p>Employees</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">
+                                    <div class="content">
+                                        <div class="left-side-content">
+                                            <span class="material-icons md-60">badge</span>
+                                            <p>Roles</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </aside>
+            }
+        }
+       
+
+
+        <div class="grid-right">
+            <header>
+                <div class="wrapper pt-1">
+                    <div class="d-flex gap-4 align-items-center container-fluid justify-content-between">
+                        <h3>Internstellar</h3>
+                        <ul class="d-flex align-items-center justify-content-center container-fluid gap-4 navBar">
+                            <li>
+                                <a href="/">Home</a>
+                            </li>
+                            <li>
+                                <a href="/#aboutUs">About Us</a>
+                            </li>
+                            <li>
+                                <a href="/Room/create">Book Room</a>
+                            </li>
+                            <li>
+                                <a href="/#roomType">Room Type</a>
+                            </li>
+                            <li>
+                                <a href="/#feedback">Feedback</a>
+                            </li>
+                        </ul>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                        <div class="user-login-logout">
+                            <p>@UserManager.GetUserName(User)</p>
+                            <form id="logoutForm" class="form-inline" asp-controller="Account" asp-action="Logout">
+                                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+                            </form>
+                        </div>
+                        }
+                        else
+                        {
+                        <a class="nav-link text-dark" href="/Account/Register">
+                            <div class="btn-svg">
+                                <span class="material-icons">person</span>
+                                Sign up
                             </div>
                         </a>
-                    </li>
+                        }
+                    </div>
+                </div>
+            </header>
+            <main>
+                @RenderBody()
+            </main>
+            <footer>
+                <div class="wrapper d-flex align-items-center justify-content-between">
+                   <div>
+                       <h1>Interstellar</h1>
+                        <p>
+                            497 Evergreen Rd. Roseville, CA 95673<br />
+                            +44 345 678 903<br />
+                            Interstellar@gmail.com
+                        </p>
+                   </div>
 
-                           
-                    }
-                }
-
-
-            </ul>
-        </nav>
-    </aside>
-
-
-    <div class="grid-right">
-        <header>
-            <span class="material-icons burger-btn" id="menu-btn">more_vert</span>
-        </header>
-        <main>
-            @RenderBody()
-        </main>
-        <footer>
-            <hr/>
-            <div class="data">
-                <ul>
+                   <ul>
                         <li>
-                            <a href="/#AboutUs">About Us</a>
+                            <a href="/">Home</a>
                         </li>
-                    <li>
-                        <a href="/#location">Location</a>
-                    </li>
-                    <li>
-                        <a href="/#roomType">Room Type</a>
-                    </li>
-                    <li>
-                        <a href="/#feedback">Feedback</a>
-                    </li>
-                    <li>
-                        <a href="/#roomType">Book a Room</a>
-                    </li>
-                </ul>
-                <p>&copy Interstellar</p>
-            </div>
-        </footer>
-    </div>
-</div>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+                        <li>
+                            <a href="/#aboutUs">About Us</a>
+                        </li>
+                        <li>
+                            <a href="/Room/create">Book Room</a>
+                        </li>
+                        <li>
+                            <a href="/#roomType">Room Type</a>
+                        </li>
+                        <li>
+                            <a href="/#feedback">Feedback</a>
+                        </li>
+                   </ul>
 
-@await RenderSectionAsync("Scripts", required: false)
+                    <ul class="flex-column justify-content-between align-items-center">
+                        <li class="d-flex gap-2 p-1">
+                            <img src="/images/Path 38.png" />
+                            <a href="facebook.com">Facebook</a>
+                        </li>
+                        <li class="d-flex align-content-center gap-2 p-1">
+                            <img src="/images/Path 39.png" />
+                            <a href="twiiter.com">Twitter</a>
+                        </li>
+                        <li class ="d-flex align-content-center gap-2 p-1">
+                            <img src="/images/Path 40.png" />
+                            <a href="instagram.com">Instagram</a>
+                        </li>
+                    </ul>
+
+                    <div>
+                        <p>Want to reach out?</p>
+                        
+                        <a href="#" class="btn-contact">Contact Us</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

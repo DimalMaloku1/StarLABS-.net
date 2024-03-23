@@ -19,6 +19,8 @@ using Application.Services.PositionServices;
 using Application.Services.DashboardService;
 using Application.Services.LoggingServices;
 using Application.Services.RazorServices;
+using Application.Services.DailyTaskServices;
+using Application.PayPal;
 
 namespace Application
 {
@@ -39,6 +41,8 @@ namespace Application
             services.AddTransient<IValidator<PaymentDto>, PaymentValidator>();
             services.AddTransient<IValidator<BillDto>, BillValidator>();
             services.Configure<StripeSettings>(configuration.GetSection("StripeSettings"));
+            services.Configure<PayPalSettings>(configuration.GetSection("PayPal"));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRoomServices, RoomServices>();
             services.AddScoped<IRoomTypeServices, RoomTypeServices>();
             services.AddScoped<IBillService, BillService>();
@@ -48,6 +52,7 @@ namespace Application
             services.AddScoped<IValidator<RegisterDto>, RegisterValidator>();
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<ILoggingService, LoggingService>();
+            services.AddScoped<IDailyTaskService, DailyTaskService>();
 
             services.AddTransient<IRazorPartialToStringRenderer, RazorPartialToStringRenderer>();
         }

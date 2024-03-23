@@ -129,42 +129,5 @@ namespace API.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> GetRoomsByFreeStatus(bool isFree)
-        {
-            var rooms = await _roomServices.GetRoomsByFreeStatusAsync(isFree);
-            foreach (var room in rooms)
-            {
-                var roomType = await _roomTypeService.GetRoomTypeByIdAsync(room.RoomTypeId);
-                room.Type = roomType?.Type;
-                room.Price = roomType?.Price ?? 0;
-            }
-
-            return View(nameof(Index), rooms);
-        }
-
-        public async Task<IActionResult> GetFreeRooms()
-        {
-            return await GetRoomsByFreeStatus(true);
-        }
-
-        public async Task<IActionResult> GetOccupiedRooms()
-        {
-            return await GetRoomsByFreeStatus(false);
-        }
-
-        public async Task<IActionResult> GetRoomsByRoomTypeId(Guid roomTypeId)
-        {
-            var rooms = await _roomServices.GetRoomsByRoomTypeIdAsync(roomTypeId, isFree: true);
-            foreach (var room in rooms)
-            {
-                var roomType = await _roomTypeService.GetRoomTypeByIdAsync(room.RoomTypeId);
-                room.Type = roomType?.Type;
-                room.Price = roomType?.Price ?? 0;
-            }
-
-            ViewBag.RoomTypes = await _roomTypeService.GetAllRoomTypesAsync();
-
-            return View("Index", rooms);
-        }
     }
 }

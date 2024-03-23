@@ -56,7 +56,6 @@ namespace Infrastructure
                         var room = new Room
                         {
                             RoomNumber = i,
-                            IsFree = true,
                             RoomTypeId = roomType.Id
                         };
                         roomsToAdd.Add(room);

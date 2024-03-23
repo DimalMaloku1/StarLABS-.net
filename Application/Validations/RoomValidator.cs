@@ -17,9 +17,6 @@ namespace Application.Validations
                 .NotEmpty().WithMessage("Room number is required.")
                 .GreaterThan(0).WithMessage("Room number must be greater than 0.");
 
-            RuleFor(x => x.IsFree)
-                .NotNull().WithMessage("IsFree property is required.");
-
         }
     }
 }

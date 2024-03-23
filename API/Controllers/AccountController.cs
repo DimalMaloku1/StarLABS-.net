@@ -1,8 +1,28 @@
-﻿using Application.DTOs.AccountDTOs;
+﻿using System.Threading.Tasks;
+using Application.DTOs.AccountDTOs;
 using Application.Services.AccountServices;
 using Application.Services.LoggingServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using System.Threading.Tasks;
+using Application.DTOs.AccountDTOs;
+using Application.Services.AccountServices;
+using Application.Services.EmailServices;
+using Application.Services.RazorServices;
+using AutoMapper;
+using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -11,11 +31,15 @@ namespace API.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly ILoggingService _loggingService;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AccountController(IAccountService accountService, ILoggingService loggingService)
+        public AccountController(IAccountService accountService, ILoggingService loggingService, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
         {
             _accountService = accountService;
             _loggingService = loggingService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
 
@@ -153,9 +177,48 @@ namespace API.Controllers
             return View();
         }
 
-        // Other methods related to managing users can be added here
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)
+        {
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
 
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (signInResult.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if (signInResult.IsLockedOut)
+            {
+                return RedirectToAction(nameof(ForgotPassword));
+            }
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                user = new AppUser { UserName = email, Email = email };
+                var result = await _userManager.CreateAsync(user);
+                if (!result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Login));
+                }
+            }
 
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
+            return RedirectToAction("Index", "Home");
+        }
 
 
     }

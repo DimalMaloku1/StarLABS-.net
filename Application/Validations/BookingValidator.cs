@@ -19,9 +19,6 @@ namespace Application.Validations
                 .NotEmpty().WithMessage("Check-out date is required.")
                 .GreaterThanOrEqualTo(x => x.CheckInDate).WithMessage("Check-out date must be after check-in date.");
 
-            RuleFor(x => x.RoomId)
-                .NotEmpty().WithMessage("RoomNumber is required.");
-
             RuleFor(x => x.UserId)
                 .NotEmpty().WithMessage("User is required.");
             RuleFor(x => x.RoomTypeId)

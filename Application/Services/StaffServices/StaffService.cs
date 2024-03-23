@@ -72,5 +72,20 @@ namespace Application.Services.StaffServices
             var staffEntities = await _staffRepository.GetStaffByPositionAsync(positionId);
             return _mapper.Map<IEnumerable<StaffDTO>>(staffEntities);
         }
+
+        public async Task<string> GetStaffFullNameByStaffIdAsync(Guid staffId)
+        {
+            var staff = await _staffRepository.GetStaffByIdAsync(staffId);
+            if (staff != null && staff.UserId != Guid.Empty)
+            {
+                var user = await _userManager.FindByIdAsync(staff.UserId.ToString());
+                if (user != null)
+                {
+                    return $"{user.UserName} {user.UserLastname}";
+                }
+            }
+            return "Unknown";
+        }
+
     }
 }

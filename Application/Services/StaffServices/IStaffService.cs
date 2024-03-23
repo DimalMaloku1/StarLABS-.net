@@ -18,5 +18,9 @@ namespace Application.Services.StaffServices
         Task<IEnumerable<StaffDTO>> GetStaffByPositionAsync(Guid positionId);
         Task<IEnumerable<Guid>> GetAllUserNamesAsync();
 
+        Task<string> GetStaffFullNameByStaffIdAsync(Guid staffId);
+
+
+
     }
 }

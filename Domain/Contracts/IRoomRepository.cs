@@ -16,9 +16,8 @@ namespace Domain.Contracts
 
         Task UpdateAsync(Guid Id, Room room);
 
-        Task<IEnumerable<Room>> GetRoomsByFreeStatusAsync(bool isFree);
+        Task<IEnumerable<Room>> GetRoomsByTypeAsync(Guid roomTypeId);
 
-        Task<IEnumerable<Room>> GetRoomsByRoomTypeIdAsync(Guid roomTypeId);
 
     }
 

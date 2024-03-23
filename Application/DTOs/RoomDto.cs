@@ -11,7 +11,6 @@ namespace Application.DTOs
     public class RoomDto : BaseEntityDto
     {
         public int RoomNumber { get; set; }
-        public bool IsFree { get; set; }
 
         public Guid RoomTypeId { get; set; }
 
@@ -20,6 +19,8 @@ namespace Application.DTOs
         public string Description { get; set; }
         public double Price { get; set; }
         public int Capacity { get; set; }
+
+        public List<BookingDto> BookingDtos { get; set; }
         public IEnumerable<RoomTypeDto> RoomTypes { get; set; }
 
 

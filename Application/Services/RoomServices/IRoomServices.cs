@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,7 @@ namespace Application.Services.RoomServices
         Task<RoomDto> CreateAsync(RoomDto room);
         Task UpdateAsync(Guid id, RoomDto roomDto);
         Task DeleteAsync(Guid id);
-
-        Task<IEnumerable<RoomDto>> GetRoomsByFreeStatusAsync(bool isFree);
-
-        Task<IEnumerable<RoomDto>> GetRoomsByRoomTypeIdAsync(Guid roomTypeId, bool isFree);
+        Task<RoomDto> GetAvailableRoomAsync(Guid roomTypeId, DateTime checkInDate, DateTime checkOutDate);
 
     }
 }

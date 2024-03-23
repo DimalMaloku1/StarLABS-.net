@@ -31,3 +31,10 @@
     </div>
 
 </form>
+<form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+    <div>
+        <p>
+            <input type="submit" class="btn btn-info" value="google" name="provider" />
+        </p>
+    </div>
+</form>

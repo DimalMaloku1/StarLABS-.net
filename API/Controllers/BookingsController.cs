@@ -1,6 +1,11 @@
-﻿using Application.DTOs;
+﻿using System.Security.Claims;
+using API.Views.Dashboard;
+using Application.DTOs;
+using Application.DTOs.AccountDTOs;
 using Application.Services.BillService;
 using Application.Services.BookingServices;
+using Application.Services.RoomServices;
+using Application.Services.RoomTypeServices;
 using Domain.Models;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace API.Controllers
 {
     [Authorize]
-    public class BookingsController(UserManager<AppUser> _userManager, IBookingService _bookingService, IValidator<BookingDto> _bookingValidator, IBillService _billService) : Controller
+    public class BookingsController(UserManager<AppUser> _userManager, IBookingService _bookingService, IValidator<BookingDto> _bookingValidator, IBillService _billService, IRoomTypeServices _roomTypeService) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -24,7 +29,6 @@ namespace API.Controllers
             {
                 var booking = await _bookingService.GetBookingByIdAsync(id);
                 if (booking is null) return NotFound();
-                await SetViewBagData();
                 return View("Details", booking);
             }
             catch (Exception ex)
@@ -33,72 +37,65 @@ namespace API.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
-            try
-            {
-                await SetViewBagData();
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("Error", ex.Message);
-                return View("Create");
-            }
+
+            var roomTypes = await _roomTypeService.GetAllRoomTypesAsync();
+            ViewBag.RoomTypes = new SelectList(roomTypes, "Id", "Type");
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookingDto bookingDto)
         {
-            try
+            var userId = _userManager.GetUserId(User);
+            if (userId is not null)
             {
-                var userId = _userManager.GetUserId(User);
-                if (userId is not null)
+                string baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}";
+                if (!ModelState.IsValid)
                 {
-                    await SetViewBagData();
-                    string baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}";
+                    var roomTypes = await _roomTypeService.GetAllRoomTypesAsync();
+                    ViewBag.RoomTypes = new SelectList(roomTypes, "Id", "Type");
 
-                    var validationResult = _bookingValidator.Validate(bookingDto);
-                    if (validationResult.IsValid)
-                    {
-                        var createdBookingDto = await _bookingService.CreateAsync(bookingDto, Guid.Parse(userId), baseUrl);
-                        var bills = await _billService.GetBillsByBookingId(createdBookingDto.Id);
+                    return View(bookingDto);
+                }
 
-                        if (bills == null || !bills.Any())
-                        {
-                            return NotFound();
-                        }
+                var createdBookingDto = await _bookingService.CreateAsync(bookingDto, Guid.Parse(userId), baseUrl);
 
-                        var firstBill = bills.FirstOrDefault();
-                        if (firstBill != null)
-                        {
-                            return RedirectToAction("Details", "Bill", new { id = firstBill.Id });
-                        }
-                        else
-                        {
-                            return NotFound();
-                        }
-                    }
-                    else
-                    {
-                        foreach (var error in validationResult.Errors)
-                        {
-                            ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                        }
-                    }
+                if (createdBookingDto == null)
+                {
+
+                    var roomTypes = await _roomTypeService.GetAllRoomTypesAsync();
+                    ViewBag.RoomTypes = new SelectList(roomTypes, "Id", "Type");
+                    ModelState.AddModelError(string.Empty, "No available rooms for the given dates.");
+                    return View(bookingDto);
+                }
+                var bills = await _billService.GetBillsByBookingId(createdBookingDto.Value.Id);
+
+                if (bills == null || !bills.Any())
+                {
+                    ModelState.AddModelError(string.Empty, "Problem while adding the bill for the particular booking!");
+                    return View(bookingDto);
+                }
+
+                var firstBill = bills.FirstOrDefault();
+                if (firstBill != null)
+                {
+                    return RedirectToAction("Details", "Bill", new { id = firstBill.Id });
                 }
                 else
                 {
-                    return RedirectToAction(nameof(Index));
+                    ModelState.AddModelError(string.Empty, "Problem while adding the bill for the particular booking!");
+                    return View(bookingDto);
                 }
-                return View(bookingDto);
+
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("Error", ex.Message);
-                return View(bookingDto);
-            }
+            return View(bookingDto);
+
         }
+
         public async Task<IActionResult> Edit(Guid id)
         {
             try
@@ -145,20 +142,18 @@ namespace API.Controllers
                 bookingDto.RoomTypes = bookingDropDownData
                                 .RoomTypes;
 
-                var validationResult = _bookingValidator.Validate(bookingDto);
-                if (validationResult.IsValid)
+                if (ModelState.IsValid)
                 {
                     bookingDto.CreatedAt = booking.CreatedAt;
                     bookingDto.UpdatedAt = DateTime.Now;
-                    await _bookingService.UpdateAsync(id, bookingDto);
-                    return RedirectToAction(nameof(Index));
+                    var result = await _bookingService.UpdateAsync(id, bookingDto);
+                    if (result != null && result.IsSuccess)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    ModelState.AddModelError(string.Empty, result.ErrorMessage);
+                    ViewData["ErrorMessage"] = result.ErrorMessage;
                 }
-
-                foreach (var error in validationResult.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-
                 return View(bookingDto);
             }
             catch (Exception ex)
@@ -167,12 +162,13 @@ namespace API.Controllers
                 return View(bookingDto);
             }
         }
+
+
         public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
                 var booking = await _bookingService.GetBookingByIdAsync(id);
-                await SetViewBagData();
                 return View("Delete", booking);
             }
             catch (Exception ex)
@@ -222,13 +218,7 @@ namespace API.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
-        private async Task SetViewBagData()
-        {
-            var bookingDropDownData = await _bookingService.GetNewBookingDropDownsValues();
-            ViewBag.Rooms = new SelectList(bookingDropDownData.Rooms, "Id", "RoomNumber");
-            ViewBag.RoomTypes = new SelectList(bookingDropDownData.RoomTypes, "Id", "Type");
-        }
-
     }
 }
+
+    

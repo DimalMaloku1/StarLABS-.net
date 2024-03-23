@@ -3,91 +3,7 @@
 
 // Write your JavaScript code.
 
-function sidebarData() {
-
-
-    let sidebarObject = [
-        {
-            name: 'Home',
-            controller: 'home',
-            symbol: 'home'
-        },
-        {
-            name: 'Bookings',
-            controller: 'Bookings',
-            symbol: 'bookmark'
-        },
-        {
-            name: 'Feedback',
-            controller: 'Feedback',
-            symbol: 'reviews'
-        },
-        {
-            name: 'Room',
-            controller: 'Room',
-            symbol: 'door_front'
-        },
-        {
-            name: 'Room Type',
-            controller: 'RoomType',
-            symbol: 'king_bed'
-        },
-        {
-            name: 'Users',
-            controller: 'Users',
-            symbol: 'group'
-        },
-        {
-            name: 'Employees',
-            controller: 'Staff',
-            symbol: 'badge'
-        },
-        {
-            name: 'Staff Positions',
-            controller: 'Position',
-            symbol: 'engineering'
-        },
-        {
-            name: 'Payments',
-            controller: 'Payment',
-            symbol: 'paid'
-        },
-        {
-            name: 'Bills',
-            controller: 'Bill',
-            symbol: 'card_membership'
-        },
-
-        //If you need to add a default symbol 'Help' ex. symbol: 'Help'
-
-        {
-            name: 'Rest',
-            controller: 'Restarutantqqwewqed',
-            symbol: 'help'
-        },
-    ]
-
-    let asideList = document.getElementById('sidebar-list');
-    let asideData = '';
-
-    sidebarObject.forEach(item => {
-        asideData += `
-        <li>
-           <a class="nav-link text-dark" href="/${item.controller}">
-              <div class="content">
-                  <div class="left-side-content">
-                      <span class="material-icons md-60">${item.symbol}</span>
-                      <p>${item.name}</p>
-                  </div>
-              </div>
-            </a>
-       </li>
-    `;
-    })
-
-    asideList.innerHTML = asideData;
-}
-
+/*
 let menuClose = document.getElementById('menu-btn');
 
 menuClose.addEventListener('click', () => {
@@ -100,6 +16,7 @@ menuClose.addEventListener('click', () => {
     gridContainer.classList.toggle('collapsed');
     aside.classList.toggle('remove');
 })
+*/
 // for details on configuring this project to bundle and minify static web 
 
 $(document).ready(function () {

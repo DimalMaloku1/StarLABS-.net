@@ -4,13 +4,19 @@ using API.Extensions;
 using Microsoft.AspNetCore.Identity;
 using API.Middleware;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 //builder.Services.AddIdentityServiceJWT(builder.Configuration);
-
+builder.Services.AddAuthentication()
+    .AddGoogle("google", opt =>
+    {
+        var googleAuth = builder.Configuration.GetSection("Authentication:Google");
+        opt.ClientId = googleAuth["ClientId"];
+        opt.ClientSecret = googleAuth["ClientSecret"];
+        opt.SignInScheme = IdentityConstants.ExternalScheme;
+    });
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

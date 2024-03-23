@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly IPaymentService _pservice;
@@ -23,17 +23,22 @@ namespace API.Controllers
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IConfiguration _configuration;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly PayPalSettings _payPalSettings;
 
 
-        public PaymentController(IPaymentService pservice, IBillService billService, IValidator<PaymentDto> paymentValidator, IOptions<StripeSettings> stripeSettings, IHttpContextAccessor context, IConfiguration configuration, UserManager<AppUser> userManager)
+
+        public PaymentController(IPaymentService pservice, IBillService billService, IValidator<PaymentDto> paymentValidator,
+            IOptions<StripeSettings> stripeSettings, IOptions<PayPalSettings> payPalSettings,IHttpContextAccessor context, UserManager<AppUser> userManager, IUnitOfWork unitOfWork)
         {
             _pservice = pservice;
             _billService = billService;
             _paymentValidator = paymentValidator;
             _stripeSettings = stripeSettings.Value;
+            _payPalSettings = payPalSettings.Value; 
             httpContextAccessor = context;
-            _configuration = configuration;
             _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -85,96 +90,7 @@ namespace API.Controllers
             return View(paymentDto);
         }
 
-
-        [HttpPost]
-        public async Task<IActionResult> Create(PaymentDto paymentDto)
-        {
-            var validationResult = _paymentValidator.Validate(paymentDto);
-            if (!validationResult.IsValid)
-            {
-                paymentDto.Bills = await _billService.GetAllBills();
-                return View(paymentDto);
-            }
-
-            if (paymentDto.PaymentMethod == Domain.Enums.PaymentMethod.Stripe)
-            {
-                var bill = await _billService.GetBillById(paymentDto.BillId);
-                if (bill != null)
-                {
-                    var totalAmount = bill.TotalAmount;
-                    return await CreateCheckoutSession(totalAmount.ToString(), paymentDto.BillId);
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Payment");
-                }
-            }
-           
-            else
-            {
-                await _pservice.AddPaymentAsync(paymentDto);
-                return RedirectToAction("Index", "Payment");
-            }
-        }
-
-
-        public async Task<IActionResult> CreateCheckoutSession(string amount, Guid billId)
-        {
-            var billDto = await _billService.GetBillById(billId);
-            if (billDto == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var currency = "usd";
-            var successUrl = "http://localhost:5000/Home";
-            var cancelUrl = "http://localhost:5000/Home/cancel";
-            Stripe.StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
-
-            var options = new Stripe.Checkout.SessionCreateOptions
-            {
-                PaymentMethodTypes = new List<string> { "card" },
-                LineItems = new List<Stripe.Checkout.SessionLineItemOptions>
-        {
-            new Stripe.Checkout.SessionLineItemOptions
-            {
-                PriceData = new Stripe.Checkout.SessionLineItemPriceDataOptions
-                {
-                    Currency = currency,
-                    UnitAmount = Convert.ToInt32(amount) * 100,
-                    ProductData = new Stripe.Checkout.SessionLineItemPriceDataProductDataOptions
-                    {
-                        Name = "Product Name",
-                        Description = "Product Description"
-                    }
-                },
-                Quantity = 1
-            }
-        },
-                Mode = "payment",
-                SuccessUrl = successUrl,
-                CancelUrl = cancelUrl
-            };
-
-            var service = new Stripe.Checkout.SessionService();
-            var session = await service.CreateAsync(options);
-
-            var paymentDto = new PaymentDto
-            {
-                BillId = billId,
-                PaymentMethod = Domain.Enums.PaymentMethod.Stripe,
-                TotalAmount = Convert.ToDecimal(amount),
-                Username = billDto.Username
-            };
-
-            await _pservice.AddPaymentAsync(paymentDto);
-
-            return Redirect(session.Url);
-        }
-
-      
-
-
+       
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
@@ -216,5 +132,196 @@ namespace API.Controllers
             await _pservice.DeletePaymentAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(PaymentDto paymentDto)
+        {
+            var validationResult = _paymentValidator.Validate(paymentDto);
+            if (!validationResult.IsValid)
+            {
+                paymentDto.Bills = await _billService.GetAllBills();
+                return View(paymentDto);
+            }
+
+            if (paymentDto.PaymentMethod == Domain.Enums.PaymentMethod.Stripe)
+            {
+                var bill = await _billService.GetBillById(paymentDto.BillId);
+                if (bill != null)
+                {
+                    var totalAmount = bill.TotalAmount;
+                    return await CreateCheckoutSession(totalAmount.ToString(), paymentDto.BillId);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Payment");
+                }
+            }
+            else if (paymentDto.PaymentMethod == Domain.Enums.PaymentMethod.PayPal)
+            {
+                return await CreatePayPalPayment(paymentDto.TotalAmount, paymentDto.BillId);
+            }
+            else
+            {
+                await _pservice.AddPaymentAsync(paymentDto);
+                return RedirectToAction("Index", "Payment");
+            }
+        }
+
+            // Stripe Integration Checkout Part:
+        public async Task<IActionResult> CreateCheckoutSession(string amount, Guid billId)
+        {
+            var billDto = await _billService.GetBillById(billId);
+            if (billDto == null)
+            {
+                return RedirectToAction("Index", "Payment");
+            }
+
+            var currency = "eur";
+            Stripe.StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
+            var customername = billDto.Username;
+            var lineItemDescription = $"Room Type: {billDto.RoomType}, Days Spent: {billDto.DaysSpent}";
+
+            var options = new Stripe.Checkout.SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "ideal", "card" },
+                LineItems = new List<Stripe.Checkout.SessionLineItemOptions>
+        {
+            new Stripe.Checkout.SessionLineItemOptions
+            {
+                PriceData = new Stripe.Checkout.SessionLineItemPriceDataOptions
+                {
+                    Currency = currency,
+                    UnitAmount = Convert.ToInt32(amount) * 100,
+                    ProductData = new Stripe.Checkout.SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = customername,
+                        Description = lineItemDescription
+                    }
+                },
+                Quantity = 1
+            }
+        },
+                Mode = "payment",
+                SuccessUrl = _stripeSettings.SuccessUrl,
+                CancelUrl = _stripeSettings.CancelUrl
+            };
+
+            var service = new Stripe.Checkout.SessionService();
+            var session = await service.CreateAsync(options);
+
+            TempData["billId"] = billId;
+            TempData["amount"] = amount;
+
+            return Redirect(session.Url);
+        }
+
+        public async Task<IActionResult> SuccessStripe()
+        {
+            if (!TempData.ContainsKey("billId") || !TempData.ContainsKey("amount"))
+            {
+                TempData["error"] = "TempData does not contain necessary data.";
+                return RedirectToAction("Index", "Payment");
+            }
+
+            var billId = (Guid)TempData["billId"];
+            var amount = TempData["amount"].ToString();
+
+            var billDto = await _billService.GetBillById(billId);
+            if (billDto == null)
+            {
+                TempData["error"] = "Bill not found.";
+                return RedirectToAction("Index", "Payment");
+            }
+
+            var paymentDto = new PaymentDto
+            {
+                BillId = billId,
+                PaymentMethod = Domain.Enums.PaymentMethod.Stripe,
+                TotalAmount = Convert.ToDecimal(amount),
+                Username = billDto.Username
+            };
+
+            await _pservice.AddPaymentAsync(paymentDto);
+
+            TempData.Remove("billId");
+            TempData.Remove("amount");
+
+            return View();
+        }
+        public IActionResult CancelStripe()
+        {
+            return View();
+        }
+
+            // PayPal Integration Checkout Part:
+        private async Task<IActionResult> CreatePayPalPayment(decimal totalAmount, Guid billId)
+        {
+            var billDto = await _billService.GetBillById(billId);
+            if (billDto == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            TempData["billId"] = billId;
+            TempData["totalAmount"] = totalAmount.ToString();
+
+            var returnUrl = _payPalSettings.SuccessUrl;
+            var cancelUrl = _payPalSettings.CancelUrl;
+
+            var createdPayment = await _unitOfWork.PaypalServices.CreateOrderAsync(totalAmount, returnUrl, cancelUrl);
+            var approvalUrl = createdPayment.links.FirstOrDefault(x => x.rel.ToLower() == "approval_url")?.href;
+
+            if (!string.IsNullOrEmpty(approvalUrl))
+            {
+                return Redirect(approvalUrl);
+            }
+            else
+            {
+                TempData["error"] = "Failed to initiate PayPal payment.";
+                return RedirectToAction("Index", "Payment");
+            }
+        }
+
+
+        public async Task<IActionResult> SuccessPayPal(string paymentId, string token, string PayerID)
+        {
+            if (!TempData.ContainsKey("billId") || !TempData.ContainsKey("totalAmount"))
+            {
+                TempData["error"] = "TempData does not contain necessary data.";
+                return RedirectToAction("Index", "Payment");
+            }
+
+            var billId = (Guid)TempData["billId"];
+            var totalAmount = TempData["totalAmount"].ToString();
+            var billDto = await _billService.GetBillById(billId);
+            if (billDto == null)
+            {
+                TempData["error"] = "Bill not found.";
+                return RedirectToAction("Index", "Payment");
+            }
+
+            var paymentDto = new PaymentDto
+            {
+                BillId = billId,
+                PaymentMethod = Domain.Enums.PaymentMethod.PayPal,
+                TotalAmount = decimal.Parse(totalAmount),
+                Username = billDto.Username
+            };
+
+            await _pservice.AddPaymentAsync(paymentDto);
+
+            ViewData["PaymentId"] = paymentId;
+            ViewData["token"] = token;
+            ViewData["payerId"] = PayerID;
+
+            TempData.Remove("billId");
+            TempData.Remove("totalAmount");
+            return View();
+        }
+        public IActionResult CancelPayPal()
+        {
+            return View();
+        }
+      
     }
 }

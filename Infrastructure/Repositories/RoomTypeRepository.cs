@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Domain.Contracts;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 
 namespace Infrastructure.Repositories
@@ -50,8 +51,12 @@ namespace Infrastructure.Repositories
 
         public async Task UpdateAsync(Guid Id, RoomType roomType)
         {
-            _context.RoomTypes.Update(roomType);
+            EntityEntry entityEntry = _context.RoomTypes.Entry(roomType);
+            entityEntry.State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
         }
+
+
     }
 }

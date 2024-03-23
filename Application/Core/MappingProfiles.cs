@@ -20,6 +20,7 @@ namespace Application.Core
             CreateMap<AppUser, UserDto>().ReverseMap();
             CreateMap<RoomTypePhoto,RoomTypePhotoDTO>().ReverseMap();
             CreateMap<AppUser, VerifyAccountDto>().ReverseMap();
+            CreateMap<DailyTask, DailyTaskDto>().ReverseMap();
 
 
 

@@ -16,7 +16,25 @@ namespace Application.Services.RoomServices
             _roomRepository = roomRepository;
             _mapp = mapper;
         }
+        
+        public async Task<RoomDto> GetAvailableRoomAsync(Guid roomTypeId, DateTime checkInDate, DateTime checkOutDate)
+        {
+            var rooms = await _roomRepository.GetRoomsByTypeAsync(roomTypeId);
 
+            var availableRoom = rooms.FirstOrDefault(room =>
+                !room.Bookings.Any(booking =>
+                    (checkInDate >= booking.CheckInDate && checkInDate < booking.CheckOutDate) ||
+                    (checkOutDate > booking.CheckInDate && checkOutDate <= booking.CheckOutDate)));
+
+            var availableRoomDto = availableRoom != null ? new RoomDto
+            {
+                Id = availableRoom.Id,
+                RoomNumber = availableRoom.RoomNumber,
+                RoomTypeId = availableRoom.RoomTypeId,
+            } : null;
+
+            return availableRoomDto;
+        }
 
         public async Task<IEnumerable<RoomDto>> GetAllRoomsAsync()
         {
@@ -55,23 +73,6 @@ namespace Application.Services.RoomServices
             _mapp.Map(roomDto, existingRoom);
             await _roomRepository.UpdateAsync(id, existingRoom);
 
-        }
-
-        public async Task<IEnumerable<RoomDto>> GetRoomsByFreeStatusAsync(bool isFree)
-        {
-            var rooms = await _roomRepository.GetRoomsByFreeStatusAsync(isFree);
-            var roomsDto = _mapp.Map<IEnumerable<RoomDto>>(rooms);
-            return roomsDto;
-        }
-
-        public async Task<IEnumerable<RoomDto>> GetRoomsByRoomTypeIdAsync(Guid roomTypeId, bool isFree)
-        {
-            var rooms = await _roomRepository.GetRoomsByRoomTypeIdAsync(roomTypeId);
-
-            rooms = rooms.Where(room => room.IsFree);
-
-            var roomDtos = _mapp.Map<IEnumerable<RoomDto>>(rooms);
-            return roomDtos;
         }
 
     }

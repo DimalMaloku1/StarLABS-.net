@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Application.DTOs.DailyTaskDto>
+
+<div class="container">
+    <h1>Daily Tasks</h1>
+
+    <div class="filter-section">
+        <form asp-action="FilterByStatus" method="post" class="filter-form">
+            <label for="status">Filter by Status:</label>
+            <select name="status" id="status">
+                <option value="To Do">To Do</option>
+                <option value="On Progress">On Progress</option>
+                <option value="Done">Done</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Filter by Status</button>
+        </form>
+    </div>
+    <div style="margin-top: 10px;"></div>
+    <div class="filter-section">
+        <form asp-action="FilterByDate" method="get" class="filter-form">
+            <label for="date">Filter by Date:</label>
+            <input type="date" id="date" name="date" value="@DateTime.Today.ToString("yyyy-MM-dd")">
+            <button type="submit" class="btn btn-primary">Filter by Date</button>
+        </form>
+    </div>
+    <div style="margin-top: 10px;"></div>
+
+
+
+    <div style="margin-top: 10px;"></div>
+    <div class="action-links">
+        <a asp-action="AllDailyTasks" class="btn btn-primary">Show All Daily Tasks</a>
+        <a asp-action="Create" class="btn btn-primary">Create New Task</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Staff Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.StaffFullName</td>
+                    <td>@item.Description</td>
+                    <td>@item.Status</td>
+                    <td>@item.Date.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this task?')" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

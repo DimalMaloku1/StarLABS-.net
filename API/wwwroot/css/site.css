@@ -25,13 +25,15 @@ body {
 }
 
 .grid-right {
-    width:100%;
     display: grid;
     grid-template-rows: auto 1fr auto;
-    gap: 50px;
-    padding: 20px 60px 0px 60px;
     grid-column: 2/3;
-    background-color: mintcream;
+
+}
+
+.wrapper {
+    width: 1350px;
+    margin: 0px auto;
 }
 
     .grid-right.collapsed {
@@ -59,10 +61,16 @@ ul {
 .grid-container {
     display: grid;
     height: 100vh;
-    grid-template-columns: 20rem 1fr;
+    grid-template-columns: auto 1fr;
     grid-template-rows: 1fr;
 }
 
+.admin-grid-container {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 20rem 1fr;
+    grid-template-rows: 1fr;
+}
 
     .grid-container.collapsed {
         grid-template-columns: 1fr; /* Change to single column when collapsed */
@@ -117,7 +125,8 @@ aside {
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content:end;
+    gap:20px;
     align-items: center;
 }
 
@@ -150,8 +159,12 @@ aside {
 }
 
     .left-side-content p {
-        color: var(--leftmenu-word-color) !important;
+        color: white !important;
     }
+
+.left-side-content-main p{
+    color:black;
+}
 
 .left-side-menu a {
     padding: 10px 5px;
@@ -231,217 +244,7 @@ aside {
     padding: 10px 20px;
 }
 
-/*=============== Header ====================*/
 
-.burger-btn {
-    padding: 10px;
-    background-color: white;
-    border-radius: 50px;
-    box-shadow: 0px 0px 20px gray;
-    transition:all 0.3s ease-in;
-}
-
-    .burger-btn:hover {
-        cursor: pointer;
-        box-shadow: 0px 0px 30px gray;
-        background-color:lightgrey;
-    }
-
-    /*=============About Us==============*/
-.about-container {
-    width: 100%;
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0px 0px 20px gray;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-    .about-container img{
-        width:500px;
-    }
-
-    .about-container .data {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        text-align: center;
-    }
-
-        .about-container .data p {
-            color: gray;
-        }
-/*=============LLocation==============*/
-.location-container {
-    width: 100%;
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0px 0px 20px gray;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-        /*=============== Room Type ====================*/
-        .roomType-container {
-        margin-top: 50px;
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr;
-        gap: 5%;
-    }
-
-    .roomType-container .card {
-        padding-bottom: 50px;
-        transition: all 0.3s ease-in;
-    }
-
-        .roomType-container .card:hover {
-            transform: scale(1.05);
-            z-index: 2;
-        }
-
-        .roomType-container .card .data {
-            padding: 10px 15px;
-        }
-
-        .roomType-container .card .bottom {
-            position: absolute;
-            width: calc(100% - 30px);
-            bottom: 0;
-        }
-
-        .roomType-container .card .price {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .roomType-container .card .bottom a {
-            background-color: forestgreen;
-            color: white;
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s ease-in;
-        }
-
-
-
-            .roomType-container .card .bottom a:hover {
-                background-color: darkgreen;
-                border-radius: 0px
-            }
-
-.booking-btn {
-    display: flex;
-    align-items: center;
-    border: none;
-    outline: none;
-    color: green;
-    border-radius: 8px;
-    font-size: 50px !important;
-    position: absolute;
-    top: -8px;
-    right: -15px;
-}
-/*=============== footer ====================*/
-footer {
-    width: 100%;
-    font-size: 18px;
-    font-weight:600;
-}
-
-    footer ul{
-        width:100%;
-        display:flex;
-        flex:1;
-        gap:5%;
-    }
-
-        footer ul a {
-            text-decoration: none;
-            color:black;
-        }
-
-    footer .data {
-        padding: 20px 0px;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-    }
-/*=============== rated feedback ====================*/
-
-.rated-feedback-grid {
-    margin-top: 50px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 50px;
-}
-
-
-.rated-feedback .card {
-    position: relative;
-    max-width: 100%;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    background-color: white;
-    padding: 50px 20px 100px 20px;
-    transition: all 0.3s ease-in;
-}
-
-    .rated-feedback .card:hover {
-        transform: scale(1.05);
-        z-index: 2;
-    }
-
-    .rated-feedback .card h6 {
-        border-radius: 6px;
-        font-size: 25px;
-        position: absolute;
-        padding: 12px;
-        background-color: mediumpurple;
-        color: white;
-        top: -20px;
-    }
-
-
-    .rated-feedback .card p {
-        color: gray;
-        font-size: 18px;
-        padding: 0;
-    }
-
-    .rated-feedback .card hr {
-        margin: 0px 45px 10px 0px;
-        padding: 0;
-    }
-
-.rated-feedback-grid .card .user-data {
-    display: flex;
-    gap: 15px;
-    padding: 0;
-    margin: 0;
-}
-
-.rated-feedback .comment-user {
-    font-size: 30px !important;
-}
-
-.rated-feedback-grid .bottom {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
 
 /*=============== Crud Index ====================*/
 
@@ -548,3 +351,305 @@ footer {
     padding:5px 10px;
     width:200px !important;
 }
+
+
+/*===================  New Code ============================*/
+
+.user-login-logout{
+    display:flex;
+    justify-content:end;
+    gap:5px;
+    align-items:center;
+}
+
+.user-login-logout p{
+    margin:0;
+}
+
+    .user-login-logout button {
+        color: red !important;
+    }
+
+        .user-login-logout button:hover {
+            background-color: red !important;
+            color: white !important;
+        }
+
+
+
+.btn-svg {
+    background-color: #E0B973;
+    color: white;
+    width: 140px;
+    height: 30px;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+    .btn-svg:hover {
+        background-color: #A88951;
+    }
+
+
+/*=============== Header ====================*/
+
+header {
+    background: #14274A;
+    color: white;
+}
+
+    header .navBar a{
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    header .navBar a:hover {
+        background-color: white;
+        color: black;
+        padding: 3px 10px;
+        border-radius: 3px;
+    }
+
+/*=============== Footer ====================*/
+
+footer {
+    background: #14274A;
+    color: white;
+    padding:60px 0px;
+    margin-top:80px;
+}
+
+
+
+    footer li, a {
+        color: white;
+        text-decoration: none;
+    }
+
+    footer a:hover {
+        color: white;
+    }
+
+    footer li:hover {
+        color: white;
+        border-bottom:2px solid white;
+    }
+
+.btn-contact {
+    background-color: #14274A;
+    border: 2px solid #E0B973;
+    padding:8px 15px 8px 15px;
+    transition:all 0.2s;
+}
+
+.btn-contact:hover {
+    color: white;
+    background-color: #E0B973;
+}
+
+
+/*=============== Hero ====================*/
+
+.hero {
+    width: 100%;
+    height: 865px;
+    background: url(/images/MaskGroup-fix.png);
+}
+
+
+.heroText {
+    position:absolute;
+    z-index:100;
+    color:white;
+    margin-top:150px;
+}
+
+.color-overlay {
+    background: linear-gradient(to top right, darkblue, #14274A);
+    width: 100%;
+    height: 100%;
+    opacity: .4;
+}
+
+.heroText p {
+    font-size: 25px;
+    margin: 0;
+}
+
+.heroText h1 {
+    font-size: 100px !important;
+    font-family: none;
+}
+
+.hero a {
+    margin-top: 100px;
+    background-color: #E0B973;
+    padding:10px 40px;
+    color:white;
+    position: absolute;
+    font-weight:bold;
+    border-radius:5px;
+}
+
+    .hero a:hover {
+        background-color: #A88951;
+    }
+
+/*=============== Room Type ====================*/
+
+.roomType {
+    display: grid;
+    grid-template-rows: auto;
+    gap: 50px;
+    color: #14274A;
+}
+
+    .roomType H1 {
+        font-family: none;
+        font-weight: bold;
+        font-size: 50px;
+    }
+
+    .room-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .room-card .card-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+        padding:40px;
+        border-left: 2px solid #14274A;
+        width:650px;
+    }
+
+        .room-card .card-left h1{
+            font-size:40px;
+            font-weight:bold;
+            font-family:none;
+        }
+
+        .room-card .card-left p {
+            font-size: 20px;
+            font-weight: lighter;
+        }
+
+        .room-card img {
+            width: 570px;
+            border-radius: 4px;
+        }
+
+    .room-card .card-left a{
+        background-color: #E0B973;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:10px;
+        font-weight:bold;
+        border-radius:4px;
+        transition:all 0.2s;
+        width:180px !important;
+    }
+
+    .room-card .card-left a:hover {
+        color: white;
+        background-color: #A88951;
+    }
+
+/*=============== Feedback ====================*/
+
+.feedback {
+    display: flex;
+    flex-direction:column;
+    align-items:center;
+    gap:30px;
+    color:#14274A;
+}
+
+.feedback h1 {
+    font-family: none;
+    font-weight:bold;
+    font-size:50px;
+}
+
+.feedback-grid{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+}
+
+    .feedback-grid .feedback-comment{
+        text-align:center;
+        width:300px;
+    }
+
+.feedback-comment h2{
+    font-family:none;
+    font-size:30px;
+}
+
+.feedback-comment p {
+    font-size: 20px;
+}
+
+.feedback a {
+    background-color: #E0B973;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 30px;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+    .feedback a:hover {
+        color: white;
+        background-color: #A88951;
+    }
+
+/*=============== About Us ====================*/
+
+.aboutUs {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    color: #14274A;
+}
+
+.about-left {
+    background-color: #081537;
+    padding: 50px;
+    text-align: center;
+    color: white;
+    font-family: none;
+    font-weight: bold;
+    font-size: 50px;
+}
+
+.about-right{
+    border:2px solid #14274A;
+    text-align:center;
+    padding:50px;
+}
+
+.about-right h2{
+    font-size:40px;
+    font-weight:bold;
+    
+}
+
+    .about-right p {
+        font-family: none;
+        font-size: 20px;
+    }
+

@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using Application.Core;
+using Application.DTOs;
 using System;
 
 namespace Application.Services.BookingServices
@@ -7,8 +8,8 @@ namespace Application.Services.BookingServices
     {
         Task<IEnumerable<BookingDto>> GetAllBookingsAsync();
         Task<BookingDto> GetBookingByIdAsync(Guid id);
-        Task<BookingDto> CreateAsync(BookingDto booking, Guid userId, string baseUrl);
-        Task UpdateAsync(Guid id, BookingDto bookingDto);
+        Task<Result<BookingDto>> CreateAsync(BookingDto booking, Guid userId, string baseUrl);
+        Task<Result<BookingDto>> UpdateAsync(Guid id, BookingDto bookingDto);
         Task DeleteAsync(Guid id);
         Task<NewBookingDropDownsDTO> GetNewBookingDropDownsValues();
     }

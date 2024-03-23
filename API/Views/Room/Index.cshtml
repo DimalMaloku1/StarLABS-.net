@@ -48,7 +48,6 @@
         <thead>
             <tr>
                 <th>Room Number</th>
-                <th>Is Free</th>
                 <th>Room Type</th>
                 <th>Price per Night</th>
                 <th>Actions</th>
@@ -61,9 +60,7 @@
                     <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.RoomNumber)
                     </td>
-                    <td class="align-middle">
-                        @(item.IsFree ? "Yes" : "No")
-                    </td>
+                    
                     <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.Type)
                     </td>

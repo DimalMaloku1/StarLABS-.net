@@ -10,5 +10,7 @@ namespace Application.Services.EmailServices
     {
         Task SendVerificationEmailAsync(string email, string message);
         Task SendBookingConfirmationEmailAsync(string email, string message);
+        Task SendDailyTaskEmailAsync(string email, string message);
+
     }
 }

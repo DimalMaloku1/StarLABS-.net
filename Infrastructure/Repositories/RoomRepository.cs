@@ -53,16 +53,15 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Room>> GetRoomsByFreeStatusAsync(bool isFree)
+        
+        public async Task<IEnumerable<Room>> GetRoomsByTypeAsync(Guid roomTypeId)
         {
-            var rooms = await _context.Rooms.Where(x => x.IsFree == isFree).ToListAsync();
-            return rooms;
-        }
+            var availablerooms = await _context.Rooms
+                .Where(r => r.RoomTypeId == roomTypeId)
+                .Include(r => r.Bookings)
+                .ToListAsync();
 
-        public async Task<IEnumerable<Room>> GetRoomsByRoomTypeIdAsync(Guid roomTypeId)
-        {
-            var rooms = await _context.Rooms.Where(room => room.RoomTypeId == roomTypeId).ToListAsync();
-            return rooms;
+            return availablerooms;
         }
 
     }
