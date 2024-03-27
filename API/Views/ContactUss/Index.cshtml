@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Domain.Models.ContactUsMessage>
+
+@{
+    ViewData["Title"] = "All Messages";
+}
+
+<h1>All Messages</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Email</th>
+            <th>Replied</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var message in Model)
+        {
+            <tr>
+                <td>@(message.UserId != null ? message.User.UserName : $"{message.Name} (guest)")</td>
+                <td>@message.MessageContent</td>
+                <td>@message.CreatedAt</td>
+                <td>
+                    <span>@(message.UserId != null ? message.User.Email : message.Email)</span>
+                    <button type="button" class="btn btn-sm btn-primary copy-button" data-email="@(message.UserId != null ? message.User.Email : message.Email)">Copy Email</button>
+                </td>
+                <td>@message.Replied</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Actions">
+                        <a href="mailto:@(message.UserId != null ? message.User.Email : message.Email)?subject=Reply%20to%20Your%20Message&body=Hello%20@(message.UserId != null ? message.User.UserName : message.Name),"
+                           class="btn btn-sm btn-secondary">Reply</a>
+                        <form method="post" action="/ContactUss/MarkAsReplied">
+                            <input type="hidden" name="id" value="@message.Id" />
+                            <button type="submit" class="btn btn-sm btn-success">Mark as Replied</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script>
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const email = button.dataset.email;
+                const textarea = document.createElement('textarea');
+                textarea.value = email;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            });
+        });
+    </script>
+}

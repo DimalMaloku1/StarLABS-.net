@@ -19,13 +19,11 @@ namespace Infrastructure.Repositories
             return payment;
         }
 
-
         public async Task<IEnumerable<Payment>> GetAllAsync()
         {
             var payments = await _db.Payments.ToListAsync();
             return payments;
         }
-
 
         public async Task AddAsync(Payment payment)
         {
@@ -45,7 +43,6 @@ namespace Infrastructure.Repositories
                 await _db.SaveChangesAsync();
             }
         }
-
 
         public async Task DeleteAsync(Guid id)
         {

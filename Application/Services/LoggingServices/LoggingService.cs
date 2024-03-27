@@ -1,72 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Domain.Contracts;
 using Domain.Models;
-using Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.LoggingServices
 {
     public class LoggingService : ILoggingService
     {
-        private readonly DataContext _context;
+        private readonly ILoggingRepository _loggingRepository;
 
-        public LoggingService(DataContext context)
+        public LoggingService(ILoggingRepository loggingRepository)
         {
-            _context = context;
+            _loggingRepository = loggingRepository;
         }
 
         public async Task LogActionAsync(string action, string entity, string userName)
         {
-            var log = new Log
-            {
-                Action = action,
-                Entity = entity,
-                UserName = userName,
-                Timestamp = DateTime.UtcNow
-            };
-
-            _context.Logs.Add(log);
-            await _context.SaveChangesAsync();
+            await _loggingRepository.LogActionAsync(action, entity, userName);
         }
 
-        public async Task<IEnumerable<Log>> GetAllLogs()
+        public async Task<IEnumerable<Log>> GetAllLogsAsync()
         {
-            return await _context.Logs.ToListAsync();
+            return await _loggingRepository.GetAllLogsAsync();
         }
 
-        public async Task<Log> GetLogById(Guid id)
+        public async Task<Log> GetLogByIdAsync(Guid id)
         {
-            return await _context.Logs.FindAsync(id);
+            return await _loggingRepository.GetLogByIdAsync(id);
         }
 
-        public async Task CreateLog(Log log)
+        public async Task CreateLogAsync(Log log)
         {
-            _context.Logs.Add(log);
-            await _context.SaveChangesAsync();
+            await _loggingRepository.CreateLogAsync(log);
         }
 
-        public async Task UpdateLog(Log log)
+        public async Task UpdateLogAsync(Log log)
         {
-            _context.Entry(log).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await _loggingRepository.UpdateLogAsync(log);
         }
 
-        public async Task DeleteLog(Guid id)
+        public async Task DeleteLogAsync(Guid id)
         {
-            var log = await _context.Logs.FindAsync(id);
-            if (log != null)
-            {
-                _context.Logs.Remove(log);
-                await _context.SaveChangesAsync();
-            }
+            await _loggingRepository.DeleteLogAsync(id);
         }
 
-        public async Task<IEnumerable<Log>> GetLogsByMonthYear(int month, int year)
+        public async Task<IEnumerable<Log>> GetLogsByMonthYearAsync(int month, int year)
         {
-            return await _context.Logs.Where(log => log.Timestamp.Month == month && log.Timestamp.Year == year).ToListAsync();
+            return await _loggingRepository.GetLogsByMonthYearAsync(month, year);
         }
-
     }
 }

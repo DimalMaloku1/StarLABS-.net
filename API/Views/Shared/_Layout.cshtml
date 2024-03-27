@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
 
 </head>
 <body>
@@ -165,13 +166,16 @@
                                 <a href="/#aboutUs">About Us</a>
                             </li>
                             <li>
-                                <a href="/Room/create">Book Room</a>
+                                <a href="/bookings/create">Book Room</a>
                             </li>
                             <li>
                                 <a href="/#roomType">Room Type</a>
                             </li>
                             <li>
                                 <a href="/#feedback">Feedback</a>
+                            </li>
+                            <li>
+                                <a href="/contactuss/SendMessage">Contact Us</a>
                             </li>
                         </ul>
                         @if (SignInManager.IsSignedIn(User))
@@ -254,6 +258,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        w3.slideshow(".nature", 3000);
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

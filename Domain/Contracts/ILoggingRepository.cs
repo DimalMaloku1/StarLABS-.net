@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Models;
+﻿using Domain.Models;
 
 namespace Domain.Contracts
 {
     public interface ILoggingRepository
     {
-        Task<IEnumerable<Log>> GetAllLogs();
-        Task<Log> GetLogById(Guid id);
-        Task CreateLog(Log log);
-        Task UpdateLog(Log log);
-        Task DeleteLog(Guid id);
+        Task<IEnumerable<Log>> GetAllLogsAsync();
+        Task<Log> GetLogByIdAsync(Guid id);
+        Task CreateLogAsync(Log log);
+        Task UpdateLogAsync(Log log);
+        Task DeleteLogAsync(Guid id);
+        Task<IEnumerable<Log>> GetLogsByMonthYearAsync(int month, int year);
+        Task LogActionAsync(string action, string entity, string userName);
     }
 }

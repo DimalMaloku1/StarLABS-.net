@@ -52,8 +52,8 @@ namespace Application
             services.AddScoped<IValidator<RegisterDto>, RegisterValidator>();
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<ILoggingService, LoggingService>();
+            services.AddScoped<IContactUsService, ContactUsService>();
             services.AddScoped<IDailyTaskService, DailyTaskService>();
-
             services.AddTransient<IRazorPartialToStringRenderer, RazorPartialToStringRenderer>();
         }
     }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Application.Services.LoggingServices;
+﻿using Application.Services.LoggingServices;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-
 
 
 namespace API.Controllers
@@ -25,7 +20,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var logs = await _loggingService.GetAllLogs();
+            var logs = await _loggingService.GetAllLogsAsync();
             return View(logs);
         }
 
@@ -33,7 +28,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var log = await _loggingService.GetLogById(id);
+            var log = await _loggingService.GetLogByIdAsync(id);
             if (log == null)
             {
                 return NotFound();
@@ -55,7 +50,7 @@ namespace API.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _loggingService.CreateLog(log);
+                await _loggingService.CreateLogAsync(log);
                 return RedirectToAction(nameof(Index));
             }
             return View(log);
@@ -65,7 +60,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var log = await _loggingService.GetLogById(id);
+            var log = await _loggingService.GetLogByIdAsync(id);
             if (log == null)
             {
                 return NotFound();
@@ -85,7 +80,7 @@ namespace API.Controllers
 
             if (ModelState.IsValid)
             {
-                await _loggingService.UpdateLog(log);
+                await _loggingService.UpdateLogAsync(log);
                 return RedirectToAction(nameof(Index));
             }
             return View(log);
@@ -95,7 +90,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var log = await _loggingService.GetLogById(id);
+            var log = await _loggingService.GetLogByIdAsync(id);
             if (log == null)
             {
                 return NotFound();
@@ -108,7 +103,7 @@ namespace API.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _loggingService.DeleteLog(id);
+            await _loggingService.DeleteLogAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
@@ -123,12 +118,12 @@ namespace API.Controllers
             if (DateTime.TryParse(monthYear, out var selectedMonthYear))
             {
                 // Get logs for the specified month and year
-                var logsToDelete = await _loggingService.GetLogsByMonthYear(selectedMonthYear.Month, selectedMonthYear.Year);
+                var logsToDelete = await _loggingService.GetLogsByMonthYearAsync(selectedMonthYear.Month, selectedMonthYear.Year);
 
                 // Delete each log
                 foreach (var log in logsToDelete)
                 {
-                    await _loggingService.DeleteLog(log.Id);
+                    await _loggingService.DeleteLogAsync(log.Id);
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -139,7 +134,5 @@ namespace API.Controllers
                 return BadRequest();
             }
         }
-
-
     }
 }

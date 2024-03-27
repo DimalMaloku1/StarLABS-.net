@@ -5,13 +5,22 @@
     ViewData["Title"] = "Add a new Booking";
 }
 
-<div class="row text">
-    <div class="col-md-8 offset-2">
-        <p>
-            <h1>Add a new Booking</h1>
-        </p>
+<div class="row text wrapper booking mt-5">
+    <div class="d-flex justify-content-around align-items-center">
+        <div class="position-relative">
+            <div class="title2">
+                <div class="still-have-unanswered-questions-and-need-to-get-in-touch"> <a href="/Contacts/create">Contact us</a> for more information, or check our <a href="/#feedback">user's feedback!'</a> </div>
+                <div class="any-questions-check-out-the-fa-qs">Still in Doubt?<br /> Check out our rooms!</div>
+            </div>
+            <div>
+            <img class="nature" src="~/images/Family Room.jpg" width="500px">
+            <img class="nature" src="~/images/Standard.jpg" width="500px">
+            <img class="nature" src="~/images/Suite.jpg" width="500px" >
+            </div>
+        </div>
         <div class="row">
-            <div class="col-md-8 offset-2">
+            <div class="col-md-8 offset-2 booking-container">
+                <h1>Book a room!</h1>
                 <form asp-controller="Bookings" asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="text-danger"></div>

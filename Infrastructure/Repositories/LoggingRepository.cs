@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Contracts;
+﻿using Domain.Contracts;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,30 +12,42 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
+        public async Task LogActionAsync(string action, string entity, string userName)
+        {
+            var log = new Log
+            {
+                Action = action,
+                Entity = entity,
+                UserName = userName,
+                Timestamp = DateTime.UtcNow
+            };
 
-        public async Task<IEnumerable<Log>> GetAllLogs()
+            _context.Logs.Add(log);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<Log>> GetAllLogsAsync()
         {
             return await _context.Logs.ToListAsync();
         }
 
-        public async Task<Log> GetLogById(Guid id)
+        public async Task<Log> GetLogByIdAsync(Guid id)
         {
             return await _context.Logs.FindAsync(id);
         }
-        
-        public async Task CreateLog(Log log)
+
+        public async Task CreateLogAsync(Log log)
         {
             _context.Logs.Add(log);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateLog(Log log)
+        public async Task UpdateLogAsync(Log log)
         {
             _context.Entry(log).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteLog(Guid id)
+        public async Task DeleteLogAsync(Guid id)
         {
             var log = await _context.Logs.FindAsync(id);
             if (log != null)
@@ -48,6 +55,10 @@ namespace Infrastructure.Repositories
                 _context.Logs.Remove(log);
                 await _context.SaveChangesAsync();
             }
+        }
+        public async Task<IEnumerable<Log>> GetLogsByMonthYearAsync(int month, int year)
+        {
+            return await _context.Logs.Where(log => log.Timestamp.Month == month && log.Timestamp.Year == year).ToListAsync();
         }
     }
 }

@@ -39,8 +39,8 @@ namespace Infrastructure
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Log> Logs { get; set; }
+        public DbSet<ContactUsMessage> ContactUsMessages { get; set; }
         public DbSet<RoomTypePhoto> RoomTypePhotos { get; set; }
-
         public DbSet<DailyTask> DailyTasks { get; set; }
 
 

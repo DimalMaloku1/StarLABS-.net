@@ -18,6 +18,7 @@ namespace Infrastructure
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<ILoggingRepository, LoggingRepository>();
+            services.AddScoped<IContactUsRepository, ContactUsRepository>();
             services.AddScoped<IDailyTaskRepository, DailyTaskRepository>();
 
 

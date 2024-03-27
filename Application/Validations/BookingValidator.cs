@@ -7,9 +7,7 @@ namespace Application.Validations
     {
         public BookingValidator()
         {
-        //    RuleFor(x => x.TotalPrice)
-        //        .NotEmpty().WithMessage("Total price is required.")
-        //        .GreaterThan(0).WithMessage("Total price must be greater than 0.");
+        
 
             RuleFor(x => x.CheckInDate)
                 .NotEmpty().WithMessage("Check-in date is required.")

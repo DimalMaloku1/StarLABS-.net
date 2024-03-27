@@ -565,57 +565,7 @@ footer {
         background-color: #A88951;
     }
 
-/*=============== Feedback ====================*/
 
-.feedback {
-    display: flex;
-    flex-direction:column;
-    align-items:center;
-    gap:30px;
-    color:#14274A;
-}
-
-.feedback h1 {
-    font-family: none;
-    font-weight:bold;
-    font-size:50px;
-}
-
-.feedback-grid{
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-}
-
-    .feedback-grid .feedback-comment{
-        text-align:center;
-        width:300px;
-    }
-
-.feedback-comment h2{
-    font-family:none;
-    font-size:30px;
-}
-
-.feedback-comment p {
-    font-size: 20px;
-}
-
-.feedback a {
-    background-color: #E0B973;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 30px;
-    font-weight: bold;
-    border-radius: 4px;
-    transition: all 0.2s;
-}
-
-    .feedback a:hover {
-        color: white;
-        background-color: #A88951;
-    }
 
 /*=============== About Us ====================*/
 
@@ -653,3 +603,491 @@ footer {
         font-size: 20px;
     }
 
+
+/*=============== Feedback ====================*/
+
+.feedback-container{
+    width:500px;
+    padding:30px;
+    box-shadow:0px 0px 8px gray;
+    border-radius:8px;
+
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+
+
+.input-feedback textarea {
+    resize: none;
+    height:200px;
+}
+
+.rating-star {
+    display:flex;
+    justify-content:space-between;
+}
+
+
+
+#feedback a {
+    background-color: #E0B973;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: all 0.2s;
+    width: 180px !important;
+}
+
+    #feedback a:hover {
+        color: white;
+        background-color: #A88951;
+    }
+
+/*=============== Booking ====================*/
+
+.booking-container {
+    width: 500px;
+    padding: 30px;
+    box-shadow: 0px 0px 8px gray;
+    border-radius: 8px;
+}
+
+.booking-container form {
+    height:300px;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+    align-content:center;
+}
+
+
+.booking a {
+    color: blue;
+}
+
+.booking img{
+    border-radius:8px;
+}
+
+.booking a:hover {
+    color: orangered;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.feedback .text,
+.text * {
+    box-sizing: border-box;
+}
+
+.feedback .text {
+    height: 380px;
+    position: relative;
+}
+
+.feedback .icon-box {
+    border-radius: 8px;
+    border-style: solid;
+    border-color: var(--gray-300, #e2e5f1);
+    border-width: 1px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 196px;
+    position: absolute;
+    left: 220px;
+    top: 214px;
+}
+
+.feedback .title {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.feedback .icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    position: relative;
+    overflow: hidden;
+}
+
+.feedback .frame-48095375 {
+    width: 28px;
+    height: 26.25px;
+    position: absolute;
+    left: 0px;
+    top: 1px;
+}
+
+.feedback .group {
+    height: auto;
+    position: absolute;
+    left: 28px;
+    top: 0px;
+    transform: translate(-28px, 0px);
+    ;
+    overflow: visible;
+}
+
+.feedback .txt {
+    color: var(--gray-700, #565973);
+    text-align: left;
+    font-family: var(--body-s-font-family, 'Manrope-Regular', sans-serif);
+    font-size: var(--body-s-font-size, 14px);
+    line-height: var(--body-s-line-height, 160%);
+    font-weight: var(--body-s-font-weight, 400);
+    ;
+    position: relative;
+    align-self: stretch;
+}
+
+.feedback .btn {
+    border-radius: 6px;
+    padding: 11px 0px 11px 0px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.feedback .btn-text {
+    color: var(--system-success, #22c55e);
+    text-align: center;
+    font-family: 'Manrope-SemiBold', sans-serif;
+    font-size: 14px;
+    line-height: 160%;
+    font-weight: 600;
+    position: relative;
+}
+
+.feedback .icon-r {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    overflow: visible;
+}
+
+.feedback .icon-box2 {
+    border-radius: 8px;
+    border-style: solid;
+    border-color: var(--gray-300, #e2e5f1);
+    border-width: 1px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 196px;
+    position: absolute;
+    left: 0px;
+    top: 214px;
+}
+
+.feedback .group2 {
+    height: auto;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    overflow: visible;
+}
+
+.feedbackr .btn-text2 {
+    color: var(--brand-primary, #6366f1);
+    text-align: center;
+    font-family: 'Manrope-SemiBold', sans-serif;
+    font-size: 14px;
+    line-height: 160%;
+    font-weight: 600;
+    position: relative;
+}
+
+.feedback .icon-r2 {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    overflow: visible;
+}
+
+.feedback .title2, .booking .title2 {
+    width: 416px;
+    height: 174px;
+    position: static;
+}
+
+.feedback .still-have-unanswered-questions-and-need-to-get-in-touch, .booking .still-have-unanswered-questions-and-need-to-get-in-touch {
+    color: var(--gray-700, #565973);
+    text-align: left;
+    font-family: var(--body-l-font-family, 'Manrope-Regular', sans-serif);
+    font-size: var(--body-l-font-size, 18px);
+    line-height: var(--body-l-line-height, 160%);
+    font-weight: var(--body-l-font-weight, 400);
+    ;
+    position: absolute;
+    left: 1px;
+    top: 116px;
+    width: 416px;
+}
+
+.feedback .any-questions-check-out-the-fa-qs, .booking .any-questions-check-out-the-fa-qs {
+    color: var(--gray-900, #0b0f19);
+    text-align: left;
+    font-family: var(--heading-h2-font-family, 'Manrope-ExtraBold', sans-serif);
+    font-size: var(--heading-h2-font-size, 32px);
+    line-height: var(--heading-h2-line-height, 130%);
+    font-weight: var(--heading-h2-font-weight, 800);
+    ;
+    position: absolute;
+    left: 1px;
+    top: 0px;
+    width: 415px;
+}
+
+
+/*====================  Contact Us ====================*/
+
+
+.inner,
+.inner * {
+    box-sizing: border-box;
+}
+
+.inner {
+    height: 420px;
+    position: relative;
+}
+
+.text {
+    width: 416px;
+    height: 186px;
+    position: static;
+}
+
+.title {
+    color: var(--gray-900, #0b0f19);
+    text-align: left;
+    font-family: var(--heading-h4-font-family, 'Manrope-ExtraBold', sans-serif);
+    font-size: var(--heading-h4-font-size, 24px);
+    line-height: var(--heading-h4-line-height, 140%);
+    font-weight: var(--heading-h4-font-weight, 800);
+    ;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    width: 141.95px;
+    position: absolute;
+    left: 0px;
+    top: 96px;
+}
+
+.icons-bx-phone-call {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    overflow: visible;
+}
+
+.btn-text {
+    color: var(--gray-700, #565973);
+    text-align: left;
+    font-family: var(--body-m-font-family, 'Manrope-Regular', sans-serif);
+    font-size: var(--body-m-font-size, 16px);
+    line-height: var(--body-m-line-height, 160%);
+    font-weight: var(--body-m-font-weight, 400);
+    ;
+    position: relative;
+}
+
+.item2 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    width: 416px;
+    position: absolute;
+    left: 0px;
+    top: 58px;
+}
+
+.icons-bx-map {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    overflow: visible;
+}
+
+.text2 {
+    color: var(--gray-700, #565973);
+    text-align: left;
+    font-family: var(--body-m-font-family, 'Manrope-Regular', sans-serif);
+    font-size: var(--body-m-font-size, 16px);
+    line-height: var(--body-m-line-height, 160%);
+    font-weight: var(--body-m-font-weight, 400);
+    ;
+    position: relative;
+    width: 388px;
+}
+
+.item3 {
+    width: 252.6px;
+    height: 52px;
+    position: static;
+}
+
+.frame-2162 {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute;
+    left: 27.6px;
+    top: 134px;
+}
+
+.icons-bx-time-five {
+    width: 19.72px;
+    height: 20px;
+    position: absolute;
+    left: 0px;
+    top: 137px;
+    overflow: visible;
+}
+
+.title2 {
+    color: var(--gray-900, #0b0f19);
+    text-align: left;
+    font-family: var(--heading-h4-font-family, 'Manrope-ExtraBold', sans-serif);
+    font-size: var(--heading-h4-font-size, 24px);
+    line-height: var(--heading-h4-line-height, 140%);
+    font-weight: var(--heading-h4-font-weight, 800);
+    ;
+    position: absolute;
+    left: 0px;
+    top: 234px;
+}
+
+.item4 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    width: 141.95px;
+    position: absolute;
+    left: 0px;
+    top: 330px;
+}
+
+.icons-bx-phone-call2 {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    overflow: visible;
+}
+
+.item5 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    width: 416px;
+    position: absolute;
+    left: 0px;
+    top: 292px;
+}
+
+.icons-bx-map2 {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    overflow: visible;
+}
+
+.frame-21622 {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute;
+    left: 27.6px;
+    top: 368px;
+}
+
+.icons-bx-time-five2 {
+    width: 19.72px;
+    height: 20px;
+    position: absolute;
+    left: 0px;
+    top: 371px;
+    overflow: visible;
+}
+
+
+
+.contact {
+    padding: 20px;
+    box-shadow: 0px 0px 8px gray;
+    border-radius: 8px;
+}
+
+.contact-container {
+    display: flex;
+    width: 400px;
+}
+
+.contact-container form{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.contact-container textarea{
+    height:400px;
+}

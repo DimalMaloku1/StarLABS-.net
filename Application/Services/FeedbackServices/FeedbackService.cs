@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Services.FeedbackServices
 {
-    internal sealed class FeedbackService : IFeedbackService
+    public class FeedbackService : IFeedbackService
     {
         private readonly IFeedbackRepository _feedbackRepository;
         private readonly UserManager<AppUser> _userManager;
@@ -96,10 +96,9 @@ namespace Application.Services.FeedbackServices
                 .Take(count)
                 .Select(f => new FeedbackDto
                 {
-                    Id = f.Id, // Assuming Id is a property in FeedbackDto
+                    Id = f.Id, 
                     Comment = f.Comment,
                     Rating = f.Rating,
-                    // Map other properties as needed
                 });
 
             return topRatedFeedbacksDto;

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.RoomTypeServices
 {
-    internal sealed class RoomTypeServices : IRoomTypeServices
+    public class RoomTypeServices : IRoomTypeServices
     {
         private readonly IRoomTypeRepository _roomTypeRepository;
         private readonly IMapper _mapper;

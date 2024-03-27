@@ -1,15 +1,63 @@
 ﻿@using Application.DTOs
 @model FeedbackDto
 
-<h2>Create New Feedback</h2>
 
-<form asp-action="Create">
-    <div class="form-group">
+
+<div class="feedback wrapper d-flex justify-content-around align-items-center mt-5">
+
+    <div class="text">
+        <div class="icon-box">
+            <div class="title">
+                <div class="icon">
+                    <div class="frame-48095375">
+                        <svg class="group" width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.0547 0C21.7443 0 28 5.5195 28 12.3047C28 15.171 26.8657 17.9483 24.8013 20.1497C24.3927 21.8344 24.8886 23.6192 26.1191 24.8497C26.6336 25.3642 26.2697 26.25 25.5391 26.25C23.2015 26.25 20.948 25.3344 19.2738 23.7194C17.6171 24.3106 15.8644 24.6094 14.0547 24.6094C6.36508 24.6094 0 19.0899 0 12.3047C0 5.5195 6.36508 0 14.0547 0ZM20.5078 14.7656C21.8648 14.7656 22.9688 13.6617 22.9688 12.3047C22.9688 10.9477 21.8648 9.84375 20.5078 9.84375C19.1508 9.84375 18.0469 10.9477 18.0469 12.3047C18.0469 13.6617 19.1508 14.7656 20.5078 14.7656ZM13.9453 14.7656C15.3023 14.7656 16.4062 13.6617 16.4062 12.3047C16.4062 10.9477 15.3023 9.84375 13.9453 9.84375C12.5883 9.84375 11.4844 10.9477 11.4844 12.3047C11.4844 13.6617 12.5883 14.7656 13.9453 14.7656ZM7.38281 14.7656C8.73983 14.7656 9.84375 13.6617 9.84375 12.3047C9.84375 10.9477 8.73983 9.84375 7.38281 9.84375C6.0258 9.84375 4.92188 10.9477 4.92188 12.3047C4.92188 13.6617 6.0258 14.7656 7.38281 14.7656Z" fill="#22C55E" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="txt"> Don&#039;t like phone calls? </div>
+            </div>
+            <div class="btn">
+                <div class="btn-text"> Contact us </div><svg class="icon-r" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.41083 14.4108L10.5892 15.5892L16.1783 9.99999L10.5892 4.41083L9.41083 5.58916L12.9883 9.16666H5V10.8333H12.9883L9.41083 14.4108Z" fill="#22C55E" />
+                </svg>
+            </div>
+        </div>
+        <div class="icon-box2">
+            <div class="title">
+                <div class="icon">
+                    <svg class="group2" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.2871 18.5226C20.3724 17.6194 19.2304 17.6194 18.3214 18.5226C17.6281 19.2101 16.9347 19.8976 16.253 20.5968C16.0666 20.7891 15.9092 20.8299 15.682 20.7017C15.2334 20.457 14.7556 20.2589 14.3244 19.9908C12.3143 18.7265 10.6304 17.1009 9.13881 15.2714C8.39885 14.3624 7.74045 13.3894 7.28015 12.294C7.18693 12.0726 7.20441 11.9269 7.38503 11.7463C8.07839 11.0763 8.75426 10.3887 9.43597 9.70119C10.3857 8.74564 10.3857 7.62695 9.43014 6.66557C8.88827 6.11788 8.34641 5.58183 7.80454 5.03414C7.24519 4.47479 6.69167 3.90962 6.1265 3.3561C5.21173 2.46464 4.06973 2.46464 3.16079 3.36193C2.46161 4.04946 1.79156 4.75447 1.08072 5.43034C0.422322 6.05378 0.09021 6.81706 0.0202916 7.70852C-0.0904125 9.15932 0.265006 10.5286 0.766088 11.8628C1.79156 14.6246 3.35307 17.0776 5.24669 19.3266C7.80454 22.3681 10.8576 24.7744 14.4293 26.5107C16.0374 27.2915 17.7038 27.8916 19.5159 27.9907C20.7627 28.0606 21.8465 27.746 22.7146 26.7729C23.3089 26.1087 23.979 25.5027 24.6083 24.8676C25.5405 23.9237 25.5463 22.7818 24.6199 21.8495C23.5129 20.7366 22.4 19.6296 21.2871 18.5226Z" fill="#6366F1" />
+                        <path d="M20.1744 13.8788L22.3243 13.5118C21.9864 11.5366 21.0542 9.74782 19.6383 8.32615C18.1409 6.82873 16.2473 5.88483 14.1614 5.59351L13.8584 7.75515C15.4723 7.98238 16.9406 8.7107 18.1001 9.87018C19.1955 10.9656 19.9122 12.3523 20.1744 13.8788Z" fill="#6366F1" />
+                        <path d="M23.5359 4.53304C21.0538 2.05094 17.9133 0.483602 14.4465 0L14.1436 2.16164C17.1384 2.58115 19.8536 3.93874 21.9977 6.07707C24.0312 8.11053 25.3655 10.68 25.8491 13.5059L27.999 13.1388C27.4339 9.86432 25.8898 6.89279 23.5359 4.53304Z" fill="#6366F1" />
+                    </svg>
+                </div>
+                <div class="txt"> Still have questions? </div>
+            </div>
+            <div class="btn">
+                <div class="btn-text2"> Contact us </div><svg class="icon-r2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.41083 14.4108L10.5892 15.5892L16.1783 9.99999L10.5892 4.41083L9.41083 5.58916L12.9883 9.16666H5V10.8333H12.9883L9.41083 14.4108Z" fill="#6366F1" />
+                </svg>
+            </div>
+        </div>
+        <div class="title2">
+            <div class="still-have-unanswered-questions-and-need-to-get-in-touch"> Still have unanswered questions and need to get in touch? </div>
+            <div class="any-questions-check-out-the-fa-qs"> Any questions?<br />Check out the FAQs </div>
+        </div>
+    </div>
+
+
+    <div class="feedback-container">
+
+<h2>Give Feedback!</h2>
+
+<form asp-action="Create" class="d-flex flex-column gap-3 ">
+    <div class="form-group input-feedback">
         <label asp-for="Comment">Comment</label>
-        <input asp-for="Comment" class="form-control" />
+                <textarea asp-for="Comment" class="form-control" ></textarea>
         <span asp-validation-for="Comment" class="text-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-group rating-star">
         <label>Rating</label>
         @for (int i = 1; i <= 5; i++)
         {
@@ -22,5 +70,7 @@
         }
         <span asp-validation-for="Rating" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="btn btn-primary">Send</button>
 </form>
+    </div>
+</div>

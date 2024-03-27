@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.StaffServices
 {
-    internal sealed class StaffService : IStaffService
+    public class StaffService : IStaffService
     {
         private readonly IStaffRepository _staffRepository;
         private readonly IMapper _mapper;

@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Models;
+﻿using Domain.Models;
 
 namespace Application.Services.LoggingServices
 {
     public interface ILoggingService
     {
-        Task<IEnumerable<Log>> GetAllLogs();
-        Task<Log> GetLogById(Guid id);
-        Task CreateLog(Log log);
-        Task UpdateLog(Log log);
-        Task DeleteLog(Guid id);
+        Task<IEnumerable<Log>> GetAllLogsAsync();
+        Task<Log> GetLogByIdAsync(Guid id);
+        Task CreateLogAsync(Log log);
+        Task UpdateLogAsync(Log log);
+        Task DeleteLogAsync(Guid id);
         Task LogActionAsync(string action, string entity, string userName);
-
-        Task<IEnumerable<Log>> GetLogsByMonthYear(int month, int year);
+        Task<IEnumerable<Log>> GetLogsByMonthYearAsync(int month, int year);
     }
 }
