@@ -11,19 +11,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.StaffServices
 {
-    public class StaffService : IStaffService
+    public class StaffService(IStaffRepository staffRepository, IMapper mapper, UserManager<AppUser> userManager) : IStaffService
     {
-        private readonly IStaffRepository _staffRepository;
-        private readonly IMapper _mapper;
-        private readonly UserManager<AppUser> _userManager;
-
-
-        public StaffService(IStaffRepository staffRepository, IMapper mapper, UserManager<AppUser> userManager)
-        {
-            _staffRepository = staffRepository;
-            _mapper = mapper;
-            _userManager = userManager;
-        }
+        private readonly IStaffRepository _staffRepository = staffRepository;
+        private readonly IMapper _mapper = mapper;
+        private readonly UserManager<AppUser> _userManager = userManager;
 
         public async Task<IEnumerable<StaffDTO>> GetAllStaffAsync()
         {

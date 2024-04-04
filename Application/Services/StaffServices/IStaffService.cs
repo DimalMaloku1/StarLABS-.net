@@ -1,9 +1,4 @@
 ﻿using Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.StaffServices
 {
@@ -17,10 +12,6 @@ namespace Application.Services.StaffServices
         Task<IEnumerable<StaffDTO>> GetStaffByDepartmentAsync(string department);
         Task<IEnumerable<StaffDTO>> GetStaffByPositionAsync(Guid positionId);
         Task<IEnumerable<Guid>> GetAllUserNamesAsync();
-
         Task<string> GetStaffFullNameByStaffIdAsync(Guid staffId);
-
-
-
     }
 }

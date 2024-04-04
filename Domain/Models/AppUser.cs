@@ -6,6 +6,7 @@ namespace Domain.Models
     {
         public string DisplayName { get; set; }
         public string UserLastname { get; set; }
+        public DateTime RegistrationDate { get; set; } = DateTime.UtcNow;
     }
 
 }

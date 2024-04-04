@@ -8,16 +8,10 @@ using Domain.Models;
 
 namespace Application.Services.PositionServices
 {
-    public class PositionServices : IPositionServices
+    public class PositionServices(IPositionRepository positionRepository, IMapper mapper) : IPositionServices
     {
-        private readonly IPositionRepository _positionRepository;
-        private readonly IMapper _mapper;
-
-        public PositionServices(IPositionRepository positionRepository, IMapper mapper)
-        {
-            _positionRepository = positionRepository;
-            _mapper = mapper ;
-        }
+        private readonly IPositionRepository _positionRepository = positionRepository;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<IEnumerable<PositionDTO>> GetAllPositionsAsync()
         {

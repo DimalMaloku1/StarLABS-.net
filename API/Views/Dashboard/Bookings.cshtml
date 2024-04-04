@@ -34,6 +34,9 @@
                 </tbody>
             </table>
         </div>
+        <div class="mt-4">
+            @await Html.PartialAsync("_BookingInformationChart", ViewData["bookingchart"])
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

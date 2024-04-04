@@ -250,6 +250,27 @@ namespace Application.Services.AccountServices
             return Result<AppUser>.Success(user);
         }
 
+        public async Task<List<UserRegistrationChartDto>> GetRegistrationInfo()
+        {
+            var users = await GetAllUsers();
+            var registrationInfoList = new List<UserRegistrationChartDto>();
+
+            foreach (var user in users)
+            {
+                
+                    var registrationDto = new UserRegistrationChartDto
+                    {
+                        FirstName = user.UserName,
+                        LastName = user.UserLastName,
+                        RegistrationDate = user.RegistrationDate
+                    };
+                    registrationInfoList.Add(registrationDto);
+                
+            }
+
+            return registrationInfoList;
+        }
+
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();

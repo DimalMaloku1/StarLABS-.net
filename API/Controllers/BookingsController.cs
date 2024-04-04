@@ -218,7 +218,19 @@ namespace API.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        private async Task SetViewBagData()
+        {
+            var bookingDropDownData = await _bookingService.GetNewBookingDropDownsValues();
+            ViewBag.Rooms = new SelectList(bookingDropDownData.Rooms, "Id", "RoomNumber");
+            ViewBag.RoomTypes = new SelectList(bookingDropDownData.RoomTypes, "Id", "Type");
+        }
+
+        public async Task<IActionResult> BookingsChart()
+        {
+            var bookings = await _bookingService.GetBookingChartInfo();
+            return PartialView("BookingsChart", bookings);
+
+        }
     }
 }
-
-    

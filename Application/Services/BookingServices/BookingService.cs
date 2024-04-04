@@ -154,6 +154,23 @@ namespace Application.Services.BookingServices
             return await _bookingRepository.GetBookingByIdAsync(id);
         }
 
+        public async Task<List<BookingChartDto>> GetBookingChartInfo()
+        {
+
+            var bookings = await _bookingRepository.GetBookingsAsync();
+            var bookingChartInfo = new List<BookingChartDto>();
+            foreach (Booking booking in bookings)
+            {
+                var bookingChartDto = new BookingChartDto
+                {
+                    BookingDate = booking.CheckInDate,
+                    RoomType = booking.Room.RoomType.Type
+                };
+                  bookingChartInfo.Add(bookingChartDto);
+                }
+            return bookingChartInfo;
+        }
+
 
         private async Task<double> CalculateTotalPrice(Guid roomtypeId, BookingDto bookingDto)
         {

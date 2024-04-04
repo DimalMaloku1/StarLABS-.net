@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Application.DTOs;
 using Application.Services.PositionServices;
@@ -9,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Application.Services.LoggingServices;
 using System.Security.Claims;
 
-namespace YourNamespace.Controllers
+namespace API.Controllers
 {
     [Authorize(Roles ="Admin")]
     public class PositionController : Controller

@@ -1,45 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Application.DTOs;
+﻿using Application.DTOs;
 using Application.Services.DailyTaskServices;
-using System;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Models; 
-using Microsoft.AspNetCore.Identity;
 using Application.Services.StaffServices;
-using Application.Services.RoomTypeServices;
-using Application.Services.RoomServices;
+using Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    public class DailyTaskController : Controller
+    public class DailyTaskController(IDailyTaskService _dailyTaskService, IStaffService _staffService, UserManager<AppUser> _userManager) : Controller
     {
-        private readonly IDailyTaskService _dailyTaskService;
-        private readonly IStaffService _staffService;
-
-        private readonly UserManager<AppUser> _userManager; 
-        public DailyTaskController(IDailyTaskService dailyTaskService, IStaffService staffService, UserManager<AppUser> userManager)
-        {
-            _dailyTaskService = dailyTaskService;
-            _userManager = userManager;
-            _staffService = staffService;
-
-        }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var dailyTasks = await _dailyTaskService.GetAllDailyTasksAsync();
-
             foreach (var task in dailyTasks)
             {
                 var staffFullName = await _staffService.GetStaffFullNameByStaffIdAsync(task.StaffId);
                 task.StaffFullName = staffFullName;
             }
-
-
-
             return View(dailyTasks);
         }
 
@@ -66,9 +48,7 @@ namespace API.Controllers
                 await _dailyTaskService.CreateAsync(dailyTaskDto);
                 return RedirectToAction(nameof(Index));
             }
-
             dailyTaskDto.Staffs = await _staffService.GetAllStaffAsync();
-
             return View(dailyTaskDto);
         }
 
@@ -80,14 +60,12 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-
             var staffs = await _staffService.GetAllStaffAsync();
             dailyTaskDto.Staffs = staffs.Select(s => new StaffDTO
             {
                 Id = s.Id,
                 Name = $"{s.User.UserName} {s.User.UserLastname}"
             });
-
             return View(dailyTaskDto);
         }
 
@@ -98,7 +76,6 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -111,16 +88,22 @@ namespace API.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            dailyTaskDto.Staffs = await _staffService.GetAllStaffAsync();
+
+            var staffs = await _staffService.GetAllStaffAsync();
+            dailyTaskDto.Staffs = staffs.Select(s => new StaffDTO
+            {
+                Id = s.Id,
+                Name = $"{s.User.UserName} {s.User.UserLastname}"
+            });
 
             return View(dailyTaskDto);
         }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _dailyTaskService.DeleteAsync(id);
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -146,15 +129,12 @@ namespace API.Controllers
         public async Task<IActionResult> FilterByStatus(string status)
         {
             var dailyTasks = await _dailyTaskService.GetAllDailyTasksAsync();
-
             foreach (var task in dailyTasks)
             {
                 var staffFullName = await _staffService.GetStaffFullNameByStaffIdAsync(task.StaffId);
                 task.StaffFullName = staffFullName;
             }
-
             var filteredTasks = dailyTasks.Where(task => task.Status == status);
-
             return View("Index", filteredTasks);
         }
 
@@ -162,13 +142,11 @@ namespace API.Controllers
         public async Task<IActionResult> AllDailyTasks()
         {
             var dailyTasks = await _dailyTaskService.GetAllDailyTasksAsync();
-
             foreach (var task in dailyTasks)
             {
                 var staffFullName = await _staffService.GetStaffFullNameByStaffIdAsync(task.StaffId);
                 task.StaffFullName = staffFullName;
             }
-
             return View("Index", dailyTasks);
         }
 
@@ -176,13 +154,11 @@ namespace API.Controllers
         public async Task<IActionResult> FilterByDate(DateTime date)
         {
             var dailyTasks = await _dailyTaskService.GetDailyTasksByDateAsync(date);
-
             foreach (var task in dailyTasks)
             {
                 var staffFullName = await _staffService.GetStaffFullNameByStaffIdAsync(task.StaffId);
                 task.StaffFullName = staffFullName;
             }
-
             return View("Index", dailyTasks);
         }
 
@@ -190,8 +166,6 @@ namespace API.Controllers
         public async Task<IActionResult> TodayTasks()
         {
             var todayTasks = await _dailyTaskService.GetDailyTasksByDateAsync(DateTime.Today);
-
-
             foreach (var task in todayTasks)
             {
                 var staffFullName = await _staffService.GetStaffFullNameByStaffIdAsync(task.StaffId);
@@ -208,19 +182,14 @@ namespace API.Controllers
             {
                 return BadRequest("User ID not found.");
             }
-
             var dailyTasks = await _dailyTaskService.GetDailyTasksByUserIdAsync(Guid.Parse(userId));
-
-
             foreach (var task in dailyTasks)
             {
                 var staffFullName = await _staffService.GetStaffFullNameByStaffIdAsync(task.StaffId);
                 task.StaffFullName = staffFullName;
             }
-
             return View("MyDailyTasks", dailyTasks);
         }
-
 
         [HttpGet]
         public async Task<IActionResult> EditTask(Guid id)
@@ -230,14 +199,12 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-
             var staffs = await _staffService.GetAllStaffAsync();
             task.Staffs = staffs.Select(s => new StaffDTO
             {
                 Id = s.Id,
                 Name = $"{s.User.UserName} {s.User.UserLastname}"
             });
-
             return View("EditTask", task);
         }
 
@@ -248,7 +215,6 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -265,8 +231,5 @@ namespace API.Controllers
 
             return View("EditTask", dailyTaskDto);
         }
-
-
     }
 }
-

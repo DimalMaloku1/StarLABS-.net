@@ -4,20 +4,10 @@ using Domain.Contracts;
 using Domain.Models;
 using Microsoft.AspNetCore.Http;
 
-
 namespace Application.Services.RoomTypeServices
 {
-    public class RoomTypeServices : IRoomTypeServices
+    public class RoomTypeServices(IRoomTypeRepository _roomTypeRepository, IMapper _mapper) : IRoomTypeServices
     {
-        private readonly IRoomTypeRepository _roomTypeRepository;
-        private readonly IMapper _mapper;
-
-        public RoomTypeServices(IRoomTypeRepository roomTypeRepository, IMapper mapper)
-        {
-            _roomTypeRepository = roomTypeRepository;
-            _mapper = mapper;
-        }
-
         public async Task<IEnumerable<RoomTypeDto>> GetAllRoomTypesAsync()
         {
             var roomTypes = await _roomTypeRepository.GetRoomTypesAsync();
@@ -29,6 +19,7 @@ namespace Application.Services.RoomTypeServices
             var roomType = await _roomTypeRepository.GetRoomTypeByIdAsync(Id);
             return _mapper.Map<RoomTypeDto>(roomType);
         }
+
         public async Task<RoomTypeDto> CreateAsync(RoomTypeDto roomTypeDto, List<IFormFile> photos)
         {
             if (roomTypeDto == null)
@@ -37,7 +28,27 @@ namespace Application.Services.RoomTypeServices
             }
 
             var roomType = _mapper.Map<RoomType>(roomTypeDto);
+            await AddPhotosToRoomTypeAsync(roomType, photos);
 
+            await _roomTypeRepository.Add(roomType);
+            return _mapper.Map<RoomTypeDto>(roomType);
+        }
+
+        public async Task UpdateAsync(Guid id, RoomTypeDto roomTypeDto)
+        {
+            var existingRoomType = await _roomTypeRepository.GetRoomTypeByIdAsync(id);
+            _mapper.Map(roomTypeDto, existingRoomType);
+            await _roomTypeRepository.UpdateAsync(id, existingRoomType);
+        }
+
+        public async Task DeleteAsync(Guid Id)
+        {
+            var roomType = await _roomTypeRepository.GetRoomTypeByIdAsync(Id);
+            await _roomTypeRepository.Delete(roomType);
+        }
+
+        private async Task AddPhotosToRoomTypeAsync(RoomType roomType, List<IFormFile> photos)
+        {
             if (photos != null && photos.Count > 0)
             {
                 roomType.Photos = new List<RoomTypePhoto>();
@@ -55,25 +66,6 @@ namespace Application.Services.RoomTypeServices
                     }
                 }
             }
-
-            await _roomTypeRepository.Add(roomType);
-
-            return _mapper.Map<RoomTypeDto>(roomType);
         }
-        public async Task UpdateAsync(Guid id, RoomTypeDto roomTypeDto)
-        {
-            var existingRoomType = await _roomTypeRepository.GetRoomTypeByIdAsync(id);
-
-            _mapper.Map(roomTypeDto, existingRoomType);
-            await _roomTypeRepository.UpdateAsync(id, existingRoomType);
-
-        }
-        public async Task DeleteAsync(Guid Id)
-        {
-            var roomType = await _roomTypeRepository.GetRoomTypeByIdAsync(Id);
-            await _roomTypeRepository.Delete(roomType);
-        }
-
-        
     }
 }

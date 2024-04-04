@@ -1,0 +1,83 @@
+﻿@model List<Application.DTOs.AccountDTOs.UserRegistrationChartDto>
+@{
+    var registrationCountsByMonth = Model
+        .GroupBy(data => data.RegistrationDate.Month)
+        .Select(group => new { Month = group.Key, Count = group.Count() })
+        .ToList();
+
+    string[] monthNames = new string[12] {
+        "January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"
+    };
+
+    int[] registrationCounts = new int[12];
+    foreach (var item in registrationCountsByMonth)
+    {
+        registrationCounts[item.Month - 1] = item.Count;
+    }
+}
+
+
+<div style="width:900px;height:800px" class="px-4">
+    <h3>Registrations by month</h3>
+    <div style="width: 100%; height: 100%;">
+        <canvas id="usersChart" ></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let JsMonthNames = [];
+    @foreach (string name in monthNames)
+    {
+        @:JsMonthNames.push("@name");
+    }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("Registration Counts:", [@Html.Raw(string.Join(",", registrationCounts))]);
+            const ctx = document.getElementById('usersChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: JsMonthNames,
+                    datasets: [{
+                        label: 'Registration By Month',
+                        data: [@Html.Raw(string.Join(",", registrationCounts))],
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)', 
+                        borderColor: 'rgba(54, 162, 235, 1)', 
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            },
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 0,
+                                minRotation: 0
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Count'
+                            },
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        });
+</script>
+
+
+
+

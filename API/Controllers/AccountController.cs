@@ -176,6 +176,12 @@ namespace API.Controllers
 
             return View();
         }
+        
+        public async Task<IActionResult> UserRegistrationChart()
+        {
+            var registrationInfo = await _accountService.GetRegistrationInfo();
+            return PartialView("_UserRegistrationChart", registrationInfo);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

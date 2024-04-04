@@ -22,7 +22,8 @@ namespace Application.Services.AccountServices
         Task<Result<UserDto>> DemoteUser(string userId);
         Task SendVerificationEmail(string email, string link);
         Task<string> GenerateEmailToken(string email);
-        Task <Result<AppUser>>VerifyEmail(string email, string token);
+        Task<Result<AppUser>>VerifyEmail(string email, string token);
+        Task<List<UserRegistrationChartDto>> GetRegistrationInfo();
 
 
 

@@ -2,51 +2,38 @@
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Application.Services.RoomServices
 {
-    public class RoomServices : IRoomServices
+    public class RoomServices(IRoomRepository _roomRepository, IMapper _mapper) : IRoomServices
     {
-
-        private readonly IRoomRepository _roomRepository;
-        private readonly IMapper _mapp;
-
-        public RoomServices(IRoomRepository roomRepository, IMapper mapper)
-        {
-            _roomRepository = roomRepository;
-            _mapp = mapper;
-        }
-        
         public async Task<RoomDto> GetAvailableRoomAsync(Guid roomTypeId, DateTime checkInDate, DateTime checkOutDate)
         {
             var rooms = await _roomRepository.GetRoomsByTypeAsync(roomTypeId);
-
-            var availableRoom = rooms.FirstOrDefault(room =>
+            var availableRoom = FindAvailableRoom(rooms, checkInDate, checkOutDate);
+            return availableRoom != null ? _mapper.Map<RoomDto>(availableRoom) : null;
+        }
+        private Room FindAvailableRoom(IEnumerable<Room> rooms, DateTime checkInDate, DateTime checkOutDate)
+        {
+            return rooms.FirstOrDefault(room =>
                 !room.Bookings.Any(booking =>
                     (checkInDate >= booking.CheckInDate && checkInDate < booking.CheckOutDate) ||
                     (checkOutDate > booking.CheckInDate && checkOutDate <= booking.CheckOutDate)));
-
-            var availableRoomDto = availableRoom != null ? new RoomDto
-            {
-                Id = availableRoom.Id,
-                RoomNumber = availableRoom.RoomNumber,
-                RoomTypeId = availableRoom.RoomTypeId,
-            } : null;
-
-            return availableRoomDto;
         }
 
         public async Task<IEnumerable<RoomDto>> GetAllRoomsAsync()
         {
             var rooms = await _roomRepository.GetRoomsAsync();
-            var roomsDto = _mapp.Map<IEnumerable<RoomDto>>(rooms);
-            return roomsDto;
+            return _mapper.Map<IEnumerable<RoomDto>>(rooms);
         }
 
         public async Task<RoomDto> CreateAsync(RoomDto roomDto)
-
         {
-            var room = _mapp.Map<Room>(roomDto);
+            var room = _mapper.Map<Room>(roomDto);
             await _roomRepository.Add(room);
             return roomDto;
         }
@@ -55,25 +42,19 @@ namespace Application.Services.RoomServices
         {
             var room = await _roomRepository.GetRoomByIdAsync(id);
             await _roomRepository.Delete(room);
-
         }
-
 
         public async Task<RoomDto> GetRoomByIdAsync(Guid id)
         {
             var room = await _roomRepository.GetRoomByIdAsync(id);
-            var roomDto = _mapp.Map<RoomDto>(room);
-            return roomDto;
+            return _mapper.Map<RoomDto>(room);
         }
 
         public async Task UpdateAsync(Guid id, RoomDto roomDto)
         {
             var existingRoom = await _roomRepository.GetRoomByIdAsync(id);
-
-            _mapp.Map(roomDto, existingRoom);
+            _mapper.Map(roomDto, existingRoom);
             await _roomRepository.UpdateAsync(id, existingRoom);
-
         }
-
     }
 }

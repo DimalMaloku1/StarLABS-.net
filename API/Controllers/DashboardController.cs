@@ -1,23 +1,26 @@
 ﻿using Application.DTOs.AccountDTOs;
+using Application.Services.AccountServices;
 using Application.Services.BillService;
 using Application.Services.DashboardService;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Application.Services.BookingServices;
 
 
 namespace API.Controllers;
 [Authorize(Roles = "Admin")]
-public class DashboardController : Controller
- 
-{
+public class DashboardController : Controller {
     private readonly IDashboardService _dashboardService;
-
-    public DashboardController(IDashboardService dashboardService)
+    private readonly IBookingService _bookingService;
+    private readonly IAccountService _accountService;
+    public DashboardController(IDashboardService dashboardService, IBookingService bookingService, IAccountService accountService)
     {
         _dashboardService = dashboardService;
+        _bookingService = bookingService;
+        _accountService = accountService;
     }
-    
+
     public IActionResult Index()
     {
         return View();
@@ -26,6 +29,7 @@ public class DashboardController : Controller
     public async Task<IActionResult> Bookings()
     {
         var bookings = await _dashboardService.GetBookings();
+        ViewData["bookingchart"] = await _bookingService.GetBookingChartInfo();
         return View(bookings);
     }
     public async Task <IActionResult> Bills()
@@ -36,6 +40,7 @@ public class DashboardController : Controller
     public async Task<IActionResult> Users()
     {
         var users = await _dashboardService.GetUsers();
+        ViewData["userchart"] = await _accountService.GetRegistrationInfo();
         return View(users);
     }
     public async Task<IActionResult> Rooms()

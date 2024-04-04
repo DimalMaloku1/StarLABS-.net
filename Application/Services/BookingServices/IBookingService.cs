@@ -12,5 +12,7 @@ namespace Application.Services.BookingServices
         Task<Result<BookingDto>> UpdateAsync(Guid id, BookingDto bookingDto);
         Task DeleteAsync(Guid id);
         Task<NewBookingDropDownsDTO> GetNewBookingDropDownsValues();
+        Task<List<BookingChartDto>>GetBookingChartInfo();
+
     }
 }
