@@ -1,6 +1,6 @@
 ﻿using PayPal.Api;
 
-namespace Application.Services.PaymentServices
+namespace Application.Services.PaymentServices.PayPal
 {
     public interface IPaypalServices
     {

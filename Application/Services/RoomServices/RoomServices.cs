@@ -5,7 +5,7 @@ using Domain.Models;
 
 namespace Application.Services.RoomServices
 {
-    internal sealed class RoomServices : IRoomServices
+    public class RoomServices : IRoomServices
     {
 
         private readonly IRoomRepository _roomRepository;

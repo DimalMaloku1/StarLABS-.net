@@ -1,7 +1,4 @@
 ﻿using Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Application.Services.PaymentServices
 {
@@ -12,6 +9,5 @@ namespace Application.Services.PaymentServices
         Task AddPaymentAsync(PaymentDto paymentDto);
         Task UpdatePaymentAsync(Guid id, PaymentDto paymentDto);
         Task DeletePaymentAsync(Guid id);
-
     }
 }

@@ -1,8 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Success";
-    string paymentId = ViewData["PaymentId"]?.ToString();
-    string token = ViewData["token"]?.ToString();
-    string payerId = ViewData["payerId"]?.ToString();
+   
 }
 
 <div class="container mt-5 pt-5">
@@ -14,13 +12,7 @@
                 </h4>
                 <hr />
                 <p>
-                    Your payment Id is: <mark>@paymentId</mark>
-                </p>
-                <p>
-                    Payment token is: <mark>@token</mark>
-                </p>
-                <p>
-                    Payer ID is: <mark>@payerId</mark>
+                    Your payment was successful.
                 </p>
             </div>
         </div>

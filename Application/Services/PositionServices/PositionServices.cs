@@ -8,7 +8,7 @@ using Domain.Models;
 
 namespace Application.Services.PositionServices
 {
-    internal sealed class PositionServices : IPositionServices
+    public class PositionServices : IPositionServices
     {
         private readonly IPositionRepository _positionRepository;
         private readonly IMapper _mapper;

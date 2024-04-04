@@ -5,17 +5,8 @@ using Domain.Models;
 
 namespace Application.Services.PaymentServices
 {
-    public class PaymentService : IPaymentService
+    public class PaymentService(IPaymentRepository _paymentRepository, IMapper _mapper) : IPaymentService
     {
-        private readonly IPaymentRepository _paymentRepository;
-        private readonly IMapper _mapper;
-
-        public PaymentService(IPaymentRepository paymentRepository, IMapper mapper)
-        {
-            _paymentRepository = paymentRepository;
-            _mapper = mapper;
-        }
-
         public async Task<PaymentDto> GetPaymentByIdAsync(Guid id)
         {
             var payment = await _paymentRepository.GetByIdAsync(id);
@@ -37,10 +28,6 @@ namespace Application.Services.PaymentServices
         public async Task UpdatePaymentAsync(Guid id, PaymentDto paymentDto)
         {
             var existingPayment = await _paymentRepository.GetByIdAsync(id);
-            if (existingPayment == null)
-            {
-                return;
-            }
             existingPayment.PaymentMethod = paymentDto.PaymentMethod;
             _mapper.Map(paymentDto, existingPayment);
             await _paymentRepository.UpdateAsync(id, existingPayment);

@@ -69,8 +69,8 @@ namespace UnitTest.Services.PaymentServices
             // Arrange
             var payments = new List<Payment>
             {
-                new Payment { Id = Guid.NewGuid() },
-                new Payment { Id = Guid.NewGuid() },
+                new() { Id = Guid.NewGuid() },
+                new() { Id = Guid.NewGuid() },
             };
             _paymentRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(payments);
 
@@ -89,7 +89,7 @@ namespace UnitTest.Services.PaymentServices
         public async Task GetAllPaymentsAsync_WhenNoPaymentsExist()
         {
             // Arrange
-            _paymentRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(new List<Payment>());
+            _paymentRepositoryMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync([]);
 
             // Act
             var result = await _paymentService.GetAllPaymentsAsync();

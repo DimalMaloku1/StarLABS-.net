@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PayPal.Api;
 
-namespace Application.Services.PaymentServices
+namespace Application.Services.PaymentServices.PayPal
 {
     public class PaypalServices : IPaypalServices
     {
@@ -11,10 +11,8 @@ namespace Application.Services.PaymentServices
         public PaypalServices(IConfiguration configuration)
         {
             this.configuration = configuration;
-
             var clientId = configuration["PayPal:ClientId"];
             var clientSecret = configuration["PayPal:ClientSecret"];
-
             var config = new Dictionary<string, string>
             {
                 {"mode", "sandbox" },
@@ -33,34 +31,32 @@ namespace Application.Services.PaymentServices
                 var apiContext = new APIContext(new OAuthTokenCredential(configuration["PayPal:ClientId"], configuration["PayPal:ClientSecret"]).GetAccessToken());
                 var itemList = new ItemList()
                 {
-                    items = new List<Item>()
-            {
-                new Item()
-                {
-                    name = "Membership Fee",
-                    currency = "USD",
-                    price = amount.ToString("0.00"),
-                    quantity = "1",
-                    sku = "membership"
-                }
-            }
+                    items =
+                    [
+                        new()
+                        {
+                            name = "Membership Fee",
+                            currency = "EUR", 
+                            price = amount.ToString("0.00"), 
+                            quantity = "1",
+                            sku = "membership"
+                        }
+                    ]
                 };
-
                 var transaction = new Transaction()
                 {
                     amount = new Amount()
                     {
-                        currency = "USD",
-                        total = amount.ToString("0.00"),
+                        currency = "EUR", 
+                        total = amount.ToString("0.00"), 
                         details = new Details()
                         {
-                            subtotal = amount.ToString("0.00")
+                            subtotal = amount.ToString("0.00") 
                         }
                     },
                     item_list = itemList,
                     description = "Membership Fee"
                 };
-
                 var payment = new Payment()
                 {
                     intent = "sale",
@@ -70,7 +66,7 @@ namespace Application.Services.PaymentServices
                         return_url = returnUrl,
                         cancel_url = cancelUrl
                     },
-                    transactions = new List<Transaction>() { transaction }
+                    transactions = [transaction]
                 };
                 var createdPayment = payment.Create(apiContext);
                 return createdPayment;

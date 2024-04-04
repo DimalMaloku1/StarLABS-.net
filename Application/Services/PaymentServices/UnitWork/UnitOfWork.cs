@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Application.Services.PaymentServices.PayPal;
+using Microsoft.Extensions.Configuration;
 
-namespace Application.Services.PaymentServices
+namespace Application.Services.PaymentServices.UnitWork
 {
     public class UnitOfWork : IUnitOfWork
     {

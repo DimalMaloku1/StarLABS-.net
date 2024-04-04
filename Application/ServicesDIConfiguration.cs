@@ -21,6 +21,11 @@ using Application.Services.LoggingServices;
 using Application.Services.RazorServices;
 using Application.Services.DailyTaskServices;
 using Application.PayPal;
+using Application.Services.PaymentServices.Stripe;
+using Application.Services.PaymentServices.PaymentSuccess;
+using Application.Services.PaymentServices.UnitWork;
+using Application.Services.PaymentServices.PaymentInitializer;
+
 
 namespace Application
 {
@@ -42,6 +47,9 @@ namespace Application
             services.AddTransient<IValidator<BillDto>, BillValidator>();
             services.Configure<StripeSettings>(configuration.GetSection("StripeSettings"));
             services.Configure<PayPalSettings>(configuration.GetSection("PayPal"));
+            services.AddScoped<IPaymentInitializer, PaymentInitializer>();
+            services.AddScoped<IPaymentSuccess, PaymentSuccess>();
+            services.AddScoped<IStripeService, StripeService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRoomServices, RoomServices>();
             services.AddScoped<IRoomTypeServices, RoomTypeServices>();
