@@ -46,6 +46,10 @@ body {
     gap: 100px;
 }
 
+main{
+    min-height:80vh;
+}
+
 span {
     color: var(--span-img-color);
     user-select: none;
@@ -196,7 +200,7 @@ aside {
 
 .material-icons.md-60 {
     font-size: var(--leftmenu-icons-size);
-    color: var(--leftmenu-word-color);
+    color: black;
 }
 
 .left-side-menu a {
@@ -249,6 +253,8 @@ aside {
 /*=============== Crud Index ====================*/
 
 .crudIndex {
+    width: 1350px;
+    margin: 80px auto;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -297,7 +303,6 @@ aside {
 
         .crudIndex .filters .input {
             display: flex;
-            width: 100%;
             position: relative;
         }
 
@@ -882,31 +887,30 @@ footer {
     box-sizing: border-box;
 }
 
-.inner {
+.contact-all .inner {
     height: 420px;
     position: relative;
 }
 
-.text {
-    width: 416px;
+.contact-all .text {
     height: 186px;
     position: static;
 }
 
-.title {
+.contact-all .title {
+    width: 300px;
     color: var(--gray-900, #0b0f19);
     text-align: left;
     font-family: var(--heading-h4-font-family, 'Manrope-ExtraBold', sans-serif);
     font-size: var(--heading-h4-font-size, 24px);
     line-height: var(--heading-h4-line-height, 140%);
     font-weight: var(--heading-h4-font-weight, 800);
-    ;
     position: absolute;
     left: 0px;
     top: 0px;
 }
 
-.item {
+.contact-all .item {
     display: flex;
     flex-direction: row;
     gap: 8px;
@@ -918,7 +922,7 @@ footer {
     top: 96px;
 }
 
-.icons-bx-phone-call {
+.contact-all .icons-bx-phone-call {
     flex-shrink: 0;
     width: 20px;
     height: 20px;
@@ -926,7 +930,7 @@ footer {
     overflow: visible;
 }
 
-.btn-text {
+.contact-all .btn-text {
     color: var(--gray-700, #565973);
     text-align: left;
     font-family: var(--body-m-font-family, 'Manrope-Regular', sans-serif);
@@ -937,7 +941,7 @@ footer {
     position: relative;
 }
 
-.item2 {
+.contact-all .item2 {
     display: flex;
     flex-direction: row;
     gap: 8px;
@@ -949,7 +953,7 @@ footer {
     top: 58px;
 }
 
-.icons-bx-map {
+.contact-all .icons-bx-map {
     flex-shrink: 0;
     width: 20px;
     height: 20px;
@@ -957,7 +961,7 @@ footer {
     overflow: visible;
 }
 
-.text2 {
+.contact-all .text2 {
     color: var(--gray-700, #565973);
     text-align: left;
     font-family: var(--body-m-font-family, 'Manrope-Regular', sans-serif);
@@ -969,13 +973,13 @@ footer {
     width: 388px;
 }
 
-.item3 {
+.contact-all .item3 {
     width: 252.6px;
     height: 52px;
     position: static;
 }
 
-.frame-2162 {
+.contact-all .frame-2162 {
     display: flex;
     flex-direction: row;
     gap: 16px;
@@ -986,7 +990,7 @@ footer {
     top: 134px;
 }
 
-.icons-bx-time-five {
+.contact-all .icons-bx-time-five {
     width: 19.72px;
     height: 20px;
     position: absolute;
@@ -995,7 +999,8 @@ footer {
     overflow: visible;
 }
 
-.title2 {
+.contact-all .title2 {
+    width: 300px;
     color: var(--gray-900, #0b0f19);
     text-align: left;
     font-family: var(--heading-h4-font-family, 'Manrope-ExtraBold', sans-serif);
@@ -1008,7 +1013,7 @@ footer {
     top: 234px;
 }
 
-.item4 {
+.contact-all .item4 {
     display: flex;
     flex-direction: row;
     gap: 8px;
@@ -1020,7 +1025,7 @@ footer {
     top: 330px;
 }
 
-.icons-bx-phone-call2 {
+.contact-all .icons-bx-phone-call2 {
     flex-shrink: 0;
     width: 20px;
     height: 20px;
@@ -1028,7 +1033,7 @@ footer {
     overflow: visible;
 }
 
-.item5 {
+.contact-all .item5 {
     display: flex;
     flex-direction: row;
     gap: 8px;
@@ -1040,7 +1045,7 @@ footer {
     top: 292px;
 }
 
-.icons-bx-map2 {
+.contact-all .icons-bx-map2 {
     flex-shrink: 0;
     width: 20px;
     height: 20px;
@@ -1048,7 +1053,7 @@ footer {
     overflow: visible;
 }
 
-.frame-21622 {
+.contact-all .frame-21622 {
     display: flex;
     flex-direction: row;
     gap: 16px;
@@ -1059,7 +1064,7 @@ footer {
     top: 368px;
 }
 
-.icons-bx-time-five2 {
+.contact-all .icons-bx-time-five2 {
     width: 19.72px;
     height: 20px;
     position: absolute;
@@ -1078,7 +1083,7 @@ footer {
 
 .contact-container {
     display: flex;
-    width: 400px;
+    width: 500px;
 }
 
 .contact-container form{
@@ -1091,3 +1096,40 @@ footer {
 .contact-container textarea{
     height:400px;
 }
+
+.wrapper-full {
+    width: auto; /* or any other value you want */
+    margin: initial;
+}
+
+/*================================================================================*/
+
+.admin-button {
+    z-index: 9999;
+    background-color: white;
+    position: fixed;
+    top: 200px;
+    border-radius: 6px;
+    box-shadow:0px 0px 20px gray;
+    display:flex;
+    justify-content:center;
+}
+
+    .admin-button:hover ul {
+        display: block;
+    }
+    .admin-button span{
+        padding:10px;
+    }
+
+    .admin-button ul {
+        width: 250px;
+        display: none;
+        margin: 5px;
+    }
+
+    .admin-button li:hover a{
+        background-color:orangered;
+        color:white !important;
+    }
+

@@ -42,12 +42,12 @@
     </div>
 </form>
 
-<form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-    <div>
+<form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal justify-content-center mt-4 d-flex">
+    <div class="container-fluid">
         <p>
-         <input type="submit" class="btn btn-info" value="google" name="provider" />
+            <input type="hidden" name="provider" value="google" />
+            <input type="submit" class="btn btn-light container-fluid" style="background-color: #f0f0f0; color: #333;border: 1px solid #ccc;" value="Sign up with Google" />
         </p>
     </div>
 </form>
-
 

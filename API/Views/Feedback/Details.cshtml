@@ -1,6 +1,8 @@
 ﻿@using Application.DTOs
 @model FeedbackDto
+<div class="d-flex justify-content-center wrapper">
 
+<div class="crudIndex">
 <h2>Feedback Details</h2>
 
 <div>
@@ -10,7 +12,8 @@
     <p>@Model.Rating</p>
 </div>
 <p>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a style="color:blue" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a style="color:blue" asp-action="Index">Back to List</a>
 </p>
 
+</div>

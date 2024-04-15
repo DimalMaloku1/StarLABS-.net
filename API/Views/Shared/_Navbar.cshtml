@@ -3,8 +3,8 @@
     font-weight: 800;
     }
 </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<nav class="navbar navbar-expand-lg navbar-light bg-light wrapper">
+    <div class="collapse navbar-collapse " id="navbarSupportedContent ">
         <ul class="navbar-nav mr-auto mx-2 px-4 fw-normal">
              <li class="nav-item @(ViewContext.RouteData.Values["action"].ToString() == "Users" ? "activeDashboard" : "")">
                             <a class="nav-link" href="@Url.Action("Users", "Dashboard")">Users</a>

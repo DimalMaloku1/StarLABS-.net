@@ -1,6 +1,8 @@
 ﻿@model RoomTypeDto
 @using Application.DTOs
+<div class="d-flex justify-content-center wrapper">
 
+<div class="crudIndex">
 <h2>Create Room Type</h2>
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
@@ -33,6 +35,8 @@
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
+    </div>
+</div>
 
 <script>
     function previewImage(input) {
@@ -48,3 +52,4 @@
         }
     }
 </script>
+</div>

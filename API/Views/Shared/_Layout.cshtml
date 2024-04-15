@@ -6,22 +6,12 @@
 
 @{
     var currentUser = await UserManager.GetUserAsync(User);
-    string gridContainerClass = "grid-container";
-    if (currentUser != null)
-    {
-        bool isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
-        if (isAdmin)
-        {
-            gridContainerClass = "admin-grid-container";
-        }
-    }
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Internstellar Hotel</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -33,124 +23,71 @@
 
 </head>
 <body>
-    <div class="@gridContainerClass">
-        @if (currentUser != null)
+
+    @if (currentUser != null)
+    {
+        bool isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
+        if (isAdmin)
         {
-            // Check if the user is in the "Admin" role
-            bool isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
-            if (isAdmin)
-            {
-                <aside class="left-side-menu" id="aside">
-                    <h1>Internstellar Hotel</h1>
-                    <hr>
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        <div class="content-user">
-                            <a id="manage" class="nav-link text-dark" asp-page="/Home/Index" title="Manage">
-                                <div class="left-side-content">
-                                    <span class="material-icons md-60">person</span>
-                                    <p>@UserManager.GetUserName(User)</p>
-                                </div>
-                            </a>
-                            <form id="logoutForm" class="form-inline" asp-controller="Account" asp-action="Logout">
-                                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-                            </form>
-                        </div>
-                    }
-                    else
-                    {
-                        <a class="nav-link text-dark" href="/Account/Register">
-                            <div class="login-btn">
-                                <span class="material-icons md-60">person</span>
-                                <p>Sign up</p>
-                            </div>
+            <div class="admin-button">
+                <span class="material-icons md-60">admin_panel_settings</span>
+            <nav>
+                <ul>
+                    <li>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Logging" asp-action="Index">
+                            Logging
                         </a>
-                    }
-                    <hr>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Users">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="DailyTask" asp-action="Index">
+                            Daily Tasks
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" asp-controller="Room" asp-action="Index">
+                            Room
+                        </a>
+                    </li>
 
-                    <nav>
-                        <ul id="sidebar-list">
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Logging" asp-action="Index">
-                                    <div class="content">
-                                        <div class="left-side-content">
-                                            <span class="material-icons md-60">list_alt</span>
-                                            <p>Logging</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
+                     <li>
+                        <a class="nav-link text-dark" asp-controller="RoomType" asp-action="Index">
+                            Room Type
+                        </a>
+                    </li>
 
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Users">
-                                    <div class="content">
-                                        <div class="left-side-content">
-                                            <span class="material-icons md-60">admin_panel_settings</span>
-                                            <p>Dashboard</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
 
-                            <li>
-                                <a class="nav-link text-dark" asp-controller="Room" asp-action="Index">
-                                    <div class="content">
-                                        <div class="left-side-content">
-                                            <span class="material-icons md-60">door_front</span>
-                                            <p>Rooms</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
+                     <li>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Position" asp-action="Index">
+                            Position
+                        </a>
+                    </li>
 
-                            <li>
-                                <a class="nav-link text-dark" asp-controller="RoomType" asp-action="Index">
-                                    <div class="content">
-                                        <div class="left-side-content">
-                                            <span class="material-icons md-60">king_bed</span>
-                                            <p>Room Types</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
 
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Position" asp-action="Index">
-                                    <div class="content">
-                                        <div class="left-side-content">
-                                            <span class="material-icons md-60">engineering</span>
-                                            <p>Staff Positions</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Staff" asp-action="Index">
-                                    <div class="content">
-                                        <div class="left-side-content">
-                                            <span class="material-icons md-60">badge</span>
-                                            <p>Employees</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
+                     <li>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Staff" asp-action="Index">
+                            Staff
+                        </a>
+                    </li>
 
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">
-                                    <div class="content">
-                                        <div class="left-side-content">
-                                            <span class="material-icons md-60">badge</span>
-                                            <p>Roles</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </aside>
-            }
+                    <li>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">
+                            Account
+                        </a>
+                    </li>
+                    
+                </ul>
+            </nav>
+            </div>
         }
-       
+
+    }
+
+
 
 
         <div class="grid-right">
@@ -199,7 +136,7 @@
                     </div>
                 </div>
             </header>
-            <main>
+            <main class="">
                 @RenderBody()
             </main>
             <footer>

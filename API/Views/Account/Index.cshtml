@@ -4,6 +4,7 @@
     ViewData["Title"] = "Manage Users";
 }
 
+<div class="crudIndex">
 <h1>Manage Users</h1>
 
 @if (User.IsInRole("Admin"))
@@ -35,4 +36,4 @@ else
 {
     <p>You do not have permission to access this page.</p>
 }
-    
+    </div>

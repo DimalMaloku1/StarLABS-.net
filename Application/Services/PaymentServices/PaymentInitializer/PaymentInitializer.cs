@@ -17,14 +17,14 @@ namespace Application.Services.PaymentServices.PaymentInitializer
 
         public async Task<IActionResult> InitiatePayment(string paymentMethod, decimal totalAmount, Guid billId, TempDataDictionary tempData)
         {
-            var bill = await _billService.GetBillById(billId);
-            if (bill == null)
-            {
-                tempData["error"] = "Bill not found";
-                return new RedirectToActionResult("Index", "Home", null);
-            }
             if (paymentMethod == "Stripe")
             {
+                var bill = await _billService.GetBillById(billId);
+                if (bill == null)
+                {
+                    tempData["error"] = "Bill not found";
+                    return new RedirectToActionResult("Index", "Home", null);
+                }
                 var apiKey = _stripeSettings.SecretKey;
                 var successUrl = _stripeSettings.SuccessUrl;
                 var cancelUrl = _stripeSettings.CancelUrl;
@@ -40,6 +40,12 @@ namespace Application.Services.PaymentServices.PaymentInitializer
             }
             else if (paymentMethod == "PayPal")
             {
+                var billDto = await _billService.GetBillById(billId);
+                if (billDto == null)
+                {
+                    tempData["error"] = "Bill not found";
+                    return new RedirectToActionResult("Index", "Home", null);
+                }
                 tempData["billId"] = billId;
                 tempData["totalAmount"] = totalAmount.ToString();
 

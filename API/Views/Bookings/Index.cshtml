@@ -3,8 +3,11 @@
 @{
     ViewData["Title"] = "List of Bookings";
 }
+<div class="d-flex justify-content-center wrapper">
 
-    <div class="crudIndex">
+    <div style="width:100%">
+
+    <div class="crudIndex wrapper">
         <div class="buttons-title">
             <h3>Bookings</h3>
             <a asp-controller="Bookings" asp-action="Create" class="btn btn-success"><span class="material-icons">add_circle</span> Add New Booking</a>
@@ -59,4 +62,6 @@
 
         </table>
     </div>
+    </div>
+</div>
 

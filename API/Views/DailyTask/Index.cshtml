@@ -1,11 +1,14 @@
 ﻿@model IEnumerable<Application.DTOs.DailyTaskDto>
 
-<div class="container">
-    <h1>Daily Tasks</h1>
+<div class="container crudIndex">
+    <div class="buttons-title">
+        <h3>Daily Tasks</h3>
+        <a asp-action="Create" class="btn btn-success"><span class="material-icons">add_circle</span>  New Task</a>
+    </div>
 
-    <div class="filter-section">
-        <form asp-action="FilterByStatus" method="post" class="filter-form">
-            <label for="status">Filter by Status:</label>
+
+    <div class="filters">
+        <form asp-action="FilterByStatus" method="post" class=" input">
             <select name="status" id="status">
                 <option value="To Do">To Do</option>
                 <option value="On Progress">On Progress</option>
@@ -13,24 +16,17 @@
             </select>
             <button type="submit" class="btn btn-primary">Filter by Status</button>
         </form>
-    </div>
-    <div style="margin-top: 10px;"></div>
-    <div class="filter-section">
-        <form asp-action="FilterByDate" method="get" class="filter-form">
-            <label for="date">Filter by Date:</label>
+
+        <form asp-action="FilterByDate" method="get" class=" input">
             <input type="date" id="date" name="date" value="@DateTime.Today.ToString("yyyy-MM-dd")">
             <button type="submit" class="btn btn-primary">Filter by Date</button>
         </form>
+
+        <div class="right-side">
+            <a asp-action="AllDailyTasks" class="btn btn-primary">Show All Daily Tasks</a>
+        </div>
     </div>
-    <div style="margin-top: 10px;"></div>
 
-
-
-    <div style="margin-top: 10px;"></div>
-    <div class="action-links">
-        <a asp-action="AllDailyTasks" class="btn btn-primary">Show All Daily Tasks</a>
-        <a asp-action="Create" class="btn btn-primary">Create New Task</a>
-    </div>
 
     <table class="table">
         <thead>

@@ -58,43 +58,44 @@ namespace API.Controllers
                 {
                     var roomTypes = await _roomTypeService.GetAllRoomTypesAsync();
                     ViewBag.RoomTypes = new SelectList(roomTypes, "Id", "Type");
-
                     return View(bookingDto);
                 }
 
-                var createdBookingDto = await _bookingService.CreateAsync(bookingDto, Guid.Parse(userId), baseUrl);
+                var createBookingResult = await _bookingService.CreateAsync(bookingDto, Guid.Parse(userId), baseUrl);
 
-                if (createdBookingDto == null)
+                if (createBookingResult.IsSuccess)
                 {
+                    var createdBookingDto = createBookingResult.Value;
+                    var bills = await _billService.GetBillsByBookingId(createdBookingDto.Id);
 
-                    var roomTypes = await _roomTypeService.GetAllRoomTypesAsync();
-                    ViewBag.RoomTypes = new SelectList(roomTypes, "Id", "Type");
-                    ModelState.AddModelError(string.Empty, "No available rooms for the given dates.");
-                    return View(bookingDto);
-                }
-                var bills = await _billService.GetBillsByBookingId(createdBookingDto.Value.Id);
+                    if (bills == null || !bills.Any())
+                    {
+                        ModelState.AddModelError(string.Empty, "Problem while adding the bill for the particular booking!");
+                        return View(bookingDto);
+                    }
 
-                if (bills == null || !bills.Any())
-                {
-                    ModelState.AddModelError(string.Empty, "Problem while adding the bill for the particular booking!");
-                    return View(bookingDto);
-                }
-
-                var firstBill = bills.FirstOrDefault();
-                if (firstBill != null)
-                {
-                    return RedirectToAction("Details", "Bill", new { id = firstBill.Id });
+                    var firstBill = bills.FirstOrDefault();
+                    if (firstBill != null)
+                    {
+                        return RedirectToAction("Details", "Bill", new { id = firstBill.Id });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Problem while adding the bill for the particular booking!");
+                        return View(bookingDto);
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Problem while adding the bill for the particular booking!");
+                    var roomTypes = await _roomTypeService.GetAllRoomTypesAsync();
+                    ViewBag.RoomTypes = new SelectList(roomTypes, "Id", "Type");
+                    ModelState.AddModelError(string.Empty, createBookingResult.ErrorMessage);
                     return View(bookingDto);
                 }
-
             }
             return View(bookingDto);
-
         }
+
 
         public async Task<IActionResult> Edit(Guid id)
         {

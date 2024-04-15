@@ -21,7 +21,7 @@ namespace API.Controllers
             _feedbackService = feedbackService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Indexx()
         {
             var roomTypes = await _roomTypeService.GetAllRoomTypesAsync();
             var feedbacks = await _feedbackService.GetAllFeedbacksAsync();

@@ -5,6 +5,8 @@
     ViewData["Title"] = "Staff List by Position";
 }
 
+<div class="crudIndex">
+
 <h1>@ViewData["Title"]</h1>
 
 @if (Model != null && Model.Any())
@@ -41,3 +43,4 @@ else
 }
 
 <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+</div>

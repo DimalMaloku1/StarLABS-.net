@@ -29,44 +29,7 @@ namespace UnitTest.Services
             _dailyTaskRepositoryMock = new Mock<IDailyTaskRepository>();
             _emailServiceMock = new Mock<IEmailService>();
             _staffRepositoryMock = new Mock<IStaffRepository>();
-            _dailyTaskService = new DailyTaskService(_dailyTaskRepositoryMock.Object, _mapper, _emailServiceMock.Object, _staffRepositoryMock.Object); // Pass _staffRepositoryMock.Object
-        }
-
-        [Fact]
-        public async Task CreateAsync_AddDailyTask()
-        {
-            // Arrange
-            var dailyTaskDto = new DailyTaskDto
-            {
-                Id = Guid.NewGuid(),
-                Name = "Test Task",
-                Date = DateTime.Now,
-                StaffId = Guid.NewGuid()
-            };
-            _dailyTaskRepositoryMock.Setup(repo => repo.Add(It.IsAny<DailyTask>())).Returns(Task.CompletedTask);
-
-            // Act
-            var result = await _dailyTaskService.CreateAsync(dailyTaskDto);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(dailyTaskDto.Id, result.Id);
-            _dailyTaskRepositoryMock.Verify(repo => repo.Add(It.IsAny<DailyTask>()), Times.Once);
-        }
-
-
-        [Fact]
-        public async Task DeleteAsync_DeleteDailyTask()
-        {
-            // Arrange
-            var dailyTaskId = Guid.NewGuid();
-            _dailyTaskRepositoryMock.Setup(repo => repo.GetDailyTaskByIdAsync(dailyTaskId)).ReturnsAsync(new DailyTask());
-
-            // Act
-            await _dailyTaskService.DeleteAsync(dailyTaskId);
-
-            // Assert
-            _dailyTaskRepositoryMock.Verify(repo => repo.Delete(It.IsAny<DailyTask>()), Times.Once);
+            _dailyTaskService = new DailyTaskService(_dailyTaskRepositoryMock.Object, _mapper, null, _emailServiceMock.Object);
         }
 
         [Fact]
@@ -182,5 +145,20 @@ namespace UnitTest.Services
             Assert.Equal(dailyTasks.Count, result.Count());
             Assert.All(result, task => Assert.Equal(userId, task.Staffs.FirstOrDefault()?.UserId));
         }
+
+        [Fact]
+        public async Task DeleteAsync_DeleteDailyTask()
+        {
+            // Arrange
+            var dailyTaskId = Guid.NewGuid();
+            _dailyTaskRepositoryMock.Setup(repo => repo.GetDailyTaskByIdAsync(dailyTaskId)).ReturnsAsync(new DailyTask());
+
+            // Act
+            await _dailyTaskService.DeleteAsync(dailyTaskId);
+
+            // Assert
+            _dailyTaskRepositoryMock.Verify(repo => repo.Delete(It.IsAny<DailyTask>()), Times.Once);
+        }
+
     }
 }

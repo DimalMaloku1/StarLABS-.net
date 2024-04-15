@@ -3,41 +3,7 @@
 @{
     ViewData["Title"] = "Logging";
 }
-
-@*
-<h1>Logging</h1>
-
-<div>
-    <label for="deleteMonth">Select Month and Year:</label>
-    <input type="month" id="deleteMonth" name="deleteMonth">
-    <button onclick="deleteLogs()">Delete Logs</button>
-</div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>User</th>
-            <th>Action</th>
-            <th>Entity</th>
-            <th>Timestamp</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var log in Model)
-        {
-            <tr>
-                <td>@log.UserName</td>
-                <td>@log.Action</td>
-                <td>@log.Entity</td>
-                <td>@log.Timestamp.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss")</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-*@
-
-
+<div class="d-flex justify-content-center wrapper">
 
 <div class="crudIndex">
     <div class="buttons-title">
@@ -52,7 +18,7 @@
                 <button onclick="deleteLogs()" class="btnDelete-logs">Delete</button>
             </div>
     </div>
-    <table class="table table-striped">
+    <table class="table table-striped loggs">
         <thead>
             <tr>
                 <th>User</th>
@@ -106,6 +72,8 @@
 
     </table>
 </div>
+    </div>
+</div>
 
 
 <script>
@@ -113,4 +81,14 @@
         var deleteMonth = document.getElementById("deleteMonth").value;
         window.location.href = "/Logging/DeleteLogs?monthYear=" + deleteMonth;
     }
+
+
+        window.onload = function() {
+            var tbody = document.querySelector('table tbody');
+            var rows = Array.from(tbody.querySelectorAll('tr'));
+            rows.reverse();
+            rows.forEach(function (row) {
+                tbody.appendChild(row);
+            });
+        };
 </script>

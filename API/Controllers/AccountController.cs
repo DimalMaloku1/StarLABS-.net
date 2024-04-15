@@ -63,7 +63,7 @@ namespace API.Controllers
                 var result = await _accountService.Login(loginDto);
                 if (result != null && result.IsSuccess)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Indexx", "Home");
                 }
                 ModelState.AddModelError(string.Empty, result.ErrorMessage);
                 ViewData["ErrorMessage"] = result.ErrorMessage;
@@ -101,7 +101,7 @@ namespace API.Controllers
         public async Task<IActionResult> Logout()
         {
             await _accountService.Logout();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Indexx", "Home");
         }
         [HttpGet]
         [Route("account/sendVerificationEmail")]
@@ -203,7 +203,7 @@ namespace API.Controllers
             var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (signInResult.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Indexx", "Home");
             }
             if (signInResult.IsLockedOut)
             {
@@ -223,7 +223,7 @@ namespace API.Controllers
 
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Indexx", "Home");
         }
 
 

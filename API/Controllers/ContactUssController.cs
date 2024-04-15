@@ -64,7 +64,7 @@ namespace API.Controllers
             {
                 await _contactUsService.AddMessageAsync(message);
                 await _loggingService.LogActionAsync("Created", "ContactUsMessage", User?.Identity.Name);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(SendMessage));
             }
 
             return View(message);

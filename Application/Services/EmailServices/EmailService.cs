@@ -18,7 +18,7 @@ namespace Application.Services.EmailServices
         {
             var client = new SmtpClient("sandbox.smtp.mailtrap.io", 587)
             {
-                Credentials = new NetworkCredential("ae5a5c523f9421", "fc8ed9a155880e"),
+                Credentials = new NetworkCredential("ffc0ccb988868a", "0eb8938323e50e"),
                 EnableSsl = true
             };
 
@@ -38,7 +38,7 @@ namespace Application.Services.EmailServices
         {
             SmtpClient client = new SmtpClient("sandbox.smtp.mailtrap.io", 587)
             {
-                Credentials = new NetworkCredential("ae5a5c523f9421", "fc8ed9a155880e"),
+                Credentials = new NetworkCredential("ffc0ccb988868a", "0eb8938323e50e"),
                 EnableSsl = true
             };
 
@@ -55,27 +55,26 @@ namespace Application.Services.EmailServices
             await client.SendMailAsync(mailMessage);
         }
 
-
         public async Task SendDailyTaskEmailAsync(string email, string message)
         {
-         
-                var client = new SmtpClient("sandbox.smtp.mailtrap.io", 587)
-                {
-                    Credentials = new NetworkCredential("ae5a5c523f9421", "fc8ed9a155880e"),
-                    EnableSsl = true
-                };
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress("systemhotelmanagment@gmail.com"),
-                    Subject = "New Daily Task Assigned",
-                    IsBodyHtml = true,
-                    Body = message
-                };
-                mailMessage.To.Add(email);
+            var client = new SmtpClient("sandbox.smtp.mailtrap.io", 587)
+            {
+                Credentials = new NetworkCredential("ffc0ccb988868a", "0eb8938323e50e"),
+                EnableSsl = true
+            };
 
-                await client.SendMailAsync(mailMessage);
-            }
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("systemhotelmanagment@gmail.com"),
+                Subject = "New Daily Task Assigned",
+                IsBodyHtml = true,
+                Body = message
+            };
+            mailMessage.To.Add(email);
+
+            await client.SendMailAsync(mailMessage);
+        }
 
     }
 }

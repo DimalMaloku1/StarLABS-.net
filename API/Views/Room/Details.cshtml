@@ -1,5 +1,7 @@
 ﻿@model Application.DTOs.RoomDto
 
+<div class="crudIndex">
+
 <h1>Room Details</h1>
 
 <table class="table">
@@ -28,6 +30,8 @@
 
 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
 <button onclick="confirmDelete('@Model.Id')" class="btn btn-danger">Delete</button>
+    </div>
+</div> 
 
 @section Scripts {
     <script>
@@ -38,3 +42,4 @@
         }
     </script>
 }
+</div>

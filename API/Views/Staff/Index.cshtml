@@ -4,67 +4,6 @@
     ViewData["Title"] = "Staff List";
 }
 
-@*<h1>@ViewData["Title"]</h1>
-<a class="btn btn-outline-success" asp-action="Create" >Create</a>
-
-<form asp-action="Department" method="post">
-    <div class="form-group">
-        <label for="department">Department:</label>
-        <input type="text" id="department" name="department" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Show Staff</button>
-</form>
-<form asp-controller="Staff" asp-action="Position" method="post">
-    <div class="form-group">
-        <label for="positionId">Position:</label>
-        <select id="positionId" name="positionId" class="form-control">
-            <option value="">Select Position</option>
-            @foreach (var staff in Model)
-            {
-                <option value="@staff.Position.Id">@staff.Position.PositionName</option>
-            }
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Show Staff</button>
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Department</th>
-            <th>Salary</th>
-            <th>Address</th>
-            <th>User</th>
-            <th>Position</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var staff in Model)
-        {
-            <tr>
-                <td>@staff.Id</td>
-                <td>@staff.Department</td>
-                <td>@staff.Salary</td>
-                <td>@staff.Address</td>
-                <td>@staff.User.Email</td>
-                <td>@staff.Position.PositionName</td>
-                <td>
-                    <a class="btn btn-outline-success" asp-action="Details" asp-route-id="@staff.Id">Details</a>
-                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@staff.Id">Edit</a>
-                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@staff.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-*@
-
-
-
-
-
-
 <div class="crudIndex">
     <div class="buttons-title">
         <h3>Employees</h3>

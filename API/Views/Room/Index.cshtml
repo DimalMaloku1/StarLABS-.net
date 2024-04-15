@@ -1,22 +1,7 @@
 ﻿@model IEnumerable<Application.DTOs.RoomDto>
+<div class="d-flex justify-content-center wrapper">
 
-<!--
-<form asp-action="GetRoomsByRoomTypeId" asp-controller="Room" method="get">
-    <div class="form-group">
-        <label for="roomType">Select Room Type:</label>
-        <select class="form-control" id="roomType" name="roomTypeId">
-            <option value="">All</option>
-       @*   @foreach (var roomType in ViewBag.RoomTypes)
-            {
-                <option value="@roomType.Id">@roomType.Type</option>
-            }*@
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Filter</button>
-</form>
-
--->
-
+    <div style="width:100%">
 <div class="crudIndex">
     <div class="buttons-title">
         <h3>Rooms</h3>
@@ -81,4 +66,6 @@
         </tbody>
 
     </table>
+</div>
+</div>
 </div>
