@@ -76,5 +76,5 @@ Press F5 or click on Start Debugging in Visual Studio to run the application. Th
 
 This project was developed during an internship with [StarLabs](https://www.starlabs.dev),
 Kosovo's leading software development company. 
-Contributions were made remotely, guided by the leadership of Mensur Hyseni.
+Contributions were made remotely, guided by the leadership.
 
