@@ -55,8 +55,8 @@ Press F5 or click on Start Debugging in Visual Studio to run the application. Th
 
 - **Payment Integration:** Seamless Stripe and Paypal integration.
 - **Password Recovery:** Allow users to reset passwords via email.
-- **Booking Confirmation:** Email notifications upon successful bookings threw MailTrap.io.
-- **Email Verification:** Send verification emails for user registration threw MailTrap.io.
+- **Booking Confirmation:** Email notifications upon successful bookings on MailTrap.io.
+- **Email Verification:** Send verification emails for user registration on MailTrap.io.
 
 
 ## Project Leader
