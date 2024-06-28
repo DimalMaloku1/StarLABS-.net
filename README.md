@@ -48,7 +48,7 @@ Press F5 or click on Start Debugging in Visual Studio to run the application. Th
 - **Payment Integration:** Integrate Stripe and Paypal payments.
 - **Single Sign-in:** Streamline access with Google sign-in.
 - **Communication:** Use Outlook for guest communication.
-- **Data Management:** Manage SQL Server with AWS RDS.
+- **Data Management:** Manage AWS RDS with SQL Server.
 - **Access Control:** Authenticate and authorize Admins, Users, and Staff.
 - **Admin Dashboard:** Provide an overview for administrators.
 
