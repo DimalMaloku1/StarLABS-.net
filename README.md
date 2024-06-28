@@ -7,7 +7,7 @@ The Hotel Management System is an advanced software designed to manage hotel ope
 - **Architecture**: Onion architecture style for separation of concerns.
 - **Technologies**: 
   - **Language**: C#
-  - **Framework**: ASP.NET Core
+  - **Framework**: ASP.NET MVC
   - **Database**: Entity Framework Core with SQL Server
 
 ## Prerequisites
