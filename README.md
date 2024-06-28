@@ -45,7 +45,6 @@ Press F5 or click on Start Debugging in Visual Studio to run the application. Th
 - **Room Management:** Manage rooms and room types.
 - **Reservation Handling:** Efficiently handle guest bookings.
 - **Employee Management:** Manage staff roles effectively.
-- **Payment Integration:** Integrate Stripe and Paypal payments.
 - **Single Sign-in:** Streamline access with Google sign-in.
 - **Communication:** Use Outlook for guest communication.
 - **Data Management:** Manage AWS RDS with SQL Server.
@@ -56,8 +55,8 @@ Press F5 or click on Start Debugging in Visual Studio to run the application. Th
 
 - **Payment Integration:** Seamless Stripe and Paypal integration.
 - **Password Recovery:** Allow users to reset passwords via email.
-- **Booking Confirmation:** Email notifications upon successful bookings.
-- **Email Verification:** Send verification emails for user registration.
+- **Booking Confirmation:** Email notifications upon successful bookings threw MailTrap.io.
+- **Email Verification:** Send verification emails for user registration threw MailTrap.io.
 
 
 ## Project Leader
